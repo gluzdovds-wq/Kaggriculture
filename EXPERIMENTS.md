@@ -130,3 +130,25 @@ arena timing instrumentation preserves both one- and two-argument agents.
 - Result: all targeted fixtures pass; full suite 13/13.
 - Decision: mechanism pass only. Each policy-level economic claim still needs
   a paired route/planner experiment.
+
+## E009 — H14/H15 wider reserve-safe WHEAT batching / submission S03
+
+- Change: `market_quantity=20` instead of 10 in exact public V36. Cash, feed,
+  investment, capacity and market-order reserves are unchanged.
+- Candidate SHA-256:
+  `8c27bc4e0f95bb56a188b43ee4624a7b04cfdabe8a53f850a19a5b1bfc76f92c`.
+- Kaggle submission: `55651309` (submitted 2026-08-20 17:29 UTC; score pending
+  at the time of this entry).
+- Protocol against exact V36: two development and four untouched holdout seeds,
+  both seats for every seed.
+- Result: 9/12 wins, paired outcome 0.75 and average margin about +67 coins.
+  The four-seed holdout alone produced outcome 0.75 and +61.9 average margin.
+- Public-pool check: on matched games against multi-route, adaptive and
+  choose-farm, the candidate improved average margin by +127 to +134 coins over
+  exact V36 without changing the per-style paired outcome.
+- Alternative: quantity 40 also scored 0.75 in a smaller screen, but improved
+  average margin by only +70.8 versus +78.2 for quantity 20 on the same screen.
+- Decision: promote quantity 20 to S03 for local-to-LB calibration. Do not
+  spend S04 until S03 and S02 can be compared in the same LB snapshot.
+- Same-poll pre-result LB snapshot: S02 1447.6, S01 325.3. These differ sharply
+  from earlier snapshots, confirming that absolute public scores are dynamic.
