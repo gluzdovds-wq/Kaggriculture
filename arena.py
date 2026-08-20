@@ -206,6 +206,85 @@ def opponent_public_checkpoints(env, candidate_seat: int) -> list[dict]:
     return checkpoints
 
 
+def private_storage_totals(observation) -> tuple[int, int]:
+    """Return own shed and carried counts; seeds do not consume shed capacity."""
+    private = _public_get(observation, "private", {}) or {}
+    shed = _public_get(private, "shed", {}) or {}
+    inventories = _public_get(private, "inventories", []) or []
+    shed_total = sum(max(0, int(value or 0)) for value in dict(shed).values())
+    carried_total = sum(
+        max(0, int(value or 0))
+        for inventory in inventories
+        for value in dict(inventory or {}).values()
+    )
+    return shed_total, carried_total
+
+
+def _private_storage_items(observation) -> tuple[dict[str, int], list[dict[str, int]]]:
+    private = _public_get(observation, "private", {}) or {}
+    shed = {
+        str(key): max(0, int(value or 0))
+        for key, value in dict(_public_get(private, "shed", {}) or {}).items()
+        if int(value or 0) > 0
+    }
+    inventories = [
+        {
+            str(key): max(0, int(value or 0))
+            for key, value in dict(inventory or {}).items()
+            if int(value or 0) > 0
+        }
+        for inventory in (_public_get(private, "inventories", []) or [])
+    ]
+    return dict(sorted(shed.items())), inventories
+
+
+def candidate_storage_pressure(env, candidate_seat: int) -> dict:
+    """Summarize legal own-storage pressure, without claiming inferred loss."""
+    capacity = int(_public_get(env.configuration, "shedCapacity", 100) or 100)
+    rows = []
+    for step, states in enumerate(env.steps):
+        observation = states[candidate_seat].observation
+        shed, carried = private_storage_totals(observation)
+        rows.append(
+            {
+                "step": step,
+                "day": int(_public_get(observation, "day", 0) or 0),
+                "hour": int(_public_get(observation, "hour", 0) or 0),
+                "shed": shed,
+                "carried": carried,
+                "combined": shed + carried,
+            }
+        )
+    pressure_events = []
+    for row in rows:
+        if row["hour"] != 23 or row["combined"] <= capacity:
+            continue
+        step = row["step"]
+        before = env.steps[step][candidate_seat].observation
+        shed_items, inventories = _private_storage_items(before)
+        event = {
+            **row,
+            "shed_items": shed_items,
+            "inventories": inventories,
+        }
+        if step + 1 < len(env.steps):
+            next_state = env.steps[step + 1][candidate_seat]
+            next_shed, next_inventories = _private_storage_items(next_state.observation)
+            event["executed_action"] = next_state.action
+            event["next_shed_items"] = next_shed
+            event["next_inventories"] = next_inventories
+        pressure_events.append(event)
+    saturated = [row for row in rows if row["shed"] >= capacity]
+    return {
+        "capacity": capacity,
+        "max_shed": max((row["shed"] for row in rows), default=0),
+        "max_carried": max((row["carried"] for row in rows), default=0),
+        "max_combined": max((row["combined"] for row in rows), default=0),
+        "saturated_observations": len(saturated),
+        "pre_action_eod_pressure_events": pressure_events,
+    }
+
+
 def play(candidate_spec: str, opponent_spec: str, seed: int, candidate_seat: int) -> dict:
     candidate, candidate_times, candidate_meta = resolve_agent(
         candidate_spec, f"candidate_{seed}_{candidate_seat}"
@@ -243,6 +322,7 @@ def play(candidate_spec: str, opponent_spec: str, seed: int, candidate_seat: int
         "opponent_artifact": opponent_meta,
         "shop_unlock_events": shop_unlock_events(env),
         "opponent_public_checkpoints": opponent_public_checkpoints(env, candidate_seat),
+        "candidate_storage_pressure": candidate_storage_pressure(env, candidate_seat),
     }
 
 

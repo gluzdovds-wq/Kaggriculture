@@ -73,6 +73,11 @@ Use `tools/compare_openings.py` to find the exact first action divergence of
 compatible public routes. Shadow calls receive deep-copied observations and
 restore Python's global RNG, so this diagnostic does not perturb the live route.
 
+Use `tools/audit_overflow.py` when testing storage changes. It measures the
+exact items discarded by the official EOD drop; the arena's lighter pressure
+counter is only a trigger screen because same-turn sales can remove apparent
+pressure before the drop.
+
 The competition submission entry point is `main.py`. Local validation and Git
 synchronization do not submit the agent to Kaggle.
 

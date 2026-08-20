@@ -2,10 +2,20 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from arena import public_farm_signature, timed_agent
+from arena import private_storage_totals, public_farm_signature, timed_agent
 
 
 class ArenaTests(unittest.TestCase):
+    def test_storage_totals_exclude_seed_inventory(self):
+        observation = {
+            "private": {
+                "shed": {"WHEAT": 7, "COW": 2},
+                "seeds": {"MELON": 50},
+                "inventories": [{"WOOL": 3}, {"MILK": 4, "WHEAT": 1}],
+            }
+        }
+        self.assertEqual(private_storage_totals(observation), (9, 8))
+
     def test_public_farm_signature_excludes_private_state(self):
         farm = {
             "money": 22,

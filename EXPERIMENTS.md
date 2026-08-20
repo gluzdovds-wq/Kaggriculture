@@ -347,3 +347,23 @@ arena timing instrumentation preserves both one- and two-argument agents.
 - Decision: reject schedule-blind feed sparsity. H02 now requires a per-animal
   deadline ledger plus a guaranteed next-day service assignment; do not mutate
   an open-loop tape by day parity.
+
+## E020 — H05 exact terminal overflow audit / mechanism pass, no overlay
+
+- Added own-private storage-pressure summaries to `arena.py` and an exact
+  engine hook in `tools/audit_overflow.py`. The hook replays the documented
+  stable inventory/item insertion order immediately before the official EOD
+  drop, reports discarded items, and then calls the unmodified engine function.
+- Fresh seeds `20262400..20262403`, both seats: against Choose, 6/8 games
+  discarded exactly 12 WHEAT on day-28 EOD; against V36, 4/8 discarded exactly
+  7 WHEAT. Across 16 games the only 100 discarded units were WHEAT. CARROT,
+  MILK, WOOL and FERTILIZER were already preserved by the current unit/item
+  order, so the feared premium-item loss did not occur.
+- A generated same-turn `PLACE WHEAT`→`SELL WHEAT` overlay forecast the exact
+  12-unit overflow but was inert: no wheat-carrying unit was on a shed-access
+  square at step 695. All such workers were several moves away. Recovering the
+  low-value surplus therefore needs earlier terminal routing, not a safe local
+  action substitution.
+- Decision: H05 mechanism and natural trigger pass, but do not promote the
+  overlay. The observed upper-bound value is small relative to six-figure
+  scores and belongs in H21's multi-turn terminal solver.
