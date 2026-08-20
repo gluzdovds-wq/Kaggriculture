@@ -61,6 +61,17 @@ def _decode_notebook(path: Path) -> bytes:
         if first.strip() == "%%writefile main.py" and separator:
             return body.encode("utf-8")
 
+    # Some public notebooks name the emitted file differently even though the
+    # cell is a self-contained competition agent.  Read the literal cell body;
+    # never execute the notebook.
+    for cell in cells:
+        source = _source(cell)
+        first, separator, body = source.partition("\n")
+        if (first.strip().startswith("%%writefile ") and
+                first.strip().endswith(".py") and separator and
+                "def agent(" in body):
+            return body.encode("utf-8")
+
     agentfile_parts = []
     for cell in cells:
         source = _source(cell)
@@ -75,15 +86,46 @@ def _decode_notebook(path: Path) -> bytes:
     if isinstance(embedded, dict) and isinstance(embedded.get("main.py"), str):
         return embedded["main.py"].encode("utf-8")
 
+    for key in ("AGENT_PAYLOAD", "PAYLOAD", "payload"):
+        encoded_b85 = values.get(key)
+        if isinstance(encoded_b85, str):
+            return zlib.decompress(base64.b85decode(encoded_b85))
+
     encoded_b85 = values.get("SOURCE_B85")
-    if not isinstance(encoded_b85, str):
-        encoded_b85 = values.get("payload")
     if isinstance(encoded_b85, str):
-        return zlib.decompress(base64.b85decode(encoded_b85)).decode("utf-8").encode("utf-8")
+        decoded = base64.b85decode(encoded_b85)
+        try:
+            return zlib.decompress(decoded)
+        except zlib.error:
+            return decoded
 
     encoded_b64 = values.get("AGENT_B64")
     if isinstance(encoded_b64, str):
         return base64.b64decode(encoded_b64)
+
+    # Last safe fallback for transparent notebooks: concatenate code cells up
+    # to the last top-level `def agent`, excluding magics.  Compilation below
+    # validates syntax but no extracted statement is executed here.
+    last_agent_cell = -1
+    accepted_sources: list[str] = []
+    for cell in cells:
+        if cell.get("cell_type") != "code":
+            continue
+        source = _source(cell)
+        if source.lstrip().startswith(("%", "!")):
+            continue
+        try:
+            tree = ast.parse(source)
+        except SyntaxError:
+            continue
+        accepted_sources.append(source)
+        if any(isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and
+               node.name == "agent" for node in tree.body):
+            last_agent_cell = len(accepted_sources) - 1
+    if last_agent_cell >= 0:
+        return ("\n\n".join(accepted_sources[: last_agent_cell + 1]) + "\n").encode(
+            "utf-8"
+        )
 
     raise ValueError("no supported literal main.py container found")
 
@@ -112,4 +154,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

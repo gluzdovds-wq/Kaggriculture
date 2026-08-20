@@ -203,3 +203,55 @@ arena timing instrumentation preserves both one- and two-argument agents.
 - Decision: mechanism pass and retain as a safe planner feature, but do not
   promote as a standalone incumbent or spend S04; its demonstrated effect is
   much smaller than the S03 local-to-LB calibration noise.
+
+## E013 — H01 alternating-day WATER / rejected
+
+- Change: on odd days only, replace WATER on a surviving previously watered
+  plant with PASS; same-turn PLANT→WATER is preserved. A second variant reuses
+  an already-ripe tile as HARVEST instead of PASS.
+- Screen against exact V36: seed `20261240`, both seats. PASS averaged -31,213
+  coins and HARVEST reuse -31,207. The first seat of seed `20261241` was also
+  catastrophic (-32,593 and -32,581 respectively), so the screen stopped.
+- Mechanism: one dry day preserves the plant, but the lost daily yield bonus
+  dominates the saved action even before the second dry day would create a
+  weed.
+- Decision: reject naive alternating WATER. H01 now needs a real marginal
+  scheduler that spends a skipped action on something worth more than the
+  foregone yield, not a survival-only rule.
+
+## E014 — fresh public-agent refresh / no submission
+
+- Safely decoded six newly published notebook agents without executing
+  notebook cells. The extractor now supports arbitrary literal `%%writefile
+  *.py` cells, zlib/base85 payload variants, raw `SOURCE_B85`, and a compiled
+  transparent-code fallback.
+- One-seed screen versus V36 was highly unstable: Moon, ReadTown and X544
+  initially showed margins from about +9,700 to +13,200, while later seeds
+  reversed Moon/ReadTown sharply.
+- Disjoint eight-seed panel (both seats) versus exact V36: X544 won 16/16 with
+  average margin +10,417; Soil won 13/16 (+768); Moon and ReadTown each won
+  only 4/16 and had negative average margins.
+- Cross-family confirmation on three fresh seeds × both seats: X544+H04 won
+  6/6 versus Soil (+8,459), but lost 0/6 to Moon (-4,415) and 0/6 to ReadTown
+  (-3,761).
+- Decision: X544 is the strongest broad local base found, but not universally
+  dominant. Keep Moon/ReadTown as explicit adversarial holdouts.
+
+## E015 — X544 local overlays and preemption factorial / candidate gate
+
+- Reproducible generator: `tools/make_x544_variant.py`.
+- Generalizing X544's feasible-window seed trim from WHEAT/CARROT to all crops
+  was inert: both embedded routes already buy TOMATO/STRAWBERRY/MELON early
+  enough, and the four-seed paired screen was byte-for-byte neutral.
+- Porting H04 to X544 triggered on some seeds but produced only +5.2 average
+  coins over four paired seeds and exactly 0.50 paired outcomes. It is retained
+  because it changes only otherwise-dead final-hour movement and did not show
+  a negative interaction.
+- Lowering X544's preemption price ratio from 1.0 to 0.5 or 0.0, and separately
+  matching Moon's fraction/batch settings, produced identical actions on the
+  two-seed Moon screen. All variants lost 0/4 with average margin -6,167.
+- Decision: the Moon weakness is route-level, not controlled by this threshold.
+  Promote X544+H04 as the S04 candidate because of its broad V36/Soil evidence,
+  while recording its explicit Moon/ReadTown failure mode.
+- Generated candidate SHA-256:
+  `fe21fb993be2ab819a31c0dfe29593487955c997e81a6ee659af85650387ef62`.

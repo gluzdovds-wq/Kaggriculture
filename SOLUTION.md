@@ -1,7 +1,34 @@
-# First local solution
+# Current local solution
 
-`main.py` is a deterministic, stateless carrot-farming baseline for the
-Kaggriculture competition.
+`main.py` is the current Kaggriculture submission candidate. The original
+carrot baseline remains documented below as the execution/calibration anchor;
+the promoted candidate is generated reproducibly from the public X544 agent
+plus our observation-only H04 end-of-day harvest overlay.
+
+## Promoted candidate
+
+- Public base: `stevenleehans/kaggriculture-x544-nah-i-d-win` (X544/X562).
+- Local change: at hour 23, replace only movement/PASS by HARVEST when the unit
+  is already standing on a mature crop with available yield. Daily position
+  reset and auto-drop preserve the next-day route.
+- Generator: `tools/make_x544_variant.py --eod-harvest`.
+- Local evidence: X544 won 16/16 against exact V36 (+10,417 average margin);
+  X544+H04 won 6/6 against Soil (+8,459). It lost 0/6 against both Moon and
+  ReadTown, so the candidate is a broad-policy promotion with a known
+  adversarial-family weakness, not a claim of universal dominance.
+- H04 itself is intentionally small: +5.2 average coins in the X544 paired
+  trigger panel. The large expected improvement over S02 comes from the newer
+  X544 route family, not from overstating the overlay.
+
+To regenerate the exact entry point:
+
+```powershell
+C:\Users\Dmitry\.venvs\kg\Scripts\python.exe tools\make_x544_variant.py `
+  research\public_agents\kaggriculture-x544-nah-i-d-win\main.py main.py `
+  --eod-harvest
+```
+
+## Original baseline strategy
 
 ## Strategy
 
