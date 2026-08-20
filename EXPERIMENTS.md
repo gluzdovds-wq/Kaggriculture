@@ -50,8 +50,34 @@ as new matches are played.
 
 ## Engine/runtime gate progress
 
-Ten tests currently pass. Targeted fixtures cover the 719-executed-action
+Eleven tests currently pass. Targeted fixtures cover the 719-executed-action
 boundary, atomic seed over-demand, plant-day watering, ordered shed overflow,
 zero-profit unchanged-market round trips, sparse animal feeding, action shape
 and a full 720-state match. Two regression tests additionally guarantee that
 arena timing instrumentation preserves both one- and two-argument agents.
+
+## E003 — fast simulator 1.32.7 patch / no submission
+
+- Hypothesis: G02.
+- Change: safely extracted the public 1.32.6 C++ port and added the official
+  1.32.7 hinge price shape for CARROT, TOMATO and EGG.
+- Protocol: step-level comparison of money and all market inventories against
+  official 1.32.7 traces.
+- Result: 13/13 episodes and 9,347/9,347 transitions exact, including four
+  V36↔multi-route competitive traces in both seat orders.
+- Runtime: about 441 episodes/s (2.27 ms/episode) with MSVC on this PC.
+- Decision: partial pass. Use for transition checks and search, but confirm
+  promoted policies in the official Python arena.
+
+## E004 — H12 non-producible hinge arbitrage / rejected implementation
+
+- Hypothesis: H12 (JIT CARROT/TOMATO/EGG under 1.32.7 scarcity).
+- Minimal experiment: append BUY_PRODUCT→town demand→SELL round trips to V36.
+- Targeted seed selection: a 5,000-seed fast scan selected `20260619`, where
+  CARROT reaches about 8,760 inventory and a quote near 994.
+- Result: emitted orders produced no bank change. Official trace inspection
+  showed they were silent no-ops.
+- Root cause: official `_process_market` accepts `BUY_PRODUCT` only for WHEAT
+  and FERTILIZER. Crops and eggs must be produced, not bought.
+- Decision: reject and delete this implementation, not the economic H12 idea.
+  Add a regression fixture; redesign H12 as actual JIT farming.

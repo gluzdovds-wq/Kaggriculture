@@ -94,6 +94,29 @@ class EngineFixtureTests(unittest.TestCase):
         self.assertTrue(kg._commit_unit("SELL", "WHEAT", sell_price, farm, private, market))
         self.assertEqual(farm["money"], start_money)
 
+    def test_buy_product_only_accepts_wheat_and_fertilizer(self):
+        def buyer(obs):
+            if int(obs.get("step", 0)) == 0:
+                return {
+                    "farmer": ["PASS"],
+                    "hands": [],
+                    "market": [
+                        ["BUY_PRODUCT", "CARROT", 1],
+                        ["BUY_PRODUCT", "WHEAT", 1],
+                    ],
+                }
+            return PASS
+
+        env = make(
+            "kaggriculture",
+            configuration={"seed": 96, "episodeSteps": 3},
+            debug=False,
+        )
+        env.run([buyer, "pass"])
+        final = env.steps[-1][0]["observation"]
+        self.assertEqual(final["private"]["shed"]["CARROT"], 0)
+        self.assertEqual(final["private"]["shed"]["WHEAT"], 1)
+
     def test_animal_produces_on_first_unfed_day_then_escapes_on_second(self):
         farm = kg._new_farm(10, 3000)
         farm["tiles"][0][0] = kg._new_animal("GOOSE", -4)
@@ -108,4 +131,3 @@ class EngineFixtureTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
