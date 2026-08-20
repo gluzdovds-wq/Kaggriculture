@@ -137,8 +137,7 @@ arena timing instrumentation preserves both one- and two-argument agents.
   investment, capacity and market-order reserves are unchanged.
 - Candidate SHA-256:
   `8c27bc4e0f95bb56a188b43ee4624a7b04cfdabe8a53f850a19a5b1bfc76f92c`.
-- Kaggle submission: `55651309` (submitted 2026-08-20 17:29 UTC; score pending
-  at the time of this entry).
+- Kaggle submission: `55651309` (submitted 2026-08-20 17:29 UTC).
 - Protocol against exact V36: two development and four untouched holdout seeds,
   both seats for every seed.
 - Result: 9/12 wins, paired outcome 0.75 and average margin about +67 coins.
@@ -148,7 +147,59 @@ arena timing instrumentation preserves both one- and two-argument agents.
   exact V36 without changing the per-style paired outcome.
 - Alternative: quantity 40 also scored 0.75 in a smaller screen, but improved
   average margin by only +70.8 versus +78.2 for quantity 20 on the same screen.
-- Decision: promote quantity 20 to S03 for local-to-LB calibration. Do not
-  spend S04 until S03 and S02 can be compared in the same LB snapshot.
-- Same-poll pre-result LB snapshot: S02 1447.6, S01 325.3. These differ sharply
-  from earlier snapshots, confirming that absolute public scores are dynamic.
+- LB result: COMPLETE at 600.0. In the same poll S02 was 1537.0 and S01 325.3.
+  Immediately before S03 completed, S02/S01 were 1447.6/325.3. These snapshots
+  differ sharply from earlier ones, confirming that absolute scores and match
+  histories are dynamic; the initial same-poll gap S03−S02 is −937.0.
+- Decision: negative calibration signal. Keep exact V36 as the online incumbent,
+  do not promote q20 and do not spend S04 on another small market-only tweak.
+  Require a substantially larger, multi-opponent holdout effect first.
+
+## E010 — H12 crop-substitution probes / no submission
+
+- Goal: test whether confirmed CARROT/TOMATO scarcity can pay for actual
+  production rather than the illegal BUY_PRODUCT idea rejected in E004.
+- Reproducible generator: `tools/make_v36_crop_variant.py`; it changes only
+  bounded BUY_SEED/PLANT actions, can harvest a ripe replacement under the
+  unit, and sells only replacement produce actually present in the shed.
+- Target scenario: seed `20260619`, whose final CARROT inventory is about 9,196
+  and price about 271 after repeated PET_CAFE/FARMERS_MARKET demand.
+- Naive large substitutions lost both seats: late WHEAT→CARROT (70 plants)
+  averaged -14,476; STRAWBERRY→TOMATO (37 plants) averaged -30,458.
+- Balanced micro-windows without harvest repair also lost: day 12 (8 plants)
+  -5,115 and day 15 (4 plants) -2,969.
+- A local ripe-crop HARVEST repair reduced those losses to -2,824 and -2,332.
+  The day-15 probe genuinely sold seven carrots, but the extra unit action
+  desynchronized the fixed tape and left seven rather than eight cows.
+- Decision: reject crop substitution on the open-loop V36 tape. H12 remains
+  open only inside a position-aware scheduler that can replan downstream unit
+  paths, feed and harvest timing.
+
+## E011 — H14 sell-after-town delay / no submission
+
+- Change: on a town-consumption step, defer an eligible SELL by one turn only
+  when no same-action buy/hire needs its cash and current cash is at least 500.
+- Telemetry on the targeted seed: six deferral events, 52 units and seven
+  flush orders; the candidate was -412 in the inspected seat.
+- Screen: two new seeds × both seats against exact V36.
+- Result: paired outcome 0.25 and average margin -207.5.
+- Observation: the deterministic town price lift is too small to compensate
+  for giving the opponent first access to the post-consumption premium.
+- Decision: reject naive one-turn delay. Any future H14 implementation must
+  model opponent queue order and conserved inventory jointly with H16.
+
+## E012 — H04 end-of-day harvest reuse / no submission
+
+- Change: at hour 23 only, replace movement/PASS with a local service action.
+  Positions reset and carried items auto-drop immediately after this action,
+  so next-day route positions are preserved.
+- Factorial screen, three new seeds × both seats versus exact V36: WATER-only
+  was exactly neutral (paired 0.50, margin 0); peak-HARVEST-only and the full
+  service rule both scored paired 0.833 and average margin +46.
+- Holdout, six further seeds × both seats versus exact V36: paired outcome
+  0.667, 95% bootstrap CI [0.50, 0.833], average margin +34.8.
+- Matched public-pool check: two seeds × both seats × multi-route, adaptive and
+  choose-farm produced exactly the same 12 banks as exact V36.
+- Decision: mechanism pass and retain as a safe planner feature, but do not
+  promote as a standalone incumbent or spend S04; its demonstrated effect is
+  much smaller than the S03 local-to-LB calibration noise.
