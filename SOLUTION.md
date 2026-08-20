@@ -25,6 +25,10 @@ C:\Users\Dmitry\.venvs\kg\Scripts\python.exe -m unittest discover -s tests -v
 Each seed is tested from both player seats. Add `--replay-dir artifacts/replays`
 to keep replay JSON files for inspection.
 
+For outcome-based evaluation against one or more real agent files, use
+`arena.py`. It records exact hashes, paired outcomes, bootstrap intervals,
+diagnostic margins and per-action latency.
+
 The competition submission entry point is `main.py`. Local validation and Git
 synchronization do not submit the agent to Kaggle.
 
@@ -41,3 +45,11 @@ Measured locally with `kaggle-environments==1.32.7` on 2026-08-20:
 
 These local scores validate execution and provide a regression baseline; they
 do not predict the public or private leaderboard score.
+
+The first online calibration confirmed this limitation: the carrot baseline
+won every built-in match but entered the live ladder around rating 600 and then
+moved substantially as games accumulated. See `EXPERIMENTS.md` for timestamped
+observations and the exact public-agent calibration.
+
+For a Russian educational introduction to the game and a runnable first RL
+example, see `RL_GUIDE_RU.md` and `rl/train_bandit.py`.

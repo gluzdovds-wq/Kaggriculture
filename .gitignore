@@ -7,4 +7,5 @@ replays/
 kaggle_token.txt
 kaggle.json
 access_token
-
+research/public_notebooks/
+research/public_agents/

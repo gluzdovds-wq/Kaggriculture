@@ -1,11 +1,14 @@
 """Run reproducible local Kaggriculture matches for main.py."""
 
 import argparse
+import contextlib
+import io
 import json
 import math
 from pathlib import Path
 
-from kaggle_environments import make
+with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+    from kaggle_environments import make
 
 from main import agent
 
@@ -40,11 +43,23 @@ def play(opponent, seed, swapped=False, replay_path=None):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--opponent", choices=("starter", "random", "pass"), default="starter")
+    parser.add_argument(
+        "--opponent",
+        default="starter",
+        help="built-in agent name or path to a public/local main.py",
+    )
     parser.add_argument("--games", type=int, default=4, help="number of seeds; both seats are played")
     parser.add_argument("--seed", type=int, default=20260820)
     parser.add_argument("--replay-dir", type=Path)
+    parser.add_argument("--json", type=Path, help="write machine-readable match results")
     args = parser.parse_args()
+
+    opponent = args.opponent
+    if opponent not in {"starter", "random", "pass"}:
+        opponent_path = Path(opponent).resolve()
+        if not opponent_path.is_file():
+            parser.error(f"opponent file does not exist: {opponent_path}")
+        opponent = str(opponent_path)
 
     results = []
     for offset in range(args.games):
@@ -54,7 +69,7 @@ def main():
             if args.replay_dir:
                 seat = 1 if swapped else 0
                 replay = args.replay_dir / f"{args.opponent}-seed{seed}-seat{seat}.json"
-            result = play(args.opponent, seed, swapped, replay)
+            result = play(opponent, seed, swapped, replay)
             results.append(result)
             verdict = "WIN" if result["win"] else ("TIE" if result["margin"] == 0 else "LOSS")
             print(
@@ -70,8 +85,23 @@ def main():
         f"summary: {wins}/{len(results)} wins, "
         f"average score {average:.1f}, average margin {average_margin:+.1f}"
     )
+    if args.json:
+        args.json.parent.mkdir(parents=True, exist_ok=True)
+        payload = {
+            "opponent": args.opponent,
+            "seed_start": args.seed,
+            "seed_count": args.games,
+            "matches": results,
+            "summary": {
+                "wins": wins,
+                "matches": len(results),
+                "win_rate": wins / len(results),
+                "average_score": average,
+                "average_margin": average_margin,
+            },
+        }
+        args.json.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
 
 if __name__ == "__main__":
     main()
-
