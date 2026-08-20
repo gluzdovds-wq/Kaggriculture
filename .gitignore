@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+artifacts/
+replays/
+kaggle_token.txt
+kaggle.json
+access_token
+
