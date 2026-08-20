@@ -276,3 +276,35 @@ arena timing instrumentation preserves both one- and two-argument agents.
   `839d2244af3498541624a70c156bf8801c22838dc67eefa6641a9e97ca1f1efa`.
 - Decision: S04 supplies no evidence about strategy. Do not make a fifth
   submission without fresh user authorization.
+
+## E017 — H22 early public family selector / promoted locally
+
+- Compatibility discovery: public X544, Moon and Read agents emit identical
+  actions through the opening; X544 and Moon first diverge at step 72, exactly
+  when the first town shop becomes observable. V36/Soil use a distinct step-0
+  opening.
+- Legal public classifier: after the common step 0, inspect only the opponent's
+  public tiles. An opening `PASTURE` selects Moon; no pasture selects X544. The
+  selected whole-season route is frozen, avoiding mid-route state mismatch.
+- Development evidence, four seeds × both seats: replacing X544 with Moon
+  against the older pasture-opening family improved multi/adaptive from 0/8 to
+  7/8 and choose from 7/8 to 8/8. Average margins changed from about -5,404 to
+  +702 and from +547 to +6,715 respectively.
+- Frozen holdout `20261800..20261803`, both seats, eight opponent families,
+  64 games per candidate: fixed X544 outcome 0.390625, average margin +274 and
+  worst-family outcome 0; selector outcome 0.78125, average margin +3,191.7 and
+  worst-family outcome 0.375. Per-family selector outcomes were V36 0.875,
+  Soil 0.75, X544 1.0, Moon 0.50, Read 0.375, multi 0.875, adaptive 0.875 and
+  choose 1.0. V36/Soil match banks were byte-for-byte unchanged from X544.
+- Shadow-init incident: omitting Moon's step-0 call destroyed its route state.
+  Calling it on the live observation risked shared-process side effects. The
+  final implementation initializes Moon on deep copies and restores Python's
+  RNG; its 64 frozen results exactly reproduce the successful prototype.
+- Arena improvements: `--jobs` multi-process evaluation, pinned
+  `PYTHONHASHSEED=0`, and observable shop-unlock event capture.
+- Artifact gate: 15/15 tests; `py_compile`; official loader selects `agent`;
+  four full path-loaded matches against V36/Moon finished `DONE`; frozen-panel
+  maximum action latency 143 ms. Candidate size 300,499 bytes, SHA-256
+  `642e4209da47f755ae1d780a21bce679bb2ce716a88ca771fc6151797f59ff08`.
+- Decision: H22/H11 pass with a large disjoint multi-family improvement. Promote
+  locally, but do not make a fifth Kaggle submission without user permission.

@@ -5,10 +5,22 @@ from pathlib import Path
 from kaggle_environments import make
 from kaggle_environments.agent import get_last_callable
 
-from main import agent
+from main import _selector_opponent_has_opening_pasture, agent
 
 
 class AgentTests(unittest.TestCase):
+    def test_selector_uses_only_public_opening_structure(self):
+        obs = {
+            "player": 0,
+            "farms": [
+                {"tiles": [[None]]},
+                {"tiles": [[{"kind": "PASTURE"}]]},
+            ],
+        }
+        self.assertTrue(_selector_opponent_has_opening_pasture(obs))
+        obs["farms"][1]["tiles"] = [[None]]
+        self.assertFalse(_selector_opponent_has_opening_pasture(obs))
+
     def test_kaggle_file_loader_selects_agent_wrapper(self):
         path = Path(__file__).resolve().parents[1] / "main.py"
         loaded = get_last_callable(path.read_text(encoding="utf-8"), path=str(path))

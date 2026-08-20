@@ -2,40 +2,41 @@
 
 `main.py` is the current Kaggriculture submission candidate. The original
 carrot baseline remains documented below as the execution/calibration anchor;
-the promoted candidate is generated reproducibly from the public X544 agent
-plus our observation-only H04 end-of-day harvest overlay.
+the promoted candidate is an observation-only early route-family selector.
 
 ## Promoted candidate
 
-- Public base: `stevenleehans/kaggriculture-x544-nah-i-d-win` (X544/X562).
-- Local change: at hour 23, replace only movement/PASS by HARVEST when the unit
-  is already standing on a mature crop with available yield. Daily position
-  reset and auto-drop preserve the next-day route.
-- Generator: `tools/make_x544_variant.py --eod-harvest`.
-- Packaging gate: the generator places a callable alias after all helpers so
-  Kaggle's `get_last_callable` selects the intended wrapper. The test suite
-  verifies this exact loader behavior and runs a full game from the file path.
-- Local evidence: X544 won 16/16 against exact V36 (+10,417 average margin);
-  X544+H04 won 6/6 against Soil (+8,459). It lost 0/6 against both Moon and
-  ReadTown, so the candidate is a broad-policy promotion with a known
-  adversarial-family weakness, not a claim of universal dominance.
-- H04 itself is intentionally small: +5.2 average coins in the X544 paired
-  trigger panel. The large expected improvement over S02 comes from the newer
-  X544 route family, not from overstating the overlay.
+- Public branches: X544/X562 and Moon Counts Melons. They emit the same opening
+  at step 0 and do not diverge until the first shop unlock at step 72.
+- Original change (H22): after step 0, inspect only the opponent's public farm.
+  An opening pasture selects Moon; otherwise select X544. The choice is then
+  frozen for the season. No opponent private inventory or replay-only field is
+  used.
+- Moon's required step-0 initialization runs on a deep-copied observation and
+  configuration with Python RNG restored afterward, so the discarded shadow
+  call cannot mutate the live local opponent or its random stream.
+- Frozen holdout: 4 untouched seeds × both seats × 8 opponent families for
+  each candidate (64 games each). Macro/micro outcome rose from 0.390625 for
+  fixed X544 to 0.78125; average margin rose from +274 to +3,192; worst-family
+  outcome rose from 0 to 0.375. V36 and Soil banks were exactly unchanged.
+- Runtime/artifact gate: 15/15 tests, `py_compile`, official
+  `get_last_callable`, and path-loaded full games against V36 and Moon all
+  pass. Maximum observed action time on the frozen panel was 143 ms.
 
 To regenerate the exact entry point:
 
 ```powershell
-C:\Users\Dmitry\.venvs\kg\Scripts\python.exe tools\make_x544_variant.py `
-  research\public_agents\kaggriculture-x544-nah-i-d-win\main.py main.py `
-  --eod-harvest
+C:\Users\Dmitry\.venvs\kg\Scripts\python.exe tools\make_family_selector.py `
+  research\public_agents\kaggriculture-x544-nah-i-d-win\main.py `
+  research\public_agents\kaggriculture-frontier-the-moon-counts-melons\main.py `
+  main.py
 ```
 
-Corrected local candidate SHA-256:
-`839d2244af3498541624a70c156bf8801c22838dc67eefa6641a9e97ca1f1efa`.
-It has passed local validation but has not been submitted: S04 (`55652287`)
-failed before play because the previous artifact exposed a helper as Kaggle's
-last callable. See E016 in `EXPERIMENTS.md`.
+Current local candidate SHA-256:
+`642e4209da47f755ae1d780a21bce679bb2ce716a88ca771fc6151797f59ff08`.
+It has not been submitted. S04 (`55652287`) was the superseded X544+H04
+artifact that failed before play; E016 and E017 in `EXPERIMENTS.md` record the
+packaging fix and the new strategic evidence.
 
 ## Original baseline strategy
 
@@ -63,7 +64,9 @@ to keep replay JSON files for inspection.
 
 For outcome-based evaluation against one or more real agent files, use
 `arena.py`. It records exact hashes, paired outcomes, bootstrap intervals,
-diagnostic margins and per-action latency.
+diagnostic margins, per-action latency and observable shop-unlock history.
+Use `--jobs N` for independent local worker processes; the arena pins
+`PYTHONHASHSEED=0` before spawning them.
 
 The competition submission entry point is `main.py`. Local validation and Git
 synchronization do not submit the agent to Kaggle.

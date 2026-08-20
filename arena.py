@@ -9,12 +9,14 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import concurrent.futures
 import hashlib
 import importlib.util
 import inspect
 import io
 import json
 import math
+import os
 import random
 import statistics
 import time
@@ -123,6 +125,26 @@ def latency_summary(values: list[float]) -> dict:
     }
 
 
+def shop_unlock_events(env) -> list[dict]:
+    """Return the observable shop history without relying on replay-private data."""
+    events = []
+    previous: tuple[str, ...] = ()
+    for step, states in enumerate(env.steps):
+        observation = states[0].observation
+        current = tuple((observation.town or {}).get("unlocked_shops", []) or [])
+        if current != previous:
+            events.append(
+                {
+                    "step": step,
+                    "day": int(observation.day),
+                    "shops": list(current),
+                    "new_shops": list(current[len(previous) :]),
+                }
+            )
+            previous = current
+    return events
+
+
 def play(candidate_spec: str, opponent_spec: str, seed: int, candidate_seat: int) -> dict:
     candidate, candidate_times, candidate_meta = resolve_agent(
         candidate_spec, f"candidate_{seed}_{candidate_seat}"
@@ -158,6 +180,7 @@ def play(candidate_spec: str, opponent_spec: str, seed: int, candidate_seat: int
         "opponent_latency": latency_summary(opponent_times),
         "candidate_artifact": candidate_meta,
         "opponent_artifact": opponent_meta,
+        "shop_unlock_events": shop_unlock_events(env),
     }
 
 
@@ -217,29 +240,51 @@ def main() -> None:
     )
     parser.add_argument("--seed", type=int, default=20260820)
     parser.add_argument("--seeds", type=int, default=4)
+    parser.add_argument(
+        "--jobs",
+        type=int,
+        default=1,
+        help="independent worker processes (use >1 for local multi-core evaluation)",
+    )
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    if args.jobs < 1:
+        parser.error("--jobs must be at least 1")
+    # Windows ProcessPool workers start fresh interpreters.  Pin their hash
+    # seed before spawning so agents that accidentally depend on set/dict hash
+    # order remain reproducible across candidate A/B runs.
+    os.environ.setdefault("PYTHONHASHSEED", "0")
 
     report = {
         "engine": "kaggle-environments==1.32.7",
+        "python_hash_seed": os.environ["PYTHONHASHSEED"],
         "candidate": args.candidate,
         "seed_start": args.seed,
         "seed_count": args.seeds,
+        "jobs": args.jobs,
         "opponents": {},
     }
     for opponent_name, opponent_spec in map(parse_opponent, args.opponent):
         print(f"opponent={opponent_name}", flush=True)
-        matches = []
-        for seed in range(args.seed, args.seed + args.seeds):
-            for seat in (0, 1):
-                match = play(args.candidate, opponent_spec, seed, seat)
-                matches.append(match)
-                print(
-                    f"  seed={seed} seat={seat} outcome={match['outcome']:.1f} "
-                    f"bank={match['candidate_bank']:.0f}:{match['opponent_bank']:.0f} "
-                    f"margin={match['margin']:+.0f}",
-                    flush=True,
-                )
+        tasks = [
+            (args.candidate, opponent_spec, seed, seat)
+            for seed in range(args.seed, args.seed + args.seeds)
+            for seat in (0, 1)
+        ]
+        if args.jobs == 1:
+            matches = [play(*task) for task in tasks]
+        else:
+            with concurrent.futures.ProcessPoolExecutor(max_workers=args.jobs) as executor:
+                matches = list(executor.map(_play_task, tasks))
+        matches.sort(key=lambda row: (row["seed"], row["candidate_seat"]))
+        for match in matches:
+            print(
+                f"  seed={match['seed']} seat={match['candidate_seat']} "
+                f"outcome={match['outcome']:.1f} "
+                f"bank={match['candidate_bank']:.0f}:{match['opponent_bank']:.0f} "
+                f"margin={match['margin']:+.0f}",
+                flush=True,
+            )
         summary = summarize(matches)
         report["opponents"][opponent_name] = {"summary": summary, "matches": matches}
         print(
@@ -251,6 +296,10 @@ def main() -> None:
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(f"report={args.output}")
+
+
+def _play_task(task: tuple[str, str, int, int]) -> dict:
+    return play(*task)
 
 
 if __name__ == "__main__":
