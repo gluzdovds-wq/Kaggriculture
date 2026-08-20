@@ -75,6 +75,30 @@ class EngineFixtureTests(unittest.TestCase):
         self.assertEqual(watered_tile.get("kind"), "PLANT")
         self.assertEqual(dry_tile, {"kind": "WEED"})
 
+    def test_same_turn_plant_then_water_chain_is_effective(self):
+        farm = kg._new_farm(10, 3000)
+        private = kg._new_private()
+        farm["hands"] = [list(farm["farmer"])]
+        private["inventories"] = [{}, {}]
+        private["seeds"]["CARROT"] = 1
+        kg._apply_unit_action(farm, private, 0, ["PLANT", "CARROT"], 10, 0, 24, 100)
+        kg._apply_unit_action(farm, private, 1, ["WATER"], 10, 0, 24, 100)
+        x, y = farm["farmer"]
+        tile = farm["tiles"][y][x]
+        self.assertEqual(tile["crop"], "CARROT")
+        self.assertTrue(tile["watered_today"])
+
+    def test_one_dry_day_survives_but_two_consecutive_dry_days_kill_plant(self):
+        farm = kg._new_farm(10, 3000)
+        x, y = farm["farmer"]
+        farm["tiles"][y][x] = kg._new_plant("TOMATO", 0, 24)
+        farm["tiles"][y][x]["watered_today"] = True
+        kg._daily_refresh_plants(farm, 0, 24)
+        kg._daily_refresh_plants(farm, 1, 24)
+        self.assertEqual(farm["tiles"][y][x].get("kind"), "PLANT")
+        kg._daily_refresh_plants(farm, 2, 24)
+        self.assertEqual(farm["tiles"][y][x], {"kind": "WEED"})
+
     def test_end_of_day_drop_obeys_inventory_order_and_capacity(self):
         private = kg._new_private()
         private["inventories"] = [{"WHEAT": 80}, {"MELON": 30}]
@@ -125,6 +149,7 @@ class EngineFixtureTests(unittest.TestCase):
         self.assertEqual(first.get("animal"), "GOOSE")
         self.assertEqual(first.get("yield_units"), 1)
         self.assertEqual(first.get("consecutive_unfed"), 1)
+        self.assertTrue(first.get("fertilizer_available"))
         kg._daily_refresh_animals(farm, 1)
         self.assertEqual(farm["tiles"][0][0], {"kind": "COOP"})
 

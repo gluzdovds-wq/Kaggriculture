@@ -50,7 +50,7 @@ as new matches are played.
 
 ## Engine/runtime gate progress
 
-Eleven tests currently pass. Targeted fixtures cover the 719-executed-action
+Thirteen tests currently pass. Targeted fixtures cover the 719-executed-action
 boundary, atomic seed over-demand, plant-day watering, ordered shed overflow,
 zero-profit unchanged-market round trips, sparse animal feeding, action shape
 and a full 720-state match. Two regression tests additionally guarantee that
@@ -81,3 +81,52 @@ arena timing instrumentation preserves both one- and two-argument agents.
   and FERTILIZER. Crops and eggs must be produced, not bought.
 - Decision: reject and delete this implementation, not the economic H12 idea.
   Add a regression fixture; redesign H12 as actual JIT farming.
+
+## E005 — H16 clone SELL preemption ablation / no submission
+
+- Change: set `clone_detection_start=999`, leaving the V36 route and all other
+  overlays unchanged.
+- Protocol: two new seeds × both seats directly against exact V36.
+- Result: 0/4 outcomes, average margin -2,331 and worst margin -3,206.
+- Telemetry: exact V36 latched after the public-state clone streak and shifted
+  roughly 580 route sell units; the ablation did not.
+- Decision: strong causal pass for H16. Retain latched one-turn preemption.
+
+## E006 — H17 market-maker feed reserve ablation / no submission
+
+- Change: `feed_days_reserve=0` instead of 2; all other bytes are unchanged.
+- Protocol: six seeds × both seats directly against exact V36 (two development,
+  four untouched holdout).
+- Result: paired outcome 0.75 and average margin +2.5 coins, but worst seat was
+  -3,069. On that seed the opposite seat was +3,073, revealing strong order
+  interaction rather than robust gain.
+- Telemetry: one extra 9-unit WHEAT round-trip on a representative seed;
+  expected edge +1 and observed paired edge only a few coins.
+- Decision: do not promote. The tiny mean does not justify removing a feed
+  safety reserve with a large worst-seat excursion.
+
+## E007 — H02 CARE sparsity ablation / no submission
+
+- Changes: (a) replace every route CARE with PASS; (b) replace CARE with PASS
+  only on odd-numbered days. No freed action was reassigned, so this estimates
+  the bonus value that a future scheduler must beat.
+- Protocol: one new seed × both seats against exact V36.
+- Result: no-CARE lost both seats by an average 93,992 coins; alternating-day
+  CARE lost both by 19,876.
+- Mechanism: every fed+cared day adds to `pending_care_bonus`; the accumulated
+  bonus is consumed on a later fed production day. Non-production care days are
+  therefore not automatically waste.
+- Decision: reject naive sparse CARE for the V36 animal route. Keep the separate
+  feed-parity/terminal-abandonment part of H02 open.
+
+## E008 — H01/H03/H10 engine mechanisms / no submission
+
+- H01: after a watered day, one dry day leaves a plant alive; the second
+  consecutive dry day turns it into a weed.
+- H03: two colocated units can execute PLANT→WATER in one turn and the new
+  plant ends that turn watered.
+- H10: an animal still exposes daily fertilizer after its first unfed day,
+  before escaping on the second.
+- Result: all targeted fixtures pass; full suite 13/13.
+- Decision: mechanism pass only. Each policy-level economic claim still needs
+  a paired route/planner experiment.
