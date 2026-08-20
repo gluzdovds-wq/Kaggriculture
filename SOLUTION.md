@@ -12,6 +12,9 @@ plus our observation-only H04 end-of-day harvest overlay.
   is already standing on a mature crop with available yield. Daily position
   reset and auto-drop preserve the next-day route.
 - Generator: `tools/make_x544_variant.py --eod-harvest`.
+- Packaging gate: the generator places a callable alias after all helpers so
+  Kaggle's `get_last_callable` selects the intended wrapper. The test suite
+  verifies this exact loader behavior and runs a full game from the file path.
 - Local evidence: X544 won 16/16 against exact V36 (+10,417 average margin);
   X544+H04 won 6/6 against Soil (+8,459). It lost 0/6 against both Moon and
   ReadTown, so the candidate is a broad-policy promotion with a known
@@ -27,6 +30,12 @@ C:\Users\Dmitry\.venvs\kg\Scripts\python.exe tools\make_x544_variant.py `
   research\public_agents\kaggriculture-x544-nah-i-d-win\main.py main.py `
   --eod-harvest
 ```
+
+Corrected local candidate SHA-256:
+`839d2244af3498541624a70c156bf8801c22838dc67eefa6641a9e97ca1f1efa`.
+It has passed local validation but has not been submitted: S04 (`55652287`)
+failed before play because the previous artifact exposed a helper as Kaggle's
+last callable. See E016 in `EXPERIMENTS.md`.
 
 ## Original baseline strategy
 

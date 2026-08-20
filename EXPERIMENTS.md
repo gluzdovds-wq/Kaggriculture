@@ -255,3 +255,24 @@ arena timing instrumentation preserves both one- and two-argument agents.
   while recording its explicit Moon/ReadTown failure mode.
 - Generated candidate SHA-256:
   `fe21fb993be2ab819a31c0dfe29593487955c997e81a6ee659af85650387ef62`.
+
+## E016 — S04 packaging failure / fixed locally, not resubmitted
+
+- Kaggle ref `55652287` ended in `SubmissionStatus.ERROR` during its validation
+  episode, before any strategic score was produced. Agent 0 logs showed
+  `TypeError: _xv_eod_harvest() missing 1 required positional argument: 'step'`.
+- Root cause: `kaggle_environments.agent.get_last_callable` executes the last
+  callable inserted into the submission module's globals. Redefining the
+  existing `agent` key does not move it to the end of Python's insertion-ordered
+  dict, so the loader selected the later `_xv_eod_harvest` helper. The old local
+  arena imported `module.agent` directly and therefore could not detect this.
+- Fix: the generator now emits a final `kaggle_entrypoint = agent` alias after
+  every helper and metadata assignment. A regression test calls the official
+  `get_last_callable` and the full-game test now loads `main.py` by path.
+- Verification: 14/14 unit tests pass; `py_compile` passes; the exact loader
+  selects a two-argument function named `agent`; full 720-turn path-loaded
+  games in both seats finished `DONE` (145,162 and 173,763 versus `starter`).
+- Corrected local candidate SHA-256:
+  `839d2244af3498541624a70c156bf8801c22838dc67eefa6641a9e97ca1f1efa`.
+- Decision: S04 supplies no evidence about strategy. Do not make a fifth
+  submission without fresh user authorization.

@@ -151,6 +151,12 @@ __version__ = (
     "X544-local-trim{{int(_XV_ALL_CROP_SEED_TRIM)}}-eod{{int(_XV_EOD_HARVEST)}}"
     "-pr{{_XV_PREEMPT_RATIO}}-pf{{_XV_PREEMPT_FRACTION}}-pb{{_XV_PREEMPT_MAX_BATCH}}"
 )
+
+# kaggle-environments executes the last callable inserted into the module
+# namespace; rebinding an existing ``agent`` name does not change insertion
+# order.  Keep this new alias after every helper and metadata assignment so the
+# official file loader selects the intended wrapper.
+kaggle_entrypoint = agent
 '''
     args.destination.parent.mkdir(parents=True, exist_ok=True)
     args.destination.write_text(source.rstrip() + "\n\n" + overlay.lstrip(), encoding="utf-8")

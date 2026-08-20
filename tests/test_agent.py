@@ -1,15 +1,24 @@
 import math
 import unittest
+from pathlib import Path
 
 from kaggle_environments import make
+from kaggle_environments.agent import get_last_callable
 
 from main import agent
 
 
 class AgentTests(unittest.TestCase):
+    def test_kaggle_file_loader_selects_agent_wrapper(self):
+        path = Path(__file__).resolve().parents[1] / "main.py"
+        loaded = get_last_callable(path.read_text(encoding="utf-8"), path=str(path))
+        self.assertEqual(loaded.__name__, "agent")
+        self.assertIn(loaded.__code__.co_argcount, (1, 2))
+
     def test_full_game_finishes_with_finite_reward(self):
         env = make("kaggriculture", configuration={"seed": 12345}, debug=False)
-        env.run([agent, "starter"])
+        path = Path(__file__).resolve().parents[1] / "main.py"
+        env.run([str(path), "starter"])
         final = env.steps[-1]
         self.assertEqual([state["status"] for state in final], ["DONE", "DONE"])
         self.assertTrue(math.isfinite(float(final[0]["reward"])))
@@ -28,4 +37,3 @@ class AgentTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
