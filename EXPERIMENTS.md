@@ -29,23 +29,29 @@ as new matches are played.
   `47ebf29039463dc0eb803ccf38d5a6f0c130d2b49f3698b20c53f495c1062dc8`
 - Kaggle submission: `55650633`
 - Hypotheses: G03, G04, G05
-- Local protocol: two seeds × both seats against current public multi-route,
-  adaptive, choose-farm and V16 agents.
-- Local result: 50% paired outcome against each of the three fresh styles and
-  100% against V16. Average margins were +3,070, +3,070, +2,650.5 and +7,108.8.
-- Runtime: 16 full games completed; median per-game candidate p99 was 1.55 ms,
-  maximum observed action was 98.25 ms.
-- Observation: outcomes against fresh public agents changed sign across only
-  two seeds, leaving bootstrap intervals at `[0, 1]`. One or two seeds cannot
-  select a submission reliably.
+- Initial local protocol: two seeds × both seats against current public
+  multi-route, adaptive, choose-farm and V16 agents.
+- Invalidated result: the first instrumented run accidentally hid the official
+  configuration argument from two-argument agents. Kaggle itself receives the
+  configuration correctly, so these cross-play numbers are not evidence for
+  S02 and must be recomputed after the arena fix.
+- Corrected local protocol: two seeds × both seats against current public
+  multi-route, adaptive, choose-farm and V16 agents. V36 scored 50% paired
+  outcomes against each of the first three, with average margins from +2,650
+  to +3,070 coins, and 100% with +7,113 against V16. The first three 95%
+  bootstrap intervals remain [0, 1], so this is a smoke test rather than a
+  ranking claim. Artifact: `artifacts/arena/v36-public-pool-2seeds-corrected.json`.
+- Observation: exact execution parity includes the callable signature, not
+  only identical source bytes. Instrumentation can change policy behavior.
 - Decision: use as a public-ceiling LB calibration point. Do not treat it as a
-  proven best public policy until the disputed pairs are expanded.
-- LB status: pending at the time of this log entry.
+  proven best public policy until the corrected pairs are expanded.
+- LB snapshot: 717.7 after completion. The S01 snapshot at the same poll was
+  385.1, for a +332.6 separation between the public ceiling and trivial anchor.
 
 ## Engine/runtime gate progress
 
-Eight tests currently pass. Targeted fixtures cover the 719-executed-action
+Ten tests currently pass. Targeted fixtures cover the 719-executed-action
 boundary, atomic seed over-demand, plant-day watering, ordered shed overflow,
 zero-profit unchanged-market round trips, sparse animal feeding, action shape
-and a full 720-state match.
-
+and a full 720-state match. Two regression tests additionally guarantee that
+arena timing instrumentation preserves both one- and two-argument agents.

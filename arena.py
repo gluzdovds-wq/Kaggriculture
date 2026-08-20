@@ -11,6 +11,7 @@ import argparse
 import contextlib
 import hashlib
 import importlib.util
+import inspect
 import io
 import json
 import math
@@ -50,15 +51,26 @@ def timed_agent(path: Path, tag: str):
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     raw_agent = module.agent
+    positional = [
+        parameter
+        for parameter in inspect.signature(raw_agent).parameters.values()
+        if parameter.kind
+        in (inspect.Parameter.POSITIONAL_ONLY, inspect.Parameter.POSITIONAL_OR_KEYWORD)
+    ]
+    accepts_configuration = len(positional) >= 2
     timings = []
 
-    def wrapped(obs):
+    def wrapped(obs, configuration=None):
         started = time.perf_counter()
         try:
+            if accepts_configuration:
+                return raw_agent(obs, configuration)
             return raw_agent(obs)
         finally:
             timings.append(time.perf_counter() - started)
 
+    wrapped._arena_signature = str(inspect.signature(raw_agent))
+    wrapped._arena_accepts_configuration = accepts_configuration
     return wrapped, timings
 
 
@@ -74,6 +86,8 @@ def resolve_agent(spec: str, tag: str):
         "path": str(path),
         "sha256": file_hash(path),
         "bytes": path.stat().st_size,
+        "callable_signature": loaded._arena_signature,
+        "accepts_configuration": loaded._arena_accepts_configuration,
     }
 
 
@@ -241,4 +255,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
