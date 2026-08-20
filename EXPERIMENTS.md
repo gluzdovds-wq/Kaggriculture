@@ -308,3 +308,42 @@ arena timing instrumentation preserves both one- and two-argument agents.
   `642e4209da47f755ae1d780a21bce679bb2ce716a88ca771fc6151797f59ff08`.
 - Decision: H22/H11 pass with a large disjoint multi-family improvement. Promote
   locally, but do not make a fifth Kaggle submission without user permission.
+
+## E018 — H22 transfer panel and public behavioral checkpoints
+
+- Added deterministic, inference-visible opponent checkpoints at steps 1, 12,
+  24, 48 and 72 to `arena.py`. They contain only public farm/money/layout/hire
+  features; no opponent private inventory, replay seed or action is exposed to
+  the policy. `tools/compare_openings.py` verifies exact first-action divergence
+  while isolating shadow observations and Python's process-global RNG.
+- Independent seeds `20262100..20262101`, both seats, the same eight-family
+  panel: fixed X544 macro outcome was 0.375; the promoted selector was 0.750.
+  Per-family selector outcomes were V36 0.50, Soil 1.0, X544 1.0, Moon 0.50,
+  Read 1.0, multi 1.0, adaptive 1.0 and choose 0.0. This is a second disjoint
+  panel, not a retune of E017.
+- All pasture-opening families remained byte-identical in public farm features
+  through step 72. Exact shadow comparison confirmed X544 first diverges from
+  Moon/Choose at step 72, after the first shop is revealed; Read first diverges
+  at step 152 on the inspected ICE_CREAM/PIZZA route. Therefore a perfect
+  pre-divergence classifier inside that clone family is impossible from public
+  state alone.
+- A 24-seed, both-seat Moon-vs-Choose probe produced outcome 0.625, average
+  margin +132.9 and bootstrap 95% CI [0.479, 0.771]. Narrow rules based on the
+  first one or two shops were inconsistent and did not justify a third branch.
+- Decision: retain the two-branch selector unchanged. H22 transfers across a
+  second panel, but family-level uncertainty and CI must remain explicit.
+
+## E019 — H02 schedule-blind alternate-day FEED / rejected
+
+- Generated a reproducible V36 route ablation that replaces every `FEED` on
+  odd days with `PASS`, preserving unit positions and all other actions.
+- Fresh seeds `20262300..20262303`, both seats versus exact V36: outcome 0/8,
+  average margin -70,983 and worst margin -77,955. On an inspected final state,
+  the ablation retained only three cows while the reference retained eight cows
+  and four sheep; most animals escaped after consecutive missed feeds.
+- This is substantially worse than the earlier sparse-CARE screen. A calendar
+  parity is not a safe proxy for each animal's `consecutive_unfed` state because
+  the tape does not necessarily visit every animal on the following day.
+- Decision: reject schedule-blind feed sparsity. H02 now requires a per-animal
+  deadline ledger plus a guaranteed next-day service assignment; do not mutate
+  an open-loop tape by day parity.

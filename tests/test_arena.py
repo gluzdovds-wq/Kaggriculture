@@ -2,10 +2,32 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from arena import timed_agent
+from arena import public_farm_signature, timed_agent
 
 
 class ArenaTests(unittest.TestCase):
+    def test_public_farm_signature_excludes_private_state(self):
+        farm = {
+            "money": 22,
+            "farmer": [4, 4],
+            "hands": [[4, 4]],
+            "hires_today": 1,
+            "unlocked_quadrants": ["NW"],
+            "tiles": [
+                [
+                    {"kind": "PASTURE", "animal": "COW"},
+                    {"kind": "PLANT", "crop": "WHEAT"},
+                    "LOCKED",
+                ]
+            ],
+            "private": {"shed": {"WHEAT": 99}},
+        }
+        signature = public_farm_signature(farm)
+        self.assertEqual(signature["tile_kinds"], {"PASTURE": 1, "PLANT": 1})
+        self.assertEqual(signature["crops"], {"WHEAT": 1})
+        self.assertEqual(signature["animals"], {"COW": 1})
+        self.assertNotIn("private", signature)
+
     def test_instrumentation_preserves_two_argument_agent_signature(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "agent.py"

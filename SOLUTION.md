@@ -64,9 +64,14 @@ to keep replay JSON files for inspection.
 
 For outcome-based evaluation against one or more real agent files, use
 `arena.py`. It records exact hashes, paired outcomes, bootstrap intervals,
-diagnostic margins, per-action latency and observable shop-unlock history.
+diagnostic margins, per-action latency, observable shop-unlock history and
+public-only opponent route checkpoints at steps 1/12/24/48/72.
 Use `--jobs N` for independent local worker processes; the arena pins
 `PYTHONHASHSEED=0` before spawning them.
+
+Use `tools/compare_openings.py` to find the exact first action divergence of
+compatible public routes. Shadow calls receive deep-copied observations and
+restore Python's global RNG, so this diagnostic does not perturb the live route.
 
 The competition submission entry point is `main.py`. Local validation and Git
 synchronization do not submit the agent to Kaggle.

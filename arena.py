@@ -27,6 +27,7 @@ with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.St
 
 
 BUILT_INS = {"pass", "random", "starter"}
+PUBLIC_CHECKPOINT_STEPS = (1, 12, 24, 48, 72)
 
 
 def file_hash(path: Path) -> str:
@@ -145,6 +146,66 @@ def shop_unlock_events(env) -> list[dict]:
     return events
 
 
+def _public_get(value, key, default=None):
+    if isinstance(value, dict):
+        return value.get(key, default)
+    return getattr(value, key, default)
+
+
+def public_farm_signature(farm) -> dict:
+    """Compress an inference-visible farm into deterministic route features."""
+    tile_kinds: dict[str, int] = {}
+    crops: dict[str, int] = {}
+    animals: dict[str, int] = {}
+    occupied = []
+    for y, row in enumerate(_public_get(farm, "tiles", []) or []):
+        for x, tile in enumerate(row or []):
+            if tile is None or tile == "LOCKED":
+                continue
+            kind = str(_public_get(tile, "kind", type(tile).__name__))
+            tile_kinds[kind] = tile_kinds.get(kind, 0) + 1
+            crop = _public_get(tile, "crop")
+            animal = _public_get(tile, "animal")
+            if crop:
+                crops[str(crop)] = crops.get(str(crop), 0) + 1
+            if animal:
+                animals[str(animal)] = animals.get(str(animal), 0) + 1
+            occupied.append([x, y, kind, crop, animal])
+    return {
+        "money": int(_public_get(farm, "money", 0) or 0),
+        "farmer": list(_public_get(farm, "farmer", []) or []),
+        "hands": [list(position) for position in (_public_get(farm, "hands", []) or [])],
+        "hires_today": int(_public_get(farm, "hires_today", 0) or 0),
+        "unlocked_quadrants": list(
+            _public_get(farm, "unlocked_quadrants", []) or []
+        ),
+        "tile_kinds": dict(sorted(tile_kinds.items())),
+        "crops": dict(sorted(crops.items())),
+        "animals": dict(sorted(animals.items())),
+        "occupied": occupied,
+    }
+
+
+def opponent_public_checkpoints(env, candidate_seat: int) -> list[dict]:
+    """Record only observations that are legal inputs to the candidate policy."""
+    opponent_seat = 1 - candidate_seat
+    checkpoints = []
+    for step in PUBLIC_CHECKPOINT_STEPS:
+        if step >= len(env.steps):
+            continue
+        observation = env.steps[step][candidate_seat].observation
+        farms = _public_get(observation, "farms", []) or []
+        checkpoints.append(
+            {
+                "step": step,
+                "day": int(_public_get(observation, "day", 0) or 0),
+                "hour": int(_public_get(observation, "hour", 0) or 0),
+                "opponent": public_farm_signature(farms[opponent_seat]),
+            }
+        )
+    return checkpoints
+
+
 def play(candidate_spec: str, opponent_spec: str, seed: int, candidate_seat: int) -> dict:
     candidate, candidate_times, candidate_meta = resolve_agent(
         candidate_spec, f"candidate_{seed}_{candidate_seat}"
@@ -181,6 +242,7 @@ def play(candidate_spec: str, opponent_spec: str, seed: int, candidate_seat: int
         "candidate_artifact": candidate_meta,
         "opponent_artifact": opponent_meta,
         "shop_unlock_events": shop_unlock_events(env),
+        "opponent_public_checkpoints": opponent_public_checkpoints(env, candidate_seat),
     }
 
 
