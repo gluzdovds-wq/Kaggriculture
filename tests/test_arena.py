@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from arena import private_storage_totals, public_farm_signature, timed_agent
+from arena import agent_telemetry, private_storage_totals, public_farm_signature, timed_agent
 
 
 class ArenaTests(unittest.TestCase):
@@ -51,6 +51,23 @@ class ArenaTests(unittest.TestCase):
             self.assertEqual(wrapped._arena_signature, "(obs, configuration=None)")
             self.assertTrue(wrapped._arena_accepts_configuration)
             self.assertEqual(len(timings), 1)
+
+    def test_instrumentation_exposes_agent_telemetry_snapshot(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "agent.py"
+            path.write_text(
+                "def agent(obs):\n"
+                "    agent.telemetry['calls'] += 1\n"
+                "    return {}\n"
+                "agent.telemetry = {'calls': 0}\n",
+                encoding="utf-8",
+            )
+            wrapped, _ = timed_agent(path, "telemetry")
+            wrapped({})
+            snapshot = agent_telemetry(wrapped)
+            self.assertEqual(snapshot, {"calls": 1})
+            snapshot["calls"] = 99
+            self.assertEqual(agent_telemetry(wrapped), {"calls": 1})
 
     def test_instrumentation_still_supports_one_argument_agent(self):
         with tempfile.TemporaryDirectory() as directory:

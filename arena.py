@@ -8,6 +8,7 @@ per-action latency for reproducibility and Kaggle runtime checks.
 from __future__ import annotations
 
 import argparse
+import copy
 import contextlib
 import concurrent.futures
 import hashlib
@@ -74,7 +75,15 @@ def timed_agent(path: Path, tag: str):
 
     wrapped._arena_signature = str(inspect.signature(raw_agent))
     wrapped._arena_accepts_configuration = accepts_configuration
+    wrapped._arena_raw_agent = raw_agent
     return wrapped, timings
+
+
+def agent_telemetry(agent) -> dict | None:
+    """Snapshot optional JSON-like telemetry exposed by a file agent."""
+    raw_agent = getattr(agent, "_arena_raw_agent", agent)
+    telemetry = getattr(raw_agent, "telemetry", None)
+    return copy.deepcopy(telemetry) if isinstance(telemetry, dict) else None
 
 
 def resolve_agent(spec: str, tag: str):
@@ -319,6 +328,7 @@ def play(candidate_spec: str, opponent_spec: str, seed: int, candidate_seat: int
         "candidate_latency": latency_summary(candidate_times),
         "opponent_latency": latency_summary(opponent_times),
         "candidate_artifact": candidate_meta,
+        "candidate_telemetry": agent_telemetry(candidate),
         "opponent_artifact": opponent_meta,
         "shop_unlock_events": shop_unlock_events(env),
         "opponent_public_checkpoints": opponent_public_checkpoints(env, candidate_seat),

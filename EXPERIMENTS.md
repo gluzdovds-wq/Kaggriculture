@@ -367,3 +367,25 @@ arena timing instrumentation preserves both one- and two-argument agents.
 - Decision: H05 mechanism and natural trigger pass, but do not promote the
   overlay. The observed upper-bound value is small relative to six-figure
   scores and belongs in H21's multi-turn terminal solver.
+
+## E021 — H09 bounded weed repair causal ablation / local pass
+
+- Added `tools/make_weed_repair_ablation.py`, which disables only the returned
+  weed-repair action while still evaluating the original repair for telemetry.
+  The fixed route, market overlay, RNG and every other policy component remain
+  unchanged. `arena.py` now snapshots optional agent telemetry in each match.
+- Fresh seeds `20262500..20262507`, both seats, against the exact corresponding
+  base agent: Moon without repair scored 0.34375 with average margin -414.0;
+  X544 without repair also scored 0.34375 with average margin -454.2. Their
+  paired bootstrap 95% intervals were [0.21875, 0.46875] and [0.15625, 0.50].
+- The counterfactual repair changed at least one unit action in 9/16 matches in
+  each branch. Across those triggered matches, disabling it cost an average
+  -736.0 coins for Moon and -807.4 for X544. In all seven no-trigger matches per
+  branch, candidate and exact-base banks were identical, confirming zero
+  strategic side effect when no relevant weed collision occurred.
+- A few triggered games were neutral or slightly better without repair, so the
+  transaction is not pointwise optimal. Its aggregate effect is nevertheless
+  clearly favorable on two separately wrapped routes, while the eight-step
+  replay bound prevents unbounded route drift.
+- Decision: H09 local pass. Retain the existing bounded repair in both branches
+  of the promoted H22 selector; no `main.py` change is required.

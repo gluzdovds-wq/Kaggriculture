@@ -15,11 +15,14 @@ the promoted candidate is an observation-only early route-family selector.
 - Moon's required step-0 initialization runs on a deep-copied observation and
   configuration with Python RNG restored afterward, so the discarded shadow
   call cannot mutate the live local opponent or its random stream.
+- Both branches retain bounded weed-collision repair. A direct no-repair
+  ablation (E021) fell to 0.34375 against each exact base, while all no-trigger
+  games remained exactly neutral in final banks.
 - Frozen holdout: 4 untouched seeds × both seats × 8 opponent families for
   each candidate (64 games each). Macro/micro outcome rose from 0.390625 for
   fixed X544 to 0.78125; average margin rose from +274 to +3,192; worst-family
   outcome rose from 0 to 0.375. V36 and Soil banks were exactly unchanged.
-- Runtime/artifact gate: 15/15 tests, `py_compile`, official
+- Runtime/artifact gate: 20/20 tests, `py_compile`, official
   `get_last_callable`, and path-loaded full games against V36 and Moon all
   pass. Maximum observed action time on the frozen panel was 143 ms.
 
@@ -64,8 +67,9 @@ to keep replay JSON files for inspection.
 
 For outcome-based evaluation against one or more real agent files, use
 `arena.py`. It records exact hashes, paired outcomes, bootstrap intervals,
-diagnostic margins, per-action latency, observable shop-unlock history and
-public-only opponent route checkpoints at steps 1/12/24/48/72.
+diagnostic margins, per-action latency, optional agent telemetry, observable
+shop-unlock history and public-only opponent route checkpoints at steps
+1/12/24/48/72.
 Use `--jobs N` for independent local worker processes; the arena pins
 `PYTHONHASHSEED=0` before spawning them.
 
