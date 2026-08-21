@@ -423,3 +423,8 @@ the leaderboard only as a noisy measurement of the current live meta.
 - Ten still-later public episodes passed exact S08 reproduction and produced
   V36 `9/10`, N39 `5/10`, N31 `4/10`, and S08 `3/10`. N39 won V36's only loss;
   the combined portfolio now covers `55/56` chronological public tapes.
+- A current-meta transfer audit then wrapped exact V36 with the existing H21
+  terminal route. It scored only `0.375` paired on eight fresh two-seat mirror
+  seeds: triggered cases spent twelve moves to liquidate six WHEAT and were
+  negative in every paired trigger. This is further evidence that useful
+  overlays must move with their compatible task graph, not just their trigger.

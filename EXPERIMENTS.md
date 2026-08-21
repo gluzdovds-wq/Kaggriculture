@@ -1070,3 +1070,24 @@ arena timing instrumentation preserves both one- and two-argument agents.
 - Decision: reject the retune without spending a full holdout or leaderboard
   slot. Exact V36 keeps its `9/10` result, while N39 already wins this episode
   by `+9540`; the right mechanism here is the two-policy portfolio.
+
+## E070 — current-meta V36 terminal-overlay transfer / rejected
+
+- Audited the original scored-donor requirements against executable evidence.
+  E036 proves the exact V16-RC5/v25 version IDs, hashes, direct S05 panels and
+  both-seat eight-family shootout. E015/E021/E022/E024--E033 separately prove
+  the weed, terminal, FERTILIZER and opponent-family-selector mechanisms on
+  the selected S05 lineage. The remaining useful question was transfer to the
+  now current-meta exact V36 policy.
+- H21 is the only existing overlay that can wrap V36 without depending on
+  X544/Moon private globals or a missing fixed action schedule. Generated
+  V36+H21 used the established step-689, actors 1/2, pressure-90 rule and was
+  screened against exact V36 on eight fresh seeds from both seats.
+- The candidate scored paired outcome `0.375` with bootstrap 95% interval
+  `[0.1875, 0.5]` and average margin `-23.875`. On every triggered farm it
+  spent twelve route moves to recover/sell only six WHEAT; paired triggered
+  deltas were negative on all three affected seeds (`-146`, `-104`, `-132`).
+- Decision: reject N47 before a broad pool or leaderboard slot. H21 is a
+  route-specific task-graph improvement, not a portable terminal primitive.
+  A V36 terminal repair would need actor opportunity-cost scoring and an
+  inventory-value-aware route planner, not fixed worker indexes.
