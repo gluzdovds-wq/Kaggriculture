@@ -301,8 +301,8 @@ the leaderboard only as a noisy measurement of the current live meta.
   sales, capped at 10 and repaid through the same debt ledger.  It passed fresh
   public-family and real-replay holdouts without an outcome regression and is
   the current local artifact (`df06a07...`), ready after the quota reset.
-- At the final checkpoint of this run S08 had moved to `1803.3` and S06r to
-  `1815.2`.  The last current-day submission remained unused as the required
+- At the final checkpoint of this run S08 had moved to `2086.9` and S06r to
+  `1919.2`.  The last current-day submission remained unused as the required
   validation/repair reserve.
 
 ## Execution checkpoint: N32–N36

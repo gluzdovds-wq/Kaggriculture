@@ -746,8 +746,8 @@ arena timing instrumentation preserves both one- and two-argument agents.
   latency in the replay holdout was 145 ms.  Decision: candidate is ready for
   the next autonomous daily slot, while the current final slot remains the
   required reserve.
-- Latest read-only ladder checkpoint: S08 rose to `1803.3` and S06r to
-  `1815.2`; both remain live ratings rather than frozen artifact scores.  No
+- Latest read-only ladder checkpoint: S08 rose to `2086.9` and S06r to
+  `1919.2`; both remain live ratings rather than frozen artifact scores.  No
   upload was made because the one remaining current-day slot is the reserve.
 
 ## E049 — N32 delayed public-state classifier / rejected
