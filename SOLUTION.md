@@ -46,6 +46,11 @@ own-state terminal and market-timing overlays.
   S08's `+3267.09`; the fourth holdout added one improvement and the first
   documented regression. It also preserved N36's `8/10` outcome on the older
   S05 replay set.
+- A current-meta donor matrix changes the second-slot choice without replacing
+  N39: exact V36 won `13/14` newest episodes, versus N39's `8/14`, but only
+  `23/32` on the preceding blocks versus N39's `30/32`. The two policies
+  therefore form a temporal/diversity portfolio; neither is a safe in-match
+  graft because they diverge at step 0.
 - On an exact eight-family transfer panel, N03 had no outcome regression and
   improved every same-seed family margin by +1.5 to +134. A separate four-seed,
   both-seat holdout preserved public-family outcomes and added +50.75 to
@@ -82,7 +87,8 @@ Current promoted artifact: 312,188 bytes, SHA-256
 `6073f67f394f7f6161dd60c8406106b130e7ca702974a4accbe1e8e163b8fa1d`.
 Final preflight passed 66/66 unit tests, `py_compile`, official last-callable
 loading and full games. N39 is held for the first post-reset autonomous slot;
-N31 is the second candidate and the current final Kaggle slot remains reserved.
+exact V36 is the second current-meta policy, and N31 is retained as the daily
+validation/repair reserve.
 
 ## Original baseline strategy
 

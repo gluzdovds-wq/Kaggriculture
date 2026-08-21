@@ -978,3 +978,22 @@ arena timing instrumentation preserves both one- and two-argument agents.
   first incompatible action. Randomizing that action only trades the two
   outcomes; it does not improve their expected win rate. Keep deterministic
   N39 and retain N31 as policy diversity.
+
+## E064 — current-meta donor matrix and portfolio correction
+
+- On the six S08 losses in the newest fourteen-episode block, four independent
+  whole-policy donors all won `6/6`: C95, V36, Soil and V16. On the other eight
+  episodes, they retained `6/8`, `7/8`, `6/8` and `4/8`; N39 retained `7/8`.
+  The complete latest-block outcomes were therefore V36 `13/14`, C95 and Soil
+  `12/14`, V16 `10/14`, and N39 `8/14`.
+- This is a temporal meta shift, not universal V36 dominance. Exact V36 won
+  only `15/20` on the first two S08 blocks and `8/12` on the third, versus
+  N39's `19/20` and `11/12`. Across all 46 episodes V36 and S08 both finish
+  `36/46`, while N39 remains `38/46`.
+- Rechecking V36's previously tested market quantity 20 reproduced the exact
+  S03 hash `8c27bc4e...`. It improved V36's only newest loss from `-875` to
+  `-597` but did not flip it, so no N43 variant was promoted.
+- Decision: after the quota reset, use N39 first and exact V36 second. They
+  are distinct from step 0 and cover different current-meta modes; N31 becomes
+  the held validation/repair reserve. Do not blend them with per-turn epsilon
+  noise or spend a slot on V36 q20.

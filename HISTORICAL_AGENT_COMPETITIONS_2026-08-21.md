@@ -398,3 +398,18 @@ the leaderboard only as a noisy measurement of the current live meta.
   latent class only after the decision it was meant to improve. Keep N39 for
   aggregate strength and N31 as a genuinely different conservative policy;
   do not spend a slot on the N42 probe.
+
+## Execution checkpoint: current-meta portfolio
+
+- A whole-policy donor matrix on the newest fourteen episodes found a sharp
+  temporal shift: exact V36 won `13/14`, while N39 won `8/14`. V36 was weaker
+  on the preceding 32 episodes (`23/32` versus N39's `30/32`), so neither
+  policy universally dominates the other.
+- C95 and Soil also won `12/14`, confirming that the six new S08 losses form a
+  coherent weakness of the N39 route family rather than one overfit tape.
+  These donors diverge at step 0; there is no inference-visible pre-action
+  feature with which an in-match selector can safely graft them onto N39.
+- The correct exploitation/exploration unit is therefore the submission
+  portfolio: activate deterministic N39 and exact V36 as two independent
+  ladder policies after reset. Keep N31 unused as the repair reserve. A q20
+  V36 retry improved its sole fresh loss margin but did not flip the outcome.
