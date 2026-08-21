@@ -679,3 +679,73 @@ arena timing instrumentation preserves both one- and two-argument agents.
   path-loaded 8-game smoke versus S08 scored paired outcome `0.75` and average
   margin `+14.0`.  Decision: hold this as S09 until the final daily slot is
   justified by stable S08 evidence or the quota reset.
+
+## E045 — N28 safe macro exploration
+
+- Evaluated stochasticity only at the state-compatible H22 route branch using
+  paired full-feedback X544/Moon reports.  The robust grid fit recovered the
+  deterministic selector exactly: Moon probability `0` without an opening
+  pasture and `1` with one.
+- On training families deterministic H22 had mean expected outcome `0.8125`,
+  worst-family outcome `0.25` and zero regret.  A 95/5 route flip reduced these
+  to `0.79375`, `0.2375` and introduced `0.01875` mean regret.  On holdout the
+  deterministic policy was `1.0/1.0`; 95/5 reduced the worst family to
+  `0.9875`.
+- Decision: reject epsilon exploration in live matches.  Exploration remains
+  an offline experiment-selection mechanism; deployed play is deterministic.
+
+## E046 — N25/N26 exact public replay league
+
+- Downloaded ten public S05 ladder replays and added an extractor that maps the
+  action stored at replay state `t+1` back to observation step `t`.  The
+  generated tape is explicitly restricted to its original public seed and
+  seat; it is not treated as recovered source code.
+- Exact S05 (`4ddec3...`) reproduced all three recorded losses down to the
+  final banks: `88377:89444`, `102375:102669` and `94909:96039`.  This fidelity
+  gate must pass before counterfactual candidates are accepted.
+- The first timing league found no outcome flips: current N29 improved average
+  loss margin by `+19.3`, while removing the FERTILIZER overlay worsened it by
+  `-56.7`.  A replay-state curriculum retained 74 unique inference-visible
+  rows across negative bank swings, market collisions, storage pressure and
+  terminal-market strata.
+- Decision: use replay tapes as a high-value best-response screen and N26
+  curriculum source, while retaining broad public-family holdouts against
+  adaptive source agents.
+
+## E047 — premium-sale best response and cap sweep
+
+- Generalized the debt-conserved market overlay to all sellable products and
+  screened MILK, WOOL and STRAWBERRY separately.  The combined premium overlay
+  moved only quantities already scheduled for a later sale and repaid every
+  advanced unit.
+- On the three exact loss replays, premium `cap=24` improved average margin by
+  `+687` and flipped the Himanshu loss to a `+1284` win.  The cap sweep kept the
+  same one improvement and zero regressions at 5/10/24; `cap=10` was best on
+  average at `+694.3` versus baseline and was selected as the smaller action.
+- A seven-win replay holdout preserved all `7/7` wins and raised average margin
+  from `+6321.0` to `+6663.7` (`+342.7`).  The replay evidence therefore
+  contains both recovered losses and untouched wins.
+
+## E048 — N31 broad holdout and local promotion
+
+- The initial `cap=24` eight-family holdout improved mean family outcome from
+  `0.8125` to `0.84375`, added `+172.4` average family margin and caused no
+  family outcome regression.  Inventory naturally route-gated the products:
+  X544-like farms advanced MILK/WOOL, while Moon-like farms advanced
+  STRAWBERRY/WOOL; all debt was repaid exactly.
+- A fresh cap10 panel on seeds `20265600..20265601`, both seats, preserved the
+  V36/Moon/Read/C95 outcomes.  Margin deltas were `-146.0`, `+444.5`, `+467.8`
+  and `-55.0`; the two small safety-family costs did not alter wins.
+- Promoted N31 to `main.py`: FERTILIZER, MILK, WOOL and STRAWBERRY are advanced
+  by at most 10 units, with X544 lead 1, Moon lead 2 and Moon lead 3 only on
+  steps 480–714.  Artifact SHA-256 is
+  `df06a07f9d83b07f504d00f5d9f742e0152bdc463e5d54ae6a6ac9f7b5b526c7`.
+- Preflight passed 49/49 tests, `py_compile`, official last-callable loading,
+  a changed-file secret scan and path-loaded games from both route families.
+  The promoted smoke won 4/4 against V36 and Moon; maximum observed action
+  latency in the replay holdout was 145 ms.  Decision: candidate is ready for
+  the next autonomous daily slot, while the current final slot remains the
+  required reserve.
+- Latest read-only ladder checkpoint: S08 rose to `1803.3` and S06r to
+  `1815.2`; both remain live ratings rather than frozen artifact scores.  No
+  upload was made because the one remaining current-day slot is the reserve.

@@ -24,10 +24,16 @@ own-state terminal and market-timing overlays.
   before day-28 EOD. It removed the observed 12-WHEAT overflow and added +577
   coins per seat on the audited seed; all X544 and low-pressure transfer games
   stayed exactly neutral.
-- N03 advances only an already scheduled FERTILIZER sale by one turn, capped at
-  10 units, then subtracts the same quantity from the next turn. A per-seat debt
-  ledger carries any unpaid amount forward, so the overlay changes timing but
-  not scheduled quantity. It runs only on steps 120–714.
+- N31 advances only already scheduled FERTILIZER, MILK, WOOL and STRAWBERRY
+  sales, capped at 10 units, then subtracts the same quantities from their
+  original future turns. A per-seat debt ledger carries any unpaid amount
+  forward, so the overlay changes timing but not scheduled quantity. It runs
+  only on steps 120–714. X544 uses lead 1; Moon uses lead 2 and lead 3 only on
+  steps 480–714.
+- The exact public-replay league reproduced three S05 losses and seven wins at
+  their original final banks. N31 flipped one of the losses to a win, caused no
+  replay outcome regression and added `+342.7` average margin on the seven-win
+  holdout. A fresh V36/Moon/Read/C95 panel also preserved every outcome.
 - On an exact eight-family transfer panel, N03 had no outcome regression and
   improved every same-seed family margin by +1.5 to +134. A separate four-seed,
   both-seat holdout preserved public-family outcomes and added +50.75 to
@@ -36,9 +42,9 @@ own-state terminal and market-timing overlays.
   each candidate (64 games each). Macro/micro outcome rose from 0.390625 for
   fixed X544 to 0.78125; average margin rose from +274 to +3,192; worst-family
   outcome rose from 0 to 0.375. V36 and Soil banks were exactly unchanged.
-- Runtime/artifact gate: 23/23 tests, `py_compile`, official
+- Runtime/artifact gate: 49/49 tests, `py_compile`, official
   `get_last_callable`, and path-loaded full games against V36 and Moon all
-  pass. Maximum observed action time on the frozen panel was 143 ms.
+  pass. Maximum observed action time in the replay holdout was 145 ms.
 
 To regenerate the exact entry point:
 
@@ -51,17 +57,18 @@ C:\Users\Dmitry\.venvs\kg\Scripts\python.exe tools\make_terminal_route_variant.p
   research\generated\h22-selector-base.py main.py `
   --actor 1 --actor 2 --start-step 689 --min-total 90 --route moon
 C:\Users\Dmitry\.venvs\kg\Scripts\python.exe tools\make_market_timing_variant.py `
-  main.py main.py --items FERTILIZER --fertilizer-cap 10 `
-  --start 120 --stop 715 --label n13_fert10
+  main.py main.py --items FERTILIZER,MILK,WOOL,STRAWBERRY `
+  --fertilizer-cap 10 --start 120 --stop 715 `
+  --x544-lead 1 --moon-lead 2 --moon-window-lead 3 `
+  --moon-window-start 480 --moon-window-stop 715 `
+  --label n31_premium_cap10
 ```
 
-Current promoted artifact: 309,836 bytes, SHA-256
-`4ddec3eafa9840e4bb7b07b9d37d4af2835c8bbcf8cf2411c776f96e662788aa`.
-It is byte-identical to the E028–E033 tested candidate. Final preflight passed
-26/26 unit tests, `py_compile`, official last-callable loading and full games on
-both selector branches; observed maximum action latency was 62.76 ms.
-Submitted as S05, Kaggle ref `55666404`; the first observed status was
-`PENDING`.
+Current promoted artifact: 310,564 bytes, SHA-256
+`df06a07f9d83b07f504d00f5d9f742e0152bdc463e5d54ae6a6ac9f7b5b526c7`.
+Final preflight passed 49/49 unit tests, `py_compile`, official last-callable
+loading and full games on both selector branches. It is held locally for the
+next autonomous daily slot; the current final Kaggle slot remains reserved.
 
 ## Original baseline strategy
 

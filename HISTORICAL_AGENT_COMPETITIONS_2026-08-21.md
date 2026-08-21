@@ -268,7 +268,7 @@ interpretation of the Kaggriculture leaderboard and makes blind duplicate
 refreshes unsafe.  Use controlled paired cross-play for causal selection and
 the leaderboard only as a noisy measurement of the current live meta.
 
-## Execution checkpoint: N24, N27 and N29
+## Execution checkpoint: N24–N29 and N31
 
 - N27's full-feedback contextual selector independently relearned H22 from
   public step-1 features: starting money at most 12 selects X544, otherwise
@@ -287,3 +287,20 @@ the leaderboard only as a noisy measurement of the current live meta.
   initial rating was `600.0`.  The locally promoted late-window refinement is
   held as the one remaining repair slot until S08 provides meaningful live
   history or the quota resets.
+- N28's safe full-feedback mixture rejected online epsilon exploration.  The
+  learned robust solution was exactly deterministic H22; a 95/5 route flip
+  reduced both mean and worst-family expected outcome on training and holdout.
+- N25 now has a fidelity-gated counterfactual league built from public ladder
+  replays.  Exact S05 reproduced all three recorded loss banks; N31's bounded
+  premium-sale overlay flipped one loss to a win, preserved seven independent
+  recorded wins and improved their average margin by `+342.7`.
+- N26 extracted 74 inference-visible rare-state rows across negative bank
+  swings, market collisions, terminal sales and storage pressure.  They are a
+  curriculum for masked macro work, not hidden opponent-state reconstruction.
+- N31 advances only already scheduled FERTILIZER, MILK, WOOL and STRAWBERRY
+  sales, capped at 10 and repaid through the same debt ledger.  It passed fresh
+  public-family and real-replay holdouts without an outcome regression and is
+  the current local artifact (`df06a07...`), ready after the quota reset.
+- At the final checkpoint of this run S08 had moved to `1803.3` and S06r to
+  `1815.2`.  The last current-day submission remained unused as the required
+  validation/repair reserve.

@@ -244,12 +244,12 @@ h21_kaggle_entrypoint = agent
 
 
 # Generated market-timing experiment: conserve quantities while moving only
-# an already scheduled WHEAT/FERTILIZER sale a bounded number of turns earlier.
+# already scheduled sales of selected products a bounded number of turns earlier.
 import copy as _mt_copy
 
 _MT_BASE_AGENT = agent
-_MT_ITEMS = ('FERTILIZER',)
-_MT_CAPS = {'WHEAT': 10, 'FERTILIZER': 10}
+_MT_ITEMS = ('FERTILIZER', 'MILK', 'WOOL', 'STRAWBERRY')
+_MT_CAPS = {'WHEAT': 10, 'FERTILIZER': 10, 'CARROT': 10, 'TOMATO': 10, 'STRAWBERRY': 10, 'MELON': 10, 'EGG': 10, 'MILK': 10, 'WOOL': 10}
 _MT_START = 120
 _MT_STOP = 715
 _MT_LEAD_X544 = 1
@@ -380,5 +380,5 @@ def agent(obs, configuration=None):
 
 
 agent.telemetry = _MT_TELEMETRY
-__version__ = "market-timing-n29_routelead_m2_m3_late"
+__version__ = "market-timing-n31_premium_cap10"
 market_timing_kaggle_entrypoint = agent

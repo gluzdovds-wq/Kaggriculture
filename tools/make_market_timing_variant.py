@@ -6,10 +6,35 @@ import argparse
 from pathlib import Path
 
 
+ALLOWED_ITEMS = (
+    "WHEAT", "FERTILIZER", "CARROT", "TOMATO", "STRAWBERRY", "MELON",
+    "EGG", "MILK", "WOOL",
+)
+
+
+def parse_item_caps(values: list[str]) -> dict[str, int]:
+    caps = {}
+    for raw in values:
+        if "=" not in raw:
+            raise ValueError("item cap must be ITEM=QUANTITY")
+        item, quantity = raw.split("=", 1)
+        item = item.strip().upper()
+        if item not in ALLOWED_ITEMS:
+            raise ValueError(f"unsupported market item: {item}")
+        try:
+            value = int(quantity)
+        except ValueError as exc:
+            raise ValueError("item cap quantity must be an integer") from exc
+        if value < 0:
+            raise ValueError("item cap quantity must be non-negative")
+        caps[item] = value
+    return caps
+
+
 TEMPLATE = r'''
 
 # Generated market-timing experiment: conserve quantities while moving only
-# an already scheduled WHEAT/FERTILIZER sale a bounded number of turns earlier.
+# already scheduled sales of selected products a bounded number of turns earlier.
 import copy as _mt_copy
 
 _MT_BASE_AGENT = agent
@@ -154,9 +179,20 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source", type=Path)
     parser.add_argument("output", type=Path)
-    parser.add_argument("--items", default="", help="comma-separated WHEAT,FERTILIZER")
+    parser.add_argument(
+        "--items",
+        default="",
+        help="comma-separated market products to advance",
+    )
     parser.add_argument("--wheat-cap", type=int, default=10)
     parser.add_argument("--fertilizer-cap", type=int, default=5)
+    parser.add_argument(
+        "--item-cap",
+        action="append",
+        default=[],
+        metavar="ITEM=QUANTITY",
+        help="override the default cap 10 for any selected product",
+    )
     parser.add_argument("--start", type=int, default=120)
     parser.add_argument("--stop", type=int, default=715)
     parser.add_argument("--lead", type=int, default=1)
@@ -174,10 +210,9 @@ def main() -> None:
     parser.add_argument("--label", required=True)
     args = parser.parse_args()
 
-    allowed = {"WHEAT", "FERTILIZER"}
     items = tuple(part.strip().upper() for part in args.items.split(",") if part.strip())
-    if any(item not in allowed for item in items):
-        parser.error("--items accepts only WHEAT,FERTILIZER")
+    if any(item not in ALLOWED_ITEMS for item in items):
+        parser.error("--items contains an unsupported market product")
     x544_lead = args.x544_lead if args.x544_lead is not None else args.lead
     moon_lead = args.moon_lead if args.moon_lead is not None else args.lead
     if not all(1 <= value <= 24 for value in (x544_lead, moon_lead)):
@@ -187,7 +222,12 @@ def main() -> None:
             parser.error("--moon-window-lead must be in 1..24")
         if args.moon_window_stop <= args.moon_window_start:
             parser.error("moon lead window must have stop > start")
-    caps = {"WHEAT": args.wheat_cap, "FERTILIZER": args.fertilizer_cap}
+    caps = {item: 10 for item in ALLOWED_ITEMS}
+    caps.update({"WHEAT": args.wheat_cap, "FERTILIZER": args.fertilizer_cap})
+    try:
+        caps.update(parse_item_caps(args.item_cap))
+    except ValueError as exc:
+        parser.error(str(exc))
     source = args.source.read_text(encoding="utf-8")
     marker = "\n# Generated market-timing experiment:"
     if args.replace_existing:
