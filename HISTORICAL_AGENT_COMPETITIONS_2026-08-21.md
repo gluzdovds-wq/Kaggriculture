@@ -420,3 +420,6 @@ the leaderboard only as a noisy measurement of the current live meta.
 - The sole shared Rikito loss was also replayed against C95, Soil, V16 and
   V25; all lost by much more than N39. No third donor therefore displaces the
   held N31/repair reserve.
+- Ten still-later public episodes passed exact S08 reproduction and produced
+  V36 `9/10`, N39 `5/10`, N31 `4/10`, and S08 `3/10`. N39 won V36's only loss;
+  the combined portfolio now covers `55/56` chronological public tapes.

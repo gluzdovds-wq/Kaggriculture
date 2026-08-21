@@ -105,9 +105,14 @@ validation/repair reserve.
   with a Bradley-Terry tournament over the accumulated episodes.
 - Therefore use copies only for infrastructure checks, not as a final
   portfolio. The current final pair is deterministic N39 plus exact V36,
-  whose replay wins are complementary (`45/46` outcome oracle). Keep N31
+  whose replay wins are complementary (`55/56` outcome oracle). Keep N31
   locally for emergency repair; submitting any third policy would evict the
   older member of the active pair.
+
+The fifth chronological live holdout reinforced the order: exact V36 won
+`9/10`, N39 `5/10`, N31 `4/10`, and submitted S08 `3/10`, with exact baseline
+reproduction. V36 supplied five unique wins while N39 supplied the sole win on
+V36's loss, so N39 followed by V36 remains preferable to duplicate copies.
 
 ## Original baseline strategy
 

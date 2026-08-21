@@ -1041,3 +1041,21 @@ arena timing instrumentation preserves both one- and two-argument agents.
   After the UTC reset, submit N39 and then exact V36: this makes the tested
   complementary pair, rather than copies, the two simultaneously active
   final-evaluation candidates. N31 remains a local artifact/repair reserve.
+
+## E068 — fifth chronological S08 replay holdout
+
+- Downloaded the ten public S08 episodes completed after the E062 cutoff.
+  Exact S08 reproduced all recorded final banks before candidate results were
+  accepted, so this is another fidelity-gated chronological holdout.
+- Outcomes were exact V36 `9/10`, N39 `5/10`, N31 `4/10`, and S08 `3/10`.
+  V36 improved seven S08 outcomes and regressed one; N39 improved two with no
+  regression. The newest 24-episode regime is now V36 `22/24` versus N39
+  `13/24`, strengthening the evidence for the current-meta V36 slot.
+- The policies remain genuinely complementary. V36 uniquely won five of the
+  new episodes; N39 uniquely won V36's sole loss (clarkzhang1031, episode
+  `96284690`). Their two-policy oracle was `10/10` on this block and `55/56`
+  across all five chronological S08 blocks.
+- Decision: keep the post-reset order N39 then exact V36, so the stronger
+  current-meta policy is also the newest submission and receives the most
+  frequent early matchmaking. Do not replace N39 with a second V36 copy: its
+  unique clarkzhang1031 win is direct evidence for portfolio diversity.
