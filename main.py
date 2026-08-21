@@ -244,7 +244,7 @@ h21_kaggle_entrypoint = agent
 
 
 # Generated market-timing experiment: conserve quantities while moving only
-# an already scheduled WHEAT/FERTILIZER sale one turn earlier.
+# an already scheduled WHEAT/FERTILIZER sale a bounded number of turns earlier.
 import copy as _mt_copy
 
 _MT_BASE_AGENT = agent
@@ -252,10 +252,23 @@ _MT_ITEMS = ('FERTILIZER',)
 _MT_CAPS = {'WHEAT': 10, 'FERTILIZER': 10}
 _MT_START = 120
 _MT_STOP = 715
+_MT_LEAD_X544 = 1
+_MT_LEAD_MOON = 2
+_MT_MOON_WINDOW_LEAD = 3
+_MT_MOON_WINDOW_START = 480
+_MT_MOON_WINDOW_STOP = 715
 _MT_OPENING = 'keep'
 _MT_DEBT = {0: {}, 1: {}}
 _MT_LAST = {0: -1, 1: -1}
-_MT_TELEMETRY = {"advanced": {}, "repaid": {}, "opening": _MT_OPENING}
+_MT_TELEMETRY = {
+    "advanced": {},
+    "repaid": {},
+    "opening": _MT_OPENING,
+    "lead_x544": _MT_LEAD_X544,
+    "lead_moon": _MT_LEAD_MOON,
+    "moon_window_lead": _MT_MOON_WINDOW_LEAD,
+    "moon_window": [_MT_MOON_WINDOW_START, _MT_MOON_WINDOW_STOP],
+}
 
 
 def _mt_trace():
@@ -263,6 +276,15 @@ def _mt_trace():
         return globals().get("_MOON_NS", {}).get("_ACTIONS", [])
     nested = globals().get("_X544_NS", {}).get("_X540_NS", {})
     return nested.get("_ACTIONS", [])
+
+
+def _mt_lead(step):
+    if globals().get("_SELECTED_ROUTE") != "moon":
+        return _MT_LEAD_X544
+    if (_MT_MOON_WINDOW_LEAD is not None and
+            _MT_MOON_WINDOW_START <= step < _MT_MOON_WINDOW_STOP):
+        return _MT_MOON_WINDOW_LEAD
+    return _MT_LEAD_MOON
 
 
 def _mt_repay(action, debt):
@@ -290,7 +312,7 @@ def _mt_advance(action, obs, step, schedule):
     if not _MT_ITEMS or step < _MT_START or step >= _MT_STOP:
         return action
     trace = _mt_trace()
-    future_step = step + 1
+    future_step = step + _mt_lead(step)
     if future_step >= len(trace):
         return action
     future = {}
@@ -358,5 +380,5 @@ def agent(obs, configuration=None):
 
 
 agent.telemetry = _MT_TELEMETRY
-__version__ = "market-timing-n13_fert10"
+__version__ = "market-timing-n29_routelead_m2_m3_late"
 market_timing_kaggle_entrypoint = agent

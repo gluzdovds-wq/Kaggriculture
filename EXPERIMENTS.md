@@ -588,7 +588,8 @@ arena timing instrumentation preserves both one- and two-argument agents.
 
 ## E039 — identical-artifact leaderboard variance / submission policy correction
 
-- S06r/cap5 completed at `600.0`; S07/cap10 completed at `692.1`.  Most
+- S06r/cap5 moved `600.0 → 1646.6 → 1737.0`; S07/cap10 moved
+  `692.1 → 1451.1 → 1476.5`.  Most
   importantly, S07 is byte-identical to S05 (same SHA-256
   `4ddec3eafa9840e4bb7b07b9d37d4af2835c8bbcf8cf2411c776f96e662788aa`),
   while S05 previously completed at `2252.1`.
@@ -605,3 +606,76 @@ arena timing instrumentation preserves both one- and two-argument agents.
   Keep the strongest validated policy active when possible, submit only
   materially distinct locally gated candidates, retain one repair slot, and
   treat a last-minute refresh as risk rather than guaranteed score recovery.
+
+## E040 — N27 contextual-bandit route selector
+
+- Added a causal route-control generator and collected full-feedback results
+  for frozen X544 and Moon routes on fresh two-seat games.  A depth-one policy
+  learned only from public step-1 features selected X544 when starting money
+  was at most 12 and Moon otherwise, independently reproducing H22's pasture
+  opening rule.
+- Training exact-route accuracy, outcome-optimal rate and leave-one-family-out
+  accuracy were all `1.0`.  On unseen V16/V25/V27/C95/V20/Tie lineages the
+  exact margin-tiebreak route accuracy was `4/6`, but all six choices were
+  outcome-optimal with zero outcome regret; both apparent misses were tied
+  wins whose routes differed only in margin.
+- Decision: N27 passes as an independently learned selector, but it introduces
+  no main-policy change because its learned stump is equivalent to H22.
+
+## E041 — N24 macro imitation / residual pilot
+
+- Added inference-aligned replay extraction: each public observation at turn
+  `t` is paired with the task and market macro executed at `t+1`.  Scored V16,
+  scored v25 and S05 produced 4,314 rows per split, 1,438 per agent, with
+  disjoint-season pilot and holdout seeds.
+- Small class-balanced linear rankers did not reproduce critical task actions.
+  Holdout task accuracy/top-3 was S05 `0.321/0.606`, V16 `0.204/0.415` and v25
+  `0.111/0.225`.  S05's market model was stronger at `0.660/0.917`, with sell
+  recall `0.892` and hire recall `0.815`, but buy-product recall was only
+  `0.268`; donor market models were weaker and missed important rare classes.
+- Decision: reject the pilot as an action executor.  Retain only the S05 market
+  top-3 ranker as a possible proposal signal beneath the legal/rule executor;
+  do not graft learned actions into `main.py`.
+
+## E042 — N29 short-horizon FERT lead factorial
+
+- Clone mirrors showed that a global two-turn lead beat the incumbent for cap
+  5/10/20, while a global three-turn lead was stronger in-clone.  The broader
+  family panel exposed the causal split: lead 2 improved Moon-routed families
+  but mildly hurt X544-routed families; global lead 3 caused roughly -314
+  margin on X544 and Choose and was rejected.
+- A route-gated candidate therefore kept X544 at lead 1 and used lead 2 only
+  on Moon.  It exactly reproduced the incumbent on the X544 route and the
+  tested lead-2 behavior on Moon.
+- Decision: reject global horizon changes and advance only route-conditioned
+  timing.
+
+## E043 — N29 route-conditioned holdout
+
+- Fresh seeds `20265000..20265002`, both seats, covered V36, Soil, X544, Moon,
+  Choose, Read, V25 and C95.  The route-gated candidate had no outcome
+  regression: exact zero margin delta on all X544-routed families and positive
+  deltas of about +21 to +24 on the tested Moon-routed families.
+- Mean margin delta across the eight-family panel was `+11.06`.  Candidate
+  SHA-256 is
+  `cfd922d83e6cc71d95f6441fe0581d3c2c730a76eedc49f17fa5c8bf6eccbe4e`.
+- Submitted as S08, Kaggle ref `55674010`; it completed with an initial
+  `600.0`, which is not yet a stable live rating.  Kaggle reported one
+  remaining daily slot, so the refined S09 artifact is held as the
+  repair/reserve submission until S08 has a meaningful live history.
+
+## E044 — N29 late-window refinement / local promotion
+
+- On top of the Moon lead-2 candidate, lead 3 was tested only in early, middle
+  or late game.  Early was inert, middle lost badly, while steps 480–714 won
+  all 8/8 clone-mirror games with exactly +19 average margin.
+- An external five-family screen preserved all outcomes and had deltas
+  `0/0/+2/0/+2` versus the route-gated base.  This bounded late window was
+  promoted to `main.py`: X544 lead 1, Moon lead 2, and Moon lead 3 only for
+  steps 480–714.  SHA-256 is
+  `3bd8b8d3c66b5c9884953ac55a5d6e5eac4237e3b32662e777b570062afe43a1`.
+- Preflight passed 35/35 tests, `py_compile`, official last-callable loading
+  and content-equivalence against the tested candidate.  A final fresh
+  path-loaded 8-game smoke versus S08 scored paired outcome `0.75` and average
+  margin `+14.0`.  Decision: hold this as S09 until the final daily slot is
+  justified by stable S08 evidence or the quota reset.

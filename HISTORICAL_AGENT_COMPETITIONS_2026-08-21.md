@@ -260,8 +260,30 @@ selected action improves official-engine paired outcome and stays within the
 
 ### Live-rating checkpoint
 
-An exact resubmission of S05 (identical SHA-256) scored `692.1` after the
-earlier copy scored `2252.1`.  This falsifies the frozen-test-set
+An exact resubmission of S05 (identical SHA-256) initially scored `692.1` and
+later moved through `1451.1` to `1476.5`, while the earlier copy remained at
+`2252.1`.  Likewise S06r moved from `600.0` through `1646.6` to `1737.0`.
+This falsifies the frozen-test-set
 interpretation of the Kaggriculture leaderboard and makes blind duplicate
 refreshes unsafe.  Use controlled paired cross-play for causal selection and
 the leaderboard only as a noisy measurement of the current live meta.
+
+## Execution checkpoint: N24, N27 and N29
+
+- N27's full-feedback contextual selector independently relearned H22 from
+  public step-1 features: starting money at most 12 selects X544, otherwise
+  Moon.  It was outcome-optimal on every unseen held-out lineage; two of six
+  exact-route misses were only margin tie-breaks between routes that both won.
+- N24's linear residual-imitation pilot is not reliable enough to execute
+  actions.  S05 holdout task accuracy/top-3 was `0.321/0.606`; its market
+  ranker reached `0.660/0.917`, but rare buy actions remained weak.  Learned
+  outputs may propose top-3 macros beneath the rule/legal layer, not replace
+  it.  Scored V16/v25 imitation was weaker still.
+- N29 found a stable timing interaction rather than a new route.  X544 keeps a
+  one-turn FERTILIZER lead; Moon uses two turns, increasing to three only at
+  steps 480–714.  The route-aware base had no outcome regression on an
+  eight-family fresh holdout and the late window added a small non-negative
+  external gain.  The route-aware base was submitted as S08 (`55674010`); the
+  initial rating was `600.0`.  The locally promoted late-window refinement is
+  held as the one remaining repair slot until S08 provides meaningful live
+  history or the quota resets.

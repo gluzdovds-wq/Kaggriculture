@@ -9,7 +9,7 @@ from pathlib import Path
 TEMPLATE = r'''
 
 # Generated market-timing experiment: conserve quantities while moving only
-# an already scheduled WHEAT/FERTILIZER sale one turn earlier.
+# an already scheduled WHEAT/FERTILIZER sale a bounded number of turns earlier.
 import copy as _mt_copy
 
 _MT_BASE_AGENT = agent
@@ -17,10 +17,23 @@ _MT_ITEMS = {items!r}
 _MT_CAPS = {caps!r}
 _MT_START = {start}
 _MT_STOP = {stop}
+_MT_LEAD_X544 = {x544_lead}
+_MT_LEAD_MOON = {moon_lead}
+_MT_MOON_WINDOW_LEAD = {moon_window_lead}
+_MT_MOON_WINDOW_START = {moon_window_start}
+_MT_MOON_WINDOW_STOP = {moon_window_stop}
 _MT_OPENING = {opening!r}
 _MT_DEBT = {{0: {{}}, 1: {{}}}}
 _MT_LAST = {{0: -1, 1: -1}}
-_MT_TELEMETRY = {{"advanced": {{}}, "repaid": {{}}, "opening": _MT_OPENING}}
+_MT_TELEMETRY = {{
+    "advanced": {{}},
+    "repaid": {{}},
+    "opening": _MT_OPENING,
+    "lead_x544": _MT_LEAD_X544,
+    "lead_moon": _MT_LEAD_MOON,
+    "moon_window_lead": _MT_MOON_WINDOW_LEAD,
+    "moon_window": [_MT_MOON_WINDOW_START, _MT_MOON_WINDOW_STOP],
+}}
 
 
 def _mt_trace():
@@ -28,6 +41,15 @@ def _mt_trace():
         return globals().get("_MOON_NS", {{}}).get("_ACTIONS", [])
     nested = globals().get("_X544_NS", {{}}).get("_X540_NS", {{}})
     return nested.get("_ACTIONS", [])
+
+
+def _mt_lead(step):
+    if globals().get("_SELECTED_ROUTE") != "moon":
+        return _MT_LEAD_X544
+    if (_MT_MOON_WINDOW_LEAD is not None and
+            _MT_MOON_WINDOW_START <= step < _MT_MOON_WINDOW_STOP):
+        return _MT_MOON_WINDOW_LEAD
+    return _MT_LEAD_MOON
 
 
 def _mt_repay(action, debt):
@@ -55,7 +77,7 @@ def _mt_advance(action, obs, step, schedule):
     if not _MT_ITEMS or step < _MT_START or step >= _MT_STOP:
         return action
     trace = _mt_trace()
-    future_step = step + 1
+    future_step = step + _mt_lead(step)
     if future_step >= len(trace):
         return action
     future = {{}}
@@ -137,6 +159,17 @@ def main() -> None:
     parser.add_argument("--fertilizer-cap", type=int, default=5)
     parser.add_argument("--start", type=int, default=120)
     parser.add_argument("--stop", type=int, default=715)
+    parser.add_argument("--lead", type=int, default=1)
+    parser.add_argument("--x544-lead", type=int)
+    parser.add_argument("--moon-lead", type=int)
+    parser.add_argument("--moon-window-lead", type=int)
+    parser.add_argument("--moon-window-start", type=int, default=0)
+    parser.add_argument("--moon-window-stop", type=int, default=0)
+    parser.add_argument(
+        "--replace-existing",
+        action="store_true",
+        help="strip a previously generated market overlay before appending",
+    )
     parser.add_argument("--opening", choices=("keep", "feed5_first", "feed6_first"), default="keep")
     parser.add_argument("--label", required=True)
     args = parser.parse_args()
@@ -145,13 +178,32 @@ def main() -> None:
     items = tuple(part.strip().upper() for part in args.items.split(",") if part.strip())
     if any(item not in allowed for item in items):
         parser.error("--items accepts only WHEAT,FERTILIZER")
+    x544_lead = args.x544_lead if args.x544_lead is not None else args.lead
+    moon_lead = args.moon_lead if args.moon_lead is not None else args.lead
+    if not all(1 <= value <= 24 for value in (x544_lead, moon_lead)):
+        parser.error("lead values must be in 1..24")
+    if args.moon_window_lead is not None:
+        if not 1 <= args.moon_window_lead <= 24:
+            parser.error("--moon-window-lead must be in 1..24")
+        if args.moon_window_stop <= args.moon_window_start:
+            parser.error("moon lead window must have stop > start")
     caps = {"WHEAT": args.wheat_cap, "FERTILIZER": args.fertilizer_cap}
     source = args.source.read_text(encoding="utf-8")
+    marker = "\n# Generated market-timing experiment:"
+    if args.replace_existing:
+        if source.count(marker) != 1:
+            parser.error("--replace-existing requires exactly one generated market overlay")
+        source = source.split(marker, 1)[0].rstrip() + "\n"
     rendered = TEMPLATE.format(
         items=items,
         caps=caps,
         start=args.start,
         stop=args.stop,
+        x544_lead=x544_lead,
+        moon_lead=moon_lead,
+        moon_window_lead=args.moon_window_lead,
+        moon_window_start=args.moon_window_start,
+        moon_window_stop=args.moon_window_stop,
         opening=args.opening,
         label=args.label,
     )
