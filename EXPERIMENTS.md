@@ -814,3 +814,20 @@ arena timing instrumentation preserves both one- and two-argument agents.
   `a51cc84460a852301bfb46bb3bc6e1289181dbdace6d97402aa1aa90c6519a86`.
   It is the primary post-reset candidate; N31 remains the second independent
   candidate and one Kaggle submission remains reserved.
+
+## E054 — N36 independent full-feedback regret audit / no N37 change
+
+- Extended the fixed-route generator to preserve N36's isolated shadow RNG,
+  then evaluated frozen X544 and Moon on seeds `20265800..20265801`, both
+  seats, against eight public families.  This removes the earlier RNG-policy
+  confound from route counterfactuals.
+- Across 32 paired contexts, N36 selected an outcome-optimal route in `32/32`
+  cases: outcome-optimal rate `1.0`, mean outcome regret `0.0`.  Mean outcome
+  was `0.875` versus `0.625` for fixed X544 and `0.6875` for fixed Moon.
+  The observed first shops were BAKERY, FARMERS_MARKET and PET_CAFE; every
+  shop subgroup also had zero regret.
+- Exact margin-tiebreak accuracy was `0.96875`; the single miss was an outcome
+  tie and therefore is not evidence for a more complex selector.
+- Decision: do not create N37.  Keep the simpler N36 rule and treat additional
+  context splits as overfitting until they improve outcome on an independent
+  full-feedback panel.

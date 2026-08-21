@@ -1,4 +1,4 @@
-"""Freeze the H22 selector to one compatible route for causal A/B tests.
+"""Freeze the H22/N36 selector to one compatible route for causal A/B tests.
 
 The generated agent keeps the exact common step-0 opening and all overlays in
 the source artifact.  Only the step-1 selector decision is replaced.  This is
@@ -17,14 +17,25 @@ SELECTOR_BLOCK = '''        pasture_opening = _selector_opponent_has_opening_pas
         _SELECTED_ROUTE = "moon" if pasture_opening else "x544"
 '''
 
+SHOP_SELECTOR_BLOCK = '''        _SELECTED_ROUTE = (
+            "x544" if (not _SHOP_OPENING_PASTURE or yarn_counter) else "moon"
+        )
+'''
+
 
 def freeze_route(source: str, route: str) -> str:
-    if source.count(SELECTOR_BLOCK) != 1:
-        raise ValueError("expected exactly one H22 selector block")
-    replacement = f'''        pasture_opening = _selector_opponent_has_opening_pasture(obs)
+    h22_count = source.count(SELECTOR_BLOCK)
+    shop_count = source.count(SHOP_SELECTOR_BLOCK)
+    if h22_count + shop_count != 1:
+        raise ValueError("expected exactly one H22 or N36 selector block")
+    if h22_count:
+        replacement = f'''        pasture_opening = _selector_opponent_has_opening_pasture(obs)
         _SELECTED_ROUTE = {route!r}
 '''
-    frozen = source.replace(SELECTOR_BLOCK, replacement, 1)
+        frozen = source.replace(SELECTOR_BLOCK, replacement, 1)
+    else:
+        replacement = f"        _SELECTED_ROUTE = {route!r}\n"
+        frozen = source.replace(SHOP_SELECTOR_BLOCK, replacement, 1)
     versions = list(re.finditer(
         r'^__version__ = "([^"\r\n]+)"$', frozen, flags=re.MULTILINE
     ))

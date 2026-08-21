@@ -325,3 +325,7 @@ the leaderboard only as a noisy measurement of the current live meta.
   ladder wins and improved the three-loss replay average from `-136.0` to
   `+88.3`.  It is now `main.py` (`a51cc844...`), with N31 retained as the
   second post-reset candidate and the final daily slot reserved.
+- A further isolated-shadow full-feedback audit on 32 new contexts selected an
+  outcome-optimal branch `32/32` times.  N36 averaged `0.875` outcome versus
+  `0.625` fixed X544 and `0.6875` fixed Moon, with zero regret separately for
+  BAKERY, FARMERS_MARKET and PET_CAFE.  No extra N37 split was justified.

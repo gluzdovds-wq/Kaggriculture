@@ -38,6 +38,9 @@ own-state terminal and market-timing overlays.
 - On fresh seed `20265700`, both seats and eight families, mean outcome rose
   from N31's `0.7500` to `0.9375` with no family regression. An independent
   two-seed panel preserved `0.84375` and slightly improved average margin.
+- A separate full-feedback audit froze each isolated-shadow route on two new
+  seeds and 32 contexts. N36 chose an outcome-optimal route in `32/32`, with
+  mean outcome `0.875` versus `0.625` fixed X544 and `0.6875` fixed Moon.
 - On an exact eight-family transfer panel, N03 had no outcome regression and
   improved every same-seed family margin by +1.5 to +134. A separate four-seed,
   both-seat holdout preserved public-family outcomes and added +50.75 to

@@ -1,6 +1,6 @@
 import unittest
 
-from tools.make_fixed_route_variant import SELECTOR_BLOCK, freeze_route
+from tools.make_fixed_route_variant import SHOP_SELECTOR_BLOCK, SELECTOR_BLOCK, freeze_route
 
 
 class FixedRouteVariantTests(unittest.TestCase):
@@ -23,6 +23,18 @@ class FixedRouteVariantTests(unittest.TestCase):
     def test_rejects_missing_selector(self):
         with self.assertRaises(ValueError):
             freeze_route('__version__ = "market-timing-n13_fert10"\n', "x544")
+
+    def test_freezes_shop_aware_selector_without_removing_shadow_runner(self):
+        source = (
+            '__version__ = "base"\n'
+            + "def choose():\n"
+            + SHOP_SELECTOR_BLOCK
+            + '__version__ = "market-timing-n36"\n'
+        )
+        frozen = freeze_route(source, "x544")
+        self.assertIn("_SELECTED_ROUTE = 'x544'", frozen)
+        self.assertNotIn("not _SHOP_OPENING_PASTURE or yarn_counter", frozen)
+        self.assertIn('market-timing-n36-fixed-x544', frozen)
 
 
 if __name__ == "__main__":
