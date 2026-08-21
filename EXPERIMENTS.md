@@ -500,3 +500,108 @@ arena timing instrumentation preserves both one- and two-argument agents.
 - Submitted once as S05, Kaggle ref `55666404`, at 2026-08-21 09:51 UTC+7.
   Initial Kaggle status: `PENDING`; four daily submissions remained afterward.
 - Decision: do not spend another authorized submission while S05 is pending.
+
+## E035 — historical Kaggle agent-solution review / no submission
+
+- Reviewed primary top-solution write-ups from Halite, Hungry Geese, Lux AI
+  Seasons 1–3 and Kore 2022.  Winning methods span hierarchical rule/planning,
+  imitation learning and distributed self-play RL; method choice follows joint
+  action structure and rollout budget rather than the competition label.
+- Closest structural analogues are Halite 2020 and Lux S2: both favored a
+  `score/role -> plan/goal -> coordinated actions` architecture after exposing
+  the difficulty of long-horizon multi-unit credit assignment.
+- Successful RL solutions used millions to billions of steps plus legal masks,
+  curriculum, teacher KL and historical opponent pools.  Replay IL was a much
+  cheaper warm start in Lux S3 and Kore, but required inference-visible state
+  reconstruction and still benefited from a rule layer.
+- Added concrete N16–N29 experiments in
+  `HISTORICAL_AGENT_COMPETITIONS_2026-08-21.md`: shadow policies, compatibility
+  graph, common opening, reactive task planner, scored donor extraction,
+  donor/overlay shootout, replay residual IL, public-medoid best-response RL,
+  replay-state curriculum, opponent conditioning, safe macro mixtures and
+  short-horizon forward simulation.
+- Decision: do not start pure end-to-end PPO.  First execute N20/N21/N23 while
+  building N16/N17; learned work begins with N24 residual imitation and then
+  N25 masked macro best response.
+
+## E036 — exact scored donor extraction and N21/N22 shootout
+
+- Kaggle's version UI ties V16-RC5's Best Score `2913.3` to V2,
+  `scriptVersionId=341905759`, and v25's current Best/Public Score `3009.0` to
+  V2, `scriptVersionId=341206423`.  Latest source is V2 in both cases; the
+  earlier `2905.7` v25 card snapshot was stale.
+- CLI-pulled notebooks and metadata are frozen under `research/scored_versions`.
+  The exact extracted agent hashes are V16
+  `f029fa0cb66a9eb509afbe44e3f59b800332d0419db91607183410e4089c4d19`
+  and v25
+  `9bdfbafb6755067182d88ce594fd46fb1d712713ffd6931e83d5d50e84bc6fb2`.
+  `extract_embedded_agent.py` was extended to recognise a literal
+  `"".join((...))` payload without executing notebook code.
+- Fresh direct panel `20264000..20264007`, both seats: S05 beat V16 14/16,
+  paired outcome 0.875 and average margin +7,607.6; S05 beat v25 16/16 and
+  +12,921.3.  v25 lost to V16 0/16 with -26,273.1 average margin.
+- Fresh eight-family screen `20264100..20264101`, both seats, 32 games per
+  candidate: S05 won 32/32 with average margin +5,917.3 and worst-family
+  outcome 1.0; V16 scored 8/32 (0.25), -5,061.0 and a zero worst family; v25
+  scored 0/32, -16,857.7.
+- Decision: N20/N21 complete and N22 passes for S05.  Keep S05 as route base;
+  donor-card rating is not a cross-play selector.  Transfer only independently
+  justified mechanisms, never the whole V16/v25 tapes.
+
+## E037 — N16/N17 shadow-run compatibility graph
+
+- Added `tools/make_shadow_switch.py`.  Both embedded policies receive every
+  live observation from step 0 on deep copies, maintain independent RNG
+  streams and internal state, while only the selected branch's action is
+  executed.  Generated artifacts compile and all 26 repository tests pass.
+- Against exact S05 on seed `20264200`, both seats, every V16/v25↔S05 switch at
+  steps 1, 72 or 240 lost 0/2.  Average margins ranged from -26,451 to
+  -106,601.  Even step 1 was unsafe: the first action had already moved the
+  physical route into an incompatible state.  Shadow memory cannot repair a
+  different farm geometry.
+- Positive control at the known shared X544/Moon prefix used step 72.  On
+  `20264300..20264301`, both directed switches had paired outcome 0.5 and
+  exactly zero paired average margin versus the target family.  Maximum action
+  latency was 156.3 ms, below the one-second limit.
+- Decision: N16 mechanism works, but N17 admits only evidence-backed compatible
+  edges.  X544↔Moon at 72 is safe in paired outcome; S05↔V16/v25 has no safe
+  tested edge.  N18's common-opening condition is mandatory, not optional.
+
+## E038 — cap-diverse preflight and S06r/S07 submissions
+
+- Chose two conservative active variants after rejecting donor replacement:
+  FERT cap5 SHA-256
+  `48985f00cc312f2703b4d6cfa8260c56ceaead6d394abf67b89ee59438f7eeb3`
+  and the exact S05/cap10 SHA-256
+  `4ddec3eafa9840e4bb7b07b9d37d4af2835c8bbcf8cf2411c776f96e662788aa`.
+  They differ only in the debt-conserved one-turn FERTILIZER quantity cap.
+- Cap5 passed `py_compile`, the official last-callable loader and 16 fresh
+  paired games.  Against X544/Moon/Choose its outcomes were 1.0/0.75/1.0;
+  maximum action latency was 91.4 ms.  Versus cap10 it scored 0.25 with only
+  -10.0 average margin, consistent with the earlier small cap10 advantage.
+- The first cap5 upload failed before ref creation due an SSL EOF and consumed
+  no quota.  Retry S06r is Kaggle ref `55673154`; S07 exact cap10 copy is ref
+  `55673148`.  Both were `PENDING` immediately after upload and two daily
+  submissions remained, preserving the required reserve.
+- Decision: monitor S06r/S07; do not spend either remaining slot without a new
+  stable candidate or a validation-error repair.
+
+## E039 — identical-artifact leaderboard variance / submission policy correction
+
+- S06r/cap5 completed at `600.0`; S07/cap10 completed at `692.1`.  Most
+  importantly, S07 is byte-identical to S05 (same SHA-256
+  `4ddec3eafa9840e4bb7b07b9d37d4af2835c8bbcf8cf2411c776f96e662788aa`),
+  while S05 previously completed at `2252.1`.
+- The same executable therefore changed by `-1560.0` rating points across two
+  submissions.  This is direct evidence that a Kaggriculture LB score is not a
+  deterministic evaluation of the artifact on a frozen private test set; the
+  live opponent sample, current population and/or rating context materially
+  affect the displayed result.
+- The cap5/cap10 comparison is not identifiable from these two independent LB
+  scores: their 92.1-point gap is confounded by different matches.  Controlled
+  paired local games remain the causal selector; the LB is a noisy live-meta
+  probe and deployment check.
+- Decision: reject blind duplicate resubmission as a way to lock a good score.
+  Keep the strongest validated policy active when possible, submit only
+  materially distinct locally gated candidates, retain one repair slot, and
+  treat a last-minute refresh as risk rather than guaranteed score recovery.

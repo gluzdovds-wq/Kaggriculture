@@ -22,7 +22,22 @@ SHA256_RE = re.compile(r"[0-9a-fA-F]{64}")
 
 
 def literal_string_parts(node: ast.AST) -> list[str] | None:
-    """Return a literal list/tuple of strings without evaluating code."""
+    """Return literal string parts without evaluating notebook code.
+
+    Besides a bare list/tuple, public notebooks commonly spell large payloads
+    as ``"".join(("part 1", "part 2"))``.  Recognising that AST shape keeps the
+    extractor data-only while avoiding execution of the surrounding cell.
+    """
+    if (
+        isinstance(node, ast.Call)
+        and len(node.args) == 1
+        and not node.keywords
+        and isinstance(node.func, ast.Attribute)
+        and node.func.attr == "join"
+        and isinstance(node.func.value, ast.Constant)
+        and node.func.value.value == ""
+    ):
+        node = node.args[0]
     try:
         value = ast.literal_eval(node)
     except (ValueError, TypeError, SyntaxError):
