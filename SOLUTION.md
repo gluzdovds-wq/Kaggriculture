@@ -30,7 +30,7 @@ own-state terminal and market-timing overlays.
   sales, capped at 10 units, then subtracts the same quantities from their
   original future turns. A per-seat debt ledger carries any unpaid amount
   forward, so the overlay changes timing but not scheduled quantity. It runs
-  only on steps 120–714. X544 uses lead 1; Moon uses lead 2 and lead 3 only on
+  only on steps 120–714. N39 uses X544 lead 2; Moon uses lead 2 and lead 3 only on
   steps 480–714.
 - The exact public-replay league reproduced three S05 losses and seven wins at
   their original final banks. N36 retained the Himanshu flip, improved average
@@ -41,9 +41,11 @@ own-state terminal and market-timing overlays.
 - A separate full-feedback audit froze each isolated-shadow route on two new
   seeds and 32 contexts. N36 chose an outcome-optimal route in `32/32`, with
   mean outcome `0.875` versus `0.625` fixed X544 and `0.6875` fixed Moon.
-- On the latest ten public S08 ladder episodes, exact S08 reproduced `8/10`;
-  N31 also scored `8/10`, while N36 scored `9/10`, improved average margin by
-  `+1344.1` versus S08 and introduced no replay regression.
+- Across twenty chronological public S08 ladder episodes, exact S08 and N31
+  reproduced `17/20`, N36 scored `18/20`, and N39 scored `19/20`. N39 improved
+  average margin by `+776.3` versus S08, flipped two recorded S08 losses and
+  introduced no replay regression. It also preserved N36's `8/10` outcome on
+  the older S05 replay set.
 - On an exact eight-family transfer panel, N03 had no outcome regression and
   improved every same-seed family margin by +1.5 to +134. A separate four-seed,
   both-seat holdout preserved public-family outcomes and added +50.75 to
@@ -52,9 +54,9 @@ own-state terminal and market-timing overlays.
   each candidate (64 games each). Macro/micro outcome rose from 0.390625 for
   fixed X544 to 0.78125; average margin rose from +274 to +3,192; worst-family
   outcome rose from 0 to 0.375. V36 and Soil banks were exactly unchanged.
-- Runtime/artifact gate: 56/56 tests, `py_compile`, official
+- Runtime/artifact gate: 59/59 tests, `py_compile`, official
   `get_last_callable`, and path-loaded full games all pass. Maximum observed
-  action time in the replay holdout was 184 ms.
+  action time in the replay holdout was 315.3 ms.
 
 To regenerate the exact entry point:
 
@@ -69,17 +71,17 @@ C:\Users\Dmitry\.venvs\kg\Scripts\python.exe tools\make_terminal_route_variant.p
 C:\Users\Dmitry\.venvs\kg\Scripts\python.exe tools\make_market_timing_variant.py `
   main.py main.py --items FERTILIZER,MILK,WOOL,STRAWBERRY `
   --fertilizer-cap 10 --start 120 --stop 715 `
-  --x544-lead 1 --moon-lead 2 --moon-window-lead 3 `
+  --x544-lead 2 --moon-lead 2 --moon-window-lead 3 `
   --moon-window-start 480 --moon-window-stop 715 `
-  --label n31_premium_cap10
+  --label n39_n36_x2
 C:\Users\Dmitry\.venvs\kg\Scripts\python.exe tools\make_shop_aware_selector.py `
   main.py main.py --label n36-shop-yarn
 ```
 
-Current promoted artifact: 312,211 bytes, SHA-256
-`a51cc84460a852301bfb46bb3bc6e1289181dbdace6d97402aa1aa90c6519a86`.
-Final preflight passed 56/56 unit tests, `py_compile`, official last-callable
-loading and full games. N36 is held for the first post-reset autonomous slot;
+Current promoted artifact: 312,188 bytes, SHA-256
+`6073f67f394f7f6161dd60c8406106b130e7ca702974a4accbe1e8e163b8fa1d`.
+Final preflight passed 59/59 unit tests, `py_compile`, official last-callable
+loading and full games. N39 is held for the first post-reset autonomous slot;
 N31 is the second candidate and the current final Kaggle slot remains reserved.
 
 ## Original baseline strategy

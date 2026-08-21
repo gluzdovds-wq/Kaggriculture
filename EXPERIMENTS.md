@@ -856,3 +856,35 @@ arena timing instrumentation preserves both one- and two-argument agents.
 - Decision: reject N38 without spending a broad holdout or LB slot.  A
   51-coin tape-specific margin gain is not enough evidence for a risky global
   timing change.
+
+## E057 — second chronological S08 replay holdout
+
+- Downloaded the preceding ten public S08 episodes as a chronological holdout.
+  Exact S08 reproduced all ten recorded banks, winning `9/10` with average
+  margin `+9120.4`.  N31 and N36 also won `9/10`, both averaging `+9267.9`;
+  the only shared loss was Dariush Afshar at `-71`.
+- Across the combined twenty S08 ladder episodes, S08 and N31 each won
+  `17/20`, while N36 won `18/20`.  N36 averaged `+6998.35`, a `+745.8`
+  improvement over exact S08, with one outcome improvement and no regression.
+- Decision: the selector gain persists across two disjoint chronological
+  batches and is not explained by the latest-ten sample alone.
+
+## E058 — N39 X-route lead-2 promotion
+
+- On the exact Dariush loss, advancing already scheduled X-route sales by
+  2--6 turns flipped `-71` to a win; lead 3 was best on that single tape at
+  `+921`, while lead 2 scored `+897`.  This was treated only as a diagnostic,
+  not sufficient promotion evidence.
+- Fresh seeds `20265900..20265901`, both seats and eight public families gave
+  32 matches per candidate.  Lead 2 and lead 3 caused zero outcome changes
+  versus N36; lead 2 was the safer variant, adding `+245.44` mean family
+  margin versus `+196.94` for lead 3 and having smaller V25/C95 costs.
+- On twenty exact S08 ladder replays, N36 won `18/20`; both lead variants won
+  `19/20` with no regression.  Lead 2 averaged `+7028.85`, flipped Dariush to
+  `+897`, and retained the selector's kevin park flip.  On ten older S05
+  replays it preserved N36's `8/10` and improved average margin by `+3.9`.
+- Promoted the conservative lead-2 variant as N39: only X544-route timing
+  changes from one turn to two; the Moon route and shop selector are unchanged.
+  The evaluated candidate is 312,190 bytes / `e56a070f...`; the promoted
+  `main.py` is text-identical after newline normalization, 312,188 bytes and
+  SHA-256 `6073f67f394f7f6161dd60c8406106b130e7ca702974a4accbe1e8e163b8fa1d`.

@@ -299,7 +299,7 @@ _MT_ITEMS = ('FERTILIZER', 'MILK', 'WOOL', 'STRAWBERRY')
 _MT_CAPS = {'WHEAT': 10, 'FERTILIZER': 10, 'CARROT': 10, 'TOMATO': 10, 'STRAWBERRY': 10, 'MELON': 10, 'EGG': 10, 'MILK': 10, 'WOOL': 10}
 _MT_START = 120
 _MT_STOP = 715
-_MT_LEAD_X544 = 1
+_MT_LEAD_X544 = 2
 _MT_LEAD_MOON = 2
 _MT_MOON_WINDOW_LEAD = 3
 _MT_MOON_WINDOW_START = 480
@@ -427,5 +427,5 @@ def agent(obs, configuration=None):
 
 
 agent.telemetry = _MT_TELEMETRY
-__version__ = "market-timing-n31_premium_cap10-n36-shop-yarn"
+__version__ = "market-timing-n39_n36_x2"
 market_timing_kaggle_entrypoint = agent

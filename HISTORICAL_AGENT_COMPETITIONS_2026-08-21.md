@@ -334,3 +334,20 @@ the leaderboard only as a noisy measurement of the current live meta.
   `9/10`, flipped the kevin park loss to `+6136` and caused no regression.
   A route plus lead/cap sweep could not flip the remaining Rikito loss, so no
   N38 timing variant was promoted.
+
+## Execution checkpoint: N39
+
+- A second disjoint chronological batch extended the exact S08 replay holdout
+  to twenty episodes.  S08 and N31 won `17/20`; N36 won `18/20`, averaged
+  `+745.8` margin versus S08 and introduced no outcome regression.
+- The remaining Dariush X-route loss exposed a narrow timing response.  A
+  two-turn X lead flipped that replay from `-71` to `+897`.  It then preserved
+  every outcome on a 32-match fresh eight-family panel, adding `+245.44` mean
+  family margin, and preserved N36's `8/10` on the older S05 replay set.
+- Across the twenty S08 episodes N39 won `19/20` versus N36's `18/20` and
+  S08's `17/20`, with no regression.  The more aggressive lead 3 also won
+  `19/20` but transferred less cleanly to V25/C95, so lead 2 was promoted.
+- This supports a bounded reactive overlay rather than per-turn epsilon
+  exploration: move only an already scheduled sale, keep a debt ledger, and
+  gate the timing by a compatible macro route.  N39 is now `main.py`
+  (`6073f67f...`); N31 remains the independent conservative candidate.
