@@ -1059,3 +1059,14 @@ arena timing instrumentation preserves both one- and two-argument agents.
   current-meta policy is also the newest submission and receives the most
   frequent early matchmaking. Do not replace N39 with a second V36 copy: its
   unique clarkzhang1031 win is direct evidence for portfolio diversity.
+
+## E069 — V36 clarkzhang quantity retune / rejected
+
+- V36's sole E068 loss was narrow (`-657`), so the existing
+  `market_quantity` variants 15, 20, 25, 30, 40 and 60 were replayed on exact
+  episode `96284690` before considering a broader gate.
+- Every quantity still lost. Quantity 40 was best at `-410`, followed by 60
+  at `-424`; the remaining margins ranged from `-533` to `-605`.
+- Decision: reject the retune without spending a full holdout or leaderboard
+  slot. Exact V36 keeps its `9/10` result, while N39 already wins this episode
+  by `+9540`; the right mechanism here is the two-policy portfolio.
