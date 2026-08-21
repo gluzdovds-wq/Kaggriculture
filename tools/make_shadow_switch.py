@@ -50,6 +50,7 @@ _TELEMETRY = {{
     "switch_step": _SWITCH_STEP,
     "calls": {{"source": 0, "target": 0}},
     "action_disagreements": 0,
+    "first_disagreements": [],
     "selected": None,
 }}
 
@@ -100,10 +101,17 @@ def agent(obs, configuration=None):
         _RNG["target"] = None
         _TELEMETRY["calls"] = {{"source": 0, "target": 0}}
         _TELEMETRY["action_disagreements"] = 0
+        _TELEMETRY["first_disagreements"] = []
     source_action = _isolated_call("source", _SOURCE_NS, obs, configuration)
     target_action = _isolated_call("target", _TARGET_NS, obs, configuration)
     if source_action != target_action:
         _TELEMETRY["action_disagreements"] += 1
+        if len(_TELEMETRY["first_disagreements"]) < 32:
+            _TELEMETRY["first_disagreements"].append({{
+                "step": step,
+                "source": source_action,
+                "target": target_action,
+            }})
     use_target = step >= _SWITCH_STEP
     _TELEMETRY["selected"] = "target" if use_target else "source"
     return target_action if use_target else source_action

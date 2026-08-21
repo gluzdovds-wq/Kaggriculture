@@ -88,6 +88,7 @@ def run_task(task: tuple[str, str, ReplayCase]) -> dict:
         "outcome": result["outcome"],
         "candidate_sha256": result["candidate_artifact"]["sha256"],
         "max_action_ms": result["candidate_latency"]["max_ms"],
+        "candidate_telemetry": result.get("candidate_telemetry"),
     }
 
 

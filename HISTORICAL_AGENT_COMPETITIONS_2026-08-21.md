@@ -304,3 +304,24 @@ the leaderboard only as a noisy measurement of the current live meta.
 - At the final checkpoint of this run S08 had moved to `1803.3` and S06r to
   `1815.2`.  The last current-day submission remained unused as the required
   validation/repair reserve.
+
+## Execution checkpoint: N32–N36
+
+- N32/N33 demonstrated the limit of opponent fingerprints: delayed
+  classification and compatible shadow switching can win exact replay
+  counterfactuals while failing on a fresh seed with the same visible farm
+  shape.  Public-state aliasing, not internal policy memory, is now the main
+  constraint on live counter-strategy selection.
+- N34 confirmed that a single COW-to-SHEEP substitution cannot reproduce the
+  winning Moon continuation; reactive planning must represent the coupled
+  purchase, care, harvest and routing task graph.  N35 likewise showed that a
+  broader sale horizon merely transfers performance between replay opponents.
+- N36 adds a robust context that is known before compatible routes diverge:
+  the first public shop.  The deterministic rule is X544 for non-pasture
+  openings, Moon for pasture openings, and X544 again for pasture plus
+  `YARN_STORE`.  It shadow-runs both routes through step 72 with isolated RNG.
+- N36 improved a fresh eight-family outcome from `0.7500` to `0.9375`, kept
+  the independent two-seed panel at `0.84375`, preserved all seven recorded
+  ladder wins and improved the three-loss replay average from `-136.0` to
+  `+88.3`.  It is now `main.py` (`a51cc844...`), with N31 retained as the
+  second post-reset candidate and the final daily slot reserved.

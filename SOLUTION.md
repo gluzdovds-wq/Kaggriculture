@@ -9,13 +9,15 @@ own-state terminal and market-timing overlays.
 
 - Public branches: X544/X562 and Moon Counts Melons. They emit the same opening
   at step 0 and do not diverge until the first shop unlock at step 72.
-- Original change (H22): after step 0, inspect only the opponent's public farm.
-  An opening pasture selects Moon; otherwise select X544. The choice is then
-  frozen for the season. No opponent private inventory or replay-only field is
-  used.
-- Moon's required step-0 initialization runs on a deep-copied observation and
-  configuration with Python RNG restored afterward, so the discarded shadow
-  call cannot mutate the live local opponent or its random stream.
+- N36 freezes the opponent's public opening-pasture flag at step 1 and keeps
+  both compatible branches in shadow mode through the first shop unlock at
+  step 72. Non-pasture openings select X544; pasture openings select Moon,
+  except `YARN_STORE` selects X544. The choice is then frozen for the season.
+  No opponent private inventory or replay-only field is used.
+- Both shadow branches run on deep-copied observations/configuration and keep
+  isolated Python RNG streams. The process RNG is restored after every shadow
+  call, so discarded actions cannot mutate the live opponent or environment
+  random stream.
 - Both branches retain bounded weed-collision repair. A direct no-repair
   ablation (E021) fell to 0.34375 against each exact base, while all no-trigger
   games remained exactly neutral in final banks.
@@ -31,9 +33,11 @@ own-state terminal and market-timing overlays.
   only on steps 120–714. X544 uses lead 1; Moon uses lead 2 and lead 3 only on
   steps 480–714.
 - The exact public-replay league reproduced three S05 losses and seven wins at
-  their original final banks. N31 flipped one of the losses to a win, caused no
-  replay outcome regression and added `+342.7` average margin on the seven-win
-  holdout. A fresh V36/Moon/Read/C95 panel also preserved every outcome.
+  their original final banks. N36 retained the Himanshu flip, improved average
+  loss margin from N31's `-136.0` to `+88.3`, and preserved all seven wins.
+- On fresh seed `20265700`, both seats and eight families, mean outcome rose
+  from N31's `0.7500` to `0.9375` with no family regression. An independent
+  two-seed panel preserved `0.84375` and slightly improved average margin.
 - On an exact eight-family transfer panel, N03 had no outcome regression and
   improved every same-seed family margin by +1.5 to +134. A separate four-seed,
   both-seat holdout preserved public-family outcomes and added +50.75 to
@@ -42,9 +46,9 @@ own-state terminal and market-timing overlays.
   each candidate (64 games each). Macro/micro outcome rose from 0.390625 for
   fixed X544 to 0.78125; average margin rose from +274 to +3,192; worst-family
   outcome rose from 0 to 0.375. V36 and Soil banks were exactly unchanged.
-- Runtime/artifact gate: 49/49 tests, `py_compile`, official
-  `get_last_callable`, and path-loaded full games against V36 and Moon all
-  pass. Maximum observed action time in the replay holdout was 145 ms.
+- Runtime/artifact gate: 56/56 tests, `py_compile`, official
+  `get_last_callable`, and path-loaded full games all pass. Maximum observed
+  action time in the replay holdout was 184 ms.
 
 To regenerate the exact entry point:
 
@@ -62,13 +66,15 @@ C:\Users\Dmitry\.venvs\kg\Scripts\python.exe tools\make_market_timing_variant.py
   --x544-lead 1 --moon-lead 2 --moon-window-lead 3 `
   --moon-window-start 480 --moon-window-stop 715 `
   --label n31_premium_cap10
+C:\Users\Dmitry\.venvs\kg\Scripts\python.exe tools\make_shop_aware_selector.py `
+  main.py main.py --label n36-shop-yarn
 ```
 
-Current promoted artifact: 310,564 bytes, SHA-256
-`df06a07f9d83b07f504d00f5d9f742e0152bdc463e5d54ae6a6ac9f7b5b526c7`.
-Final preflight passed 49/49 unit tests, `py_compile`, official last-callable
-loading and full games on both selector branches. It is held locally for the
-next autonomous daily slot; the current final Kaggle slot remains reserved.
+Current promoted artifact: 312,211 bytes, SHA-256
+`a51cc84460a852301bfb46bb3bc6e1289181dbdace6d97402aa1aa90c6519a86`.
+Final preflight passed 56/56 unit tests, `py_compile`, official last-callable
+loading and full games. N36 is held for the first post-reset autonomous slot;
+N31 is the second candidate and the current final Kaggle slot remains reserved.
 
 ## Original baseline strategy
 

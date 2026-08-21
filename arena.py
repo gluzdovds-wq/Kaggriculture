@@ -28,7 +28,7 @@ with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.St
 
 
 BUILT_INS = {"pass", "random", "starter"}
-PUBLIC_CHECKPOINT_STEPS = (1, 12, 24, 48, 72)
+PUBLIC_CHECKPOINT_STEPS = (1, 12, 24, 48, 72, 96, 112)
 
 
 def file_hash(path: Path) -> str:

@@ -749,3 +749,68 @@ arena timing instrumentation preserves both one- and two-argument agents.
 - Latest read-only ladder checkpoint: S08 rose to `1803.3` and S06r to
   `1815.2`; both remain live ratings rather than frozen artifact scores.  No
   upload was made because the one remaining current-day slot is the reserve.
+
+## E049 — N32 delayed public-state classifier / rejected
+
+- Shadow-ran both compatible routes to step 112 and selected from the
+  opponent's public active-hand count.  On the three exact loss replays this
+  won `2/3` instead of N31's `1/3` and improved average margin to `+399.7`.
+- A fresh V36 game exposed catastrophic transfer failure (about `-7996`
+  average margin).  The public fingerprint correctly recognized the observed
+  farm shape, but that shape did not make the fixed Moon continuation robust
+  to a different shop/RNG trajectory.
+- Decision: reject N32.  Delayed public classification is valid machinery,
+  but a behavioral fingerprint is not proof that the counter-route is safe.
+
+## E050 — N33 compatible switch localization / rejected
+
+- Exact Uri replay sweeps localized the decisive X544/Moon macro divergence:
+  switching through step 264 won, while step 268 and later lost.  Telemetry
+  showed the step-264 choice was two COWs versus two SHEEP, followed by a
+  different downstream task route.
+- The step-264 switch flipped Uri to `+937`, but a fresh Soil screen lost both
+  seats by `-613` despite an aliased public state.
+- Decision: reject live switching at that state.  Compatibility prevents
+  invalid internal memory, but it does not remove partial-observation aliasing.
+
+## E051 — N34 bounded animal response / rejected
+
+- Replaced only an already scheduled two-COW macro with two SHEEP on the
+  recognized public state and translated exactly the matching pickup/place
+  actions.  Telemetry confirmed `2/2/2` purchase, pickup and placement events.
+- Uri nevertheless worsened from N31's `-718` to `-1751`.  The profitable
+  Moon response is a coupled downstream task plan, not an isolated animal
+  substitution.
+- Decision: keep the bounded reactive-task infrastructure, reject this macro.
+
+## E052 — N35 Moon premium-lead sweep / rejected
+
+- Swept global and late-window Moon sale leads through 24 turns.  Lead 6
+  improved Naru from `-998` to `-757` (`-749` at cap 24), but reduced the
+  Himanshu win from `+1308` to `+703` (`+660` at cap 24).
+- Across all three exact losses, cap-10 lead 6 averaged `-257.3`, worse than
+  N31's `-136.0`; longer horizons deteriorated further.
+- Decision: retain N31 timing and reject N35.
+
+## E053 — N36 shop-aware compatible selector / local promotion
+
+- Full-feedback route results revealed a stable public interaction: pasture
+  openings normally prefer Moon, except when the first public shop at step 72
+  is `YARN_STORE`, where X544 is safer.  Non-pasture openings remain X544.
+  Both branches are shadow-run with isolated RNG until the decision.
+- A first implementation mistakenly re-measured the opening pasture at step
+  72; the broad screen caught the resulting V36 regression.  The promoted
+  implementation freezes that feature at step 1 and observes only the shop at
+  step 72.
+- On fresh seed `20265700`, both seats, eight families, mean outcome improved
+  from N31's `0.7500` to `0.9375`: X544 moved `0/2 -> 1/2`, Choose
+  `0/2 -> 2/2`, and no family regressed.  On the independent two-seed E048
+  panel, N36 exactly preserved mean outcome `0.84375` and slightly improved
+  average family margin (`3047.4` versus `3039.6` for cap 24).
+- The exact loss league retained the Himanshu flip and improved average margin
+  from N31's `-136.0` to `+88.3`; all seven recorded wins remained wins.  The
+  final artifact passed 56/56 tests, official loading and full-game screens.
+- Promoted artifact: 312,211 bytes, SHA-256
+  `a51cc84460a852301bfb46bb3bc6e1289181dbdace6d97402aa1aa90c6519a86`.
+  It is the primary post-reset candidate; N31 remains the second independent
+  candidate and one Kaggle submission remains reserved.
