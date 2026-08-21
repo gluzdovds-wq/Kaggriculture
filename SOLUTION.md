@@ -51,6 +51,9 @@ own-state terminal and market-timing overlays.
   `23/32` on the preceding blocks versus N39's `30/32`. The two policies
   therefore form a temporal/diversity portfolio; neither is a safe in-match
   graft because they diverge at step 0.
+- Their replay outcome union is `45/46`: N39 has nine unique wins and V36
+  seven. This complement is used across two deterministic submissions, not as
+  an unobservable in-match oracle or random per-action exploration.
 - On an exact eight-family transfer panel, N03 had no outcome regression and
   improved every same-seed family margin by +1.5 to +134. A separate four-seed,
   both-seat holdout preserved public-family outcomes and added +50.75 to

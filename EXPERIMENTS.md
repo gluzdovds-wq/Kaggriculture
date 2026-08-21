@@ -997,3 +997,18 @@ arena timing instrumentation preserves both one- and two-argument agents.
   are distinct from step 0 and cover different current-meta modes; N31 becomes
   the held validation/repair reserve. Do not blend them with per-turn epsilon
   noise or spend a slot on V36 q20.
+
+## E065 — N39/V36 complement and V36 quantity sweep
+
+- Across all 46 chronological replays, N39-only wins account for nine episodes,
+  V36-only wins for seven, and both win 29. Their two-policy outcome oracle is
+  `45/46`; the only shared loss is Rikito Kanda. This quantifies genuine policy
+  complement rather than merely different average margins.
+- V36 market quantities 15, 20, 25, 30, 40 and 60 were tested on its only
+  newest loss. Quantity 40 was best, monotonically improving the relevant
+  range from exact V36's `-875` to `-423`, but no value flipped the outcome;
+  quantity 60 regressed to `-1309`.
+- Decision: reject N44 quantity tuning without a broad gate or LB slot. The
+  45/46 oracle cannot be implemented inside one agent because N39 and V36
+  diverge on the simultaneous step-0 action. Preserve the two deterministic
+  submissions as the exploration/exploitation portfolio.

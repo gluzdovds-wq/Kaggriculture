@@ -413,3 +413,7 @@ the leaderboard only as a noisy measurement of the current live meta.
   portfolio: activate deterministic N39 and exact V36 as two independent
   ladder policies after reset. Keep N31 unused as the repair reserve. A q20
   V36 retry improved its sole fresh loss margin but did not flip the outcome.
+- Across all 46 tapes, the N39/V36 outcome oracle reaches `45/46`: nine wins
+  are unique to N39 and seven to V36. A wider V36 market-quantity sweep still
+  could not flip its only newest loss, reinforcing policy diversity over
+  another narrowly tuned copy.
