@@ -389,3 +389,33 @@ arena timing instrumentation preserves both one- and two-argument agents.
   replay bound prevents unbounded route drift.
 - Decision: H09 local pass. Retain the existing bounded repair in both branches
   of the promoted H22 selector; no `main.py` change is required.
+
+## E022 — H21 pressure-gated pre-EOD routing / promoted locally
+
+- Exact engine audit clarified the action order: at day-28 EOD the Moon route's
+  shed was empty and eleven inventories held 112 units. The automatic stable
+  drop accepted 100 and discarded the final 12 WHEAT. A last-turn shed sale
+  cannot help because there is nothing in the shed yet; a worker must reach a
+  shed-access tile, `DROP`, and sell before the automatic drop.
+- Added `tools/trace_terminal_state.py` and a reproducible fixed-actor generator
+  `tools/make_terminal_route_variant.py`. The causal screen starts at step 689,
+  routes hand 0 and hand 1 by shortest unlocked paths, and sells their dropped
+  inventory on the same turn. On the original overflow seed, hand0, hand1 and
+  both together improved both seats by +468, +424 and +647 coins respectively.
+- Fresh Moon mirror seeds `20262600..20262607`, both seats: the two-worker route
+  won 16/16 against the exact selector base with average margin +626.5 and
+  paired bootstrap 95% CI [1.0, 1.0].
+- The ungated route harmed X544-family games and low-pressure Moon games. A
+  public/private-own-state gate fixed both failures: run only after the H22
+  selector has frozen `moon`, and only when shed plus carried inventory is at
+  least 90 on step 689. On a two-seed × both-seat × four-family transfer panel,
+  V36, Soil and low-pressure Moon games were exactly neutral. In triggered
+  Read/Choose games own-bank lift was +530 to +819 with no outcome regression.
+- Exact post-promotion overflow audit on seed 20262400 removed both 12-WHEAT
+  drops and increased own bank by +577 in each seat. The promoted artifact
+  passes 23/23 tests, `py_compile`, the official insertion-order loader and
+  full path-loaded games on both selector branches. Size is 305,555 bytes;
+  SHA-256 is `541d421f272666da360699e365a26cba96721577a957ed51f15c0f442586aa9f`.
+- Decision: H21 local pass and promote. This is an own-state terminal overlay;
+  it does not inspect opponent private state and is inert outside the gated
+  Moon pressure regime.

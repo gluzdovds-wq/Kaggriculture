@@ -18,11 +18,16 @@ the promoted candidate is an observation-only early route-family selector.
 - Both branches retain bounded weed-collision repair. A direct no-repair
   ablation (E021) fell to 0.34375 against each exact base, while all no-trigger
   games remained exactly neutral in final banks.
+- H21 adds a Moon-only terminal pressure gate. If shed plus carried inventory
+  is at least 90 on step 689, two fixed workers route to the shed, drop and sell
+  before day-28 EOD. It removed the observed 12-WHEAT overflow and added +577
+  coins per seat on the audited seed; all X544 and low-pressure transfer games
+  stayed exactly neutral.
 - Frozen holdout: 4 untouched seeds × both seats × 8 opponent families for
   each candidate (64 games each). Macro/micro outcome rose from 0.390625 for
   fixed X544 to 0.78125; average margin rose from +274 to +3,192; worst-family
   outcome rose from 0 to 0.375. V36 and Soil banks were exactly unchanged.
-- Runtime/artifact gate: 20/20 tests, `py_compile`, official
+- Runtime/artifact gate: 23/23 tests, `py_compile`, official
   `get_last_callable`, and path-loaded full games against V36 and Moon all
   pass. Maximum observed action time on the frozen panel was 143 ms.
 
@@ -32,11 +37,14 @@ To regenerate the exact entry point:
 C:\Users\Dmitry\.venvs\kg\Scripts\python.exe tools\make_family_selector.py `
   research\public_agents\kaggriculture-x544-nah-i-d-win\main.py `
   research\public_agents\kaggriculture-frontier-the-moon-counts-melons\main.py `
-  main.py
+  research\generated\h22-selector-base.py
+C:\Users\Dmitry\.venvs\kg\Scripts\python.exe tools\make_terminal_route_variant.py `
+  research\generated\h22-selector-base.py main.py `
+  --actor 1 --actor 2 --start-step 689 --min-total 90 --route moon
 ```
 
 Current local candidate SHA-256:
-`642e4209da47f755ae1d780a21bce679bb2ce716a88ca771fc6151797f59ff08`.
+`541d421f272666da360699e365a26cba96721577a957ed51f15c0f442586aa9f`.
 It has not been submitted. S04 (`55652287`) was the superseded X544+H04
 artifact that failed before play; E016 and E017 in `EXPERIMENTS.md` record the
 packaging fix and the new strategic evidence.
