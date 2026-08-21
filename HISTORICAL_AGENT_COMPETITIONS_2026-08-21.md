@@ -417,3 +417,6 @@ the leaderboard only as a noisy measurement of the current live meta.
   are unique to N39 and seven to V36. A wider V36 market-quantity sweep still
   could not flip its only newest loss, reinforcing policy diversity over
   another narrowly tuned copy.
+- The sole shared Rikito loss was also replayed against C95, Soil, V16 and
+  V25; all lost by much more than N39. No third donor therefore displaces the
+  held N31/repair reserve.

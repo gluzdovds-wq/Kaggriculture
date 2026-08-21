@@ -1012,3 +1012,13 @@ arena timing instrumentation preserves both one- and two-argument agents.
   45/46 oracle cannot be implemented inside one agent because N39 and V36
   diverge on the simultaneous step-0 action. Preserve the two deterministic
   submissions as the exploration/exploitation portfolio.
+
+## E066 — shared Rikito loss reserve-donor control
+
+- Tested the only N39/V36 shared loss against full C95, Soil, V16 and V25.
+  Every donor also lost: margins were `-10725`, `-14837`, `-14482` and
+  `-7770`, versus V36 `-5180`, S08 `-478` and N39 `-371`.
+- Decision: no third donor earns the reserve slot. N39 is already the closest
+  whole policy on this tape, and the earlier N38 timing diagnostic's best
+  `-51` did not flip it. Keep N31/repair capacity in reserve rather than
+  chasing the final oracle miss.
