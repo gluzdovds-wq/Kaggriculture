@@ -2,7 +2,8 @@
 
 `main.py` is the current Kaggriculture submission candidate. The original
 carrot baseline remains documented below as the execution/calibration anchor;
-the promoted candidate is an observation-only early route-family selector.
+the promoted candidate combines the public-state route selector with bounded
+own-state terminal and market-timing overlays.
 
 ## Promoted candidate
 
@@ -23,6 +24,14 @@ the promoted candidate is an observation-only early route-family selector.
   before day-28 EOD. It removed the observed 12-WHEAT overflow and added +577
   coins per seat on the audited seed; all X544 and low-pressure transfer games
   stayed exactly neutral.
+- N03 advances only an already scheduled FERTILIZER sale by one turn, capped at
+  10 units, then subtracts the same quantity from the next turn. A per-seat debt
+  ledger carries any unpaid amount forward, so the overlay changes timing but
+  not scheduled quantity. It runs only on steps 120–714.
+- On an exact eight-family transfer panel, N03 had no outcome regression and
+  improved every same-seed family margin by +1.5 to +134. A separate four-seed,
+  both-seat holdout preserved public-family outcomes and added +50.75 to
+  +139.75 average margin; telemetry recorded 65 advanced and 65 repaid units.
 - Frozen holdout: 4 untouched seeds × both seats × 8 opponent families for
   each candidate (64 games each). Macro/micro outcome rose from 0.390625 for
   fixed X544 to 0.78125; average margin rose from +274 to +3,192; worst-family
@@ -41,13 +50,16 @@ C:\Users\Dmitry\.venvs\kg\Scripts\python.exe tools\make_family_selector.py `
 C:\Users\Dmitry\.venvs\kg\Scripts\python.exe tools\make_terminal_route_variant.py `
   research\generated\h22-selector-base.py main.py `
   --actor 1 --actor 2 --start-step 689 --min-total 90 --route moon
+C:\Users\Dmitry\.venvs\kg\Scripts\python.exe tools\make_market_timing_variant.py `
+  main.py main.py --items FERTILIZER --fertilizer-cap 10 `
+  --start 120 --stop 715 --label n13_fert10
 ```
 
-Current local candidate SHA-256:
-`541d421f272666da360699e365a26cba96721577a957ed51f15c0f442586aa9f`.
-It has not been submitted. S04 (`55652287`) was the superseded X544+H04
-artifact that failed before play; E016 and E017 in `EXPERIMENTS.md` record the
-packaging fix and the new strategic evidence.
+Current promoted artifact: 309,836 bytes, SHA-256
+`4ddec3eafa9840e4bb7b07b9d37d4af2835c8bbcf8cf2411c776f96e662788aa`.
+It is byte-identical to the E028–E033 tested candidate. Final preflight passed
+26/26 unit tests, `py_compile`, official last-callable loading and full games on
+both selector branches; observed maximum action latency was 62.76 ms.
 
 ## Original baseline strategy
 

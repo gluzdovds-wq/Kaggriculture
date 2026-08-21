@@ -435,3 +435,56 @@ arena timing instrumentation preserves both one- and two-argument agents.
   which is H06's rolling scheduler rather than a safe local overlay.
 - Decision: H03 partial reject for the current fixed-route candidate. Do not
   mutate `main.py`; revisit only together with an H06 scheduler/layout search.
+
+## E024–E027 — public refresh and market-timing causal split
+
+- Full replacement by the public V27 and C95 artifacts lost all 16 paired
+  games per candidate to the incumbent, with average margins -14,725.9 and
+  -14,088.1. Both routes already differ from the incumbent at step 0, so a
+  state-compatible midgame graft is unavailable.
+- A small screen advanced an already scheduled sale by exactly one turn and
+  removed the same quantity from the following turn. WHEAT and the combined
+  WHEAT+FERTILIZER variant won their clone mirror, but transferred badly to
+  X544/Moon/Choose: WHEAT cost as much as 4,847 margin and 0.50 outcome.
+- FERTILIZER-only was non-negative on every affected family: +87.5 margin vs
+  X544, +126.5 and +0.25 outcome vs Moon, and +55.5 vs Choose on the exact
+  same seeds and seats. All advanced quantities were fully repaid.
+- Moving the initial feed purchase to the first market slot lost 3/4 games;
+  changing six feed wheat to five was effectively neutral (+6 average).
+- Decision: reject whole-route refresh, WHEAT, the combined overlay and both
+  opening changes. Continue only with the conserved FERTILIZER mechanism.
+
+## E028–E029 — FERTILIZER cap/window and eight-family transfer
+
+- Cap 10 beat cap 5 in all eight paired games by +7 to +21 coins. Start 0 was
+  identical to start 120 because no earlier natural trigger existed; start 240
+  was consistently one coin worse. Keep the bounded step 120–714 window.
+- Against eight public families on the exact E026 seeds, cap-10 FERTILIZER had
+  no outcome regression and improved every same-seed average margin: V36 +6,
+  Soil +5, X544 +98.5, Moon +134, Choose +64.5, V16 +5, V27 +20 and C95 +1.5.
+  Telemetry recorded roughly 62 units advanced and exactly 62 repaid per game.
+- Decision: local pass for FERTILIZER-only cap 10; require a fresh holdout.
+
+## E030–E032 — H21 terminal parameter and final-call audit
+
+- Adding a third routed worker lost 8/8 with average margin -68.5. Starting at
+  step 688 instead of 689 lost 8/8 with average margin -471.2.
+- Threshold 80 was mirror-neutral when pressure was 92–108, but added a real
+  trigger at pressure 81 against related families and reduced their margin by
+  about 31 coins. Retain threshold 90.
+- At steps 717–718, Moon/X544 branches already carried zero inventory. The
+  other branch already sold 33 units at step 717 and the remaining five at
+  step 718. A new terminal relay would be inert or duplicate existing code.
+- Decision: reject all four terminal variants and retain H21 unchanged.
+
+## E033 — FERTILIZER cap-10 independent holdout / promotion gate pass
+
+- Fresh seeds `20263700..20263703`, both seats: FERTILIZER beat the exact
+  incumbent in 7/8 games with average margin +139.75. One seed exposed the
+  expected first-seller interaction (-3,213 from one seat, +3,887 from the
+  other), while the paired mean remained positive.
+- Exact incumbent controls on the same public-family games showed unchanged
+  outcomes and positive candidate margin deltas: X544 +71.75, Moon +139.75,
+  Choose +50.75. Average telemetry was 65 advanced and 65 repaid units.
+- Decision: promote the one-turn, debt-conserved FERTILIZER sale with cap 10,
+  steps 120–714. Do not include WHEAT or alter H21.
