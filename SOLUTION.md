@@ -60,6 +60,8 @@ Current promoted artifact: 309,836 bytes, SHA-256
 It is byte-identical to the E028–E033 tested candidate. Final preflight passed
 26/26 unit tests, `py_compile`, official last-callable loading and full games on
 both selector branches; observed maximum action latency was 62.76 ms.
+Submitted as S05, Kaggle ref `55666404`; the first observed status was
+`PENDING`.
 
 ## Original baseline strategy
 

@@ -488,3 +488,15 @@ arena timing instrumentation preserves both one- and two-argument agents.
   Choose +50.75. Average telemetry was 65 advanced and 65 repaid units.
 - Decision: promote the one-turn, debt-conserved FERTILIZER sale with cap 10,
   steps 120–714. Do not include WHEAT or alter H21.
+
+## E034 — promoted artifact preflight and S05 submission
+
+- Promoted `main.py` is byte-identical to the E028–E033 candidate: 309,836
+  bytes, SHA-256 `4ddec3eafa9840e4bb7b07b9d37d4af2835c8bbcf8cf2411c776f96e662788aa`.
+- Passed 26/26 unit tests, `py_compile`, official last-callable loading and full
+  path-loaded games on both selector branches. Observed maximum action latency
+  was 62.76 ms; preflight telemetry repaid exactly 62/62 and 68/68 advanced
+  FERTILIZER units.
+- Submitted once as S05, Kaggle ref `55666404`, at 2026-08-21 09:51 UTC+7.
+  Initial Kaggle status: `PENDING`; four daily submissions remained afterward.
+- Decision: do not spend another authorized submission while S05 is pending.
