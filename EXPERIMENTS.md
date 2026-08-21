@@ -1091,3 +1091,28 @@ arena timing instrumentation preserves both one- and two-argument agents.
   route-specific task-graph improvement, not a portable terminal primitive.
   A V36 terminal repair would need actor opportunity-cost scoring and an
   inventory-value-aware route planner, not fixed worker indexes.
+
+## E071 — trace-guided V36 terminal worker selection / rejected
+
+- Traced exact V36 at step 689 on the three E070 trigger seeds.  The terminal
+  state was structurally stable: actors 1/2 were five and seven moves from
+  shed access with only six and four WHEAT, while actor 9 was one move away
+  carrying nine items (one WHEAT, two FERTILIZER and six MILK).  This explains
+  the fixed-route loss as opportunity cost rather than a bad pressure trigger.
+- Fixed actors 8/9 were neutral (`0.500`, `-7.6` mean margin), while actor 9
+  alone passed the original 16-game mirror (`0.625`, `+12.6`).  On a matched
+  32-game eight-family control, however, N49 changed no outcome and triggered
+  only four times: its mean margin delta versus exact V36 was `+2.4`, split
+  between `-7` against Choose and `+46` against C95.
+- Exact-replay evaluation on the ten newest S08 episodes preserved V36's
+  `9/10` but improved only one triggered margin by 11 coins (`+1.1` mean).
+  N50 replaced the fixed index with a conservative planner that selects at
+  most one loaded hand within one move of shed access.  It reproduced N49 on
+  the original mirror and scored `0.531` with `+2.8` mean margin on sixteen
+  fresh paired seeds; every one of its ten combined trigger cases still chose
+  actor 9 because V36's late task graph is effectively deterministic.
+- Decision: keep exact V36 for the second post-reset submission.  N49/N50 are
+  tiny positive diagnostics but do not clear a submission-risk threshold:
+  they produce no outcome gain on 42 broad/replay games and the dynamic
+  selector has not encountered a genuinely different useful worker.  Retain
+  `make_terminal_nearby_variant.py` as the safer reactive-planner scaffold.

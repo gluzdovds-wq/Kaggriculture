@@ -428,3 +428,9 @@ the leaderboard only as a noisy measurement of the current live meta.
   seeds: triggered cases spent twelve moves to liquidate six WHEAT and were
   negative in every paired trigger. This is further evidence that useful
   overlays must move with their compatible task graph, not just their trigger.
+- Trace-guided repair found that a single one-step worker route was slightly
+  positive, but it changed no outcome on a matched eight-family panel and
+  added only 11 coins on one of ten exact current-meta replays. A conservative
+  nearby-worker planner selected that same worker in every trigger because
+  V36's late task graph is stable. This is too small for a leaderboard slot;
+  exact V36 remains the lower-risk portfolio member.
