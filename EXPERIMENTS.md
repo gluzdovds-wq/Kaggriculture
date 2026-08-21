@@ -419,3 +419,19 @@ arena timing instrumentation preserves both one- and two-argument agents.
 - Decision: H21 local pass and promote. This is an own-state terminal overlay;
   it does not inspect opponent private state and is inert outside the gated
   Moon pressure regime.
+
+## E023 — H03 natural same-turn dependency audit / trigger absent
+
+- Added `tools/audit_same_turn_chains.py`, which reconstructs official executed
+  unit order from each pre-action observation and detects only causal co-located
+  chains: `PLANT→WATER`, ripe `HARVEST→PLANT`, and matching
+  `BUILD_{COOP,BARN}→PLACE_{animal}`. Synthetic unit tests pin each classifier.
+- Seeds `20262900..20262902`, both seats, were audited separately on the frozen
+  X544 and Moon selector branches: 12 full games and 8,628 executed candidate
+  turns in total. The number of qualifying dependency chains was exactly zero.
+- Therefore the engine mechanism remains valid (E008), but it cannot explain
+  the incumbent routes and there is no existing second action to ablate. Adding
+  chains would require co-locating units and rescheduling upstream movement,
+  which is H06's rolling scheduler rather than a safe local overlay.
+- Decision: H03 partial reject for the current fixed-route candidate. Do not
+  mutate `main.py`; revisit only together with an H06 scheduler/layout search.
