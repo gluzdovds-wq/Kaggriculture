@@ -439,3 +439,12 @@ the leaderboard only as a noisy measurement of the current live meta.
   (`12/15` versus `9/15` and `8/15`). N39 and V36 now each win `48/61`
   chronological replays and their two-policy oracle covers `60/61`, confirming
   that temporal complementarity is more valuable than selecting one winner.
+- A compatible policy-pool experiment then isolated the last shared loss.
+  N39 and a FERTILIZER+WOOL timing variant share the complete prefix before the
+  first shop reveal, so both can be shadow-run safely and the variant selected
+  only for `BAKERY`.  This N53 selector won all eight historical BAKERY tapes
+  versus N39's seven, exactly reproduced N39 on every tested non-BAKERY game,
+  and raised the corpus result to `49/61`.  Paired with V36, its retrospective
+  outcome oracle covers all `61/61`.  This is the safe form of in-match
+  adaptation: deterministic context selection at a verified compatible state,
+  not random action-level exploration or a late task-graph splice.

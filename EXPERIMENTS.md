@@ -1138,3 +1138,35 @@ arena timing instrumentation preserves both one- and two-argument agents.
 - Decision: keep the post-reset pair and order unchanged: submit N39 first,
   then exact V36.  The newest-five shift strengthens the need for diversity;
   it does not support replacing V36 with the more correlated N31, Soil or C95.
+
+## E073 — compatible BAKERY whole-policy shadow selector / promoted
+
+- Extended the only N39/V36 shared Rikito loss donor control with X544, Moon,
+  Choose and Read.  All four full policies also lost (`-627`, `-1104`,
+  `-1040`, and `-1354`), so another incompatible whole-policy submission was
+  not supported.
+- A residual subset search inside the existing N38 market overlay found that
+  advancing only FERTILIZER and WOOL with lead 11 flipped Rikito from N39's
+  `-371` to `+127`.  Used globally as N52 it won the older latest-ten block
+  `10/10`, but only `7/15` on the current latest-fifteen and regressed one N39
+  outcome.  N52 was therefore rejected as a global replacement.
+- N39 and N52 emit the same actions through the first shop reveal at step 72
+  (and through step 239 on Rikito).  N53 embeds both policies, gives each an
+  isolated RNG stream, shadow-runs both from step zero, verifies the action
+  prefix, and selects N52 only when the first shop is `BAKERY`; an incompatible
+  prefix falls back to N39.
+- All eight BAKERY episodes in the 61-game chronological S08 corpus passed
+  exact baseline reproduction.  N53 won `8/8`, versus N39 `7/8` and S08
+  `5/8`, flipping Rikito with no outcome regression.  All eight reported a
+  compatible prefix and zero mismatches.  On thirteen non-BAKERY episodes in
+  the newest-fifteen, N53 exactly reproduced N39.  A separate 32-game,
+  eight-family two-seat panel contained no BAKERY seeds and reproduced every
+  N39 outcome and final margin exactly (`31/32` wins).
+- The final generated file is 511,698 bytes, SHA-256 `10868816...`, passed
+  `py_compile`, all 69 unit tests, exact replay loading, and stayed below
+  290 ms maximum local action latency.  Its retrospective corpus result is
+  `49/61`, one above N39; the N53/V36 outcome oracle is `61/61`.
+- Decision: promote N53 to the first post-reset slot instead of N39, followed
+  by exact V36.  This is deterministic contextual exploitation, not per-turn
+  epsilon noise: the selector changes policy only at a verified compatible
+  checkpoint and otherwise remains byte-for-byte N39 in game outcomes.
