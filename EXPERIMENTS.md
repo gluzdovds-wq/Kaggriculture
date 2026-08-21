@@ -831,3 +831,28 @@ arena timing instrumentation preserves both one- and two-argument agents.
 - Decision: do not create N37.  Keep the simpler N36 rule and treat additional
   context splits as overfitting until they improve outcome on an independent
   full-feedback panel.
+
+## E055 — latest-10 S08 live-meta replay league
+
+- Downloaded the ten chronologically latest public S08 episodes before
+  inspecting their outcomes: eight wins and losses to kevin park (`-526`) and
+  Rikito Kanda (`-478`).  Exact S08 (`cfd922d8...`) reproduced all ten final
+  banks, so the counterfactual fidelity gate passed.
+- N31 preserved `8/10` and improved average margin from S08's `+3384.7` to
+  `+3985.2`.  N36 reached `9/10`, average `+4728.8`, with one improvement and
+  zero regressions.  The kevin loss became a `+6136` win; Rikito improved to
+  `-371` but remained a loss.
+- Decision: the current live meta independently supports N36 as the first
+  post-reset submission and N31 as the second conservative candidate.
+
+## E056 — N38 Rikito route/timing counterfactual / rejected
+
+- Frozen isolated-shadow routes showed that Rikito is not a selector error:
+  Moon scored `-371` versus X544's `-665`.  Swept global Moon sale leads
+  `1,3..12,16,24`; lead 11 was best at `-51`, but none changed the outcome.
+- Cap sweeps `5/15/20/24` at leads 10 and 11 were effectively inert and also
+  failed to flip the replay.  The earlier N35 league already showed that long
+  leads reduce margins against other opponents.
+- Decision: reject N38 without spending a broad holdout or LB slot.  A
+  51-coin tape-specific margin gain is not enough evidence for a risky global
+  timing change.

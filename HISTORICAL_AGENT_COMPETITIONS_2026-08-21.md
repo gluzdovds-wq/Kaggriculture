@@ -329,3 +329,8 @@ the leaderboard only as a noisy measurement of the current live meta.
   outcome-optimal branch `32/32` times.  N36 averaged `0.875` outcome versus
   `0.625` fixed X544 and `0.6875` fixed Moon, with zero regret separately for
   BAKERY, FARMERS_MARKET and PET_CAFE.  No extra N37 split was justified.
+- On the chronologically latest ten public S08 ladder episodes, exact S08
+  reproduced all banks at `8/10`; N31 remained `8/10`, while N36 reached
+  `9/10`, flipped the kevin park loss to `+6136` and caused no regression.
+  A route plus lead/cap sweep could not flip the remaining Rikito loss, so no
+  N38 timing variant was promoted.
