@@ -1194,3 +1194,16 @@ arena timing instrumentation preserves both one- and two-argument agents.
   BAKERY result.  Restore the post-reset plan to deterministic N39 followed by
   exact V36, retain one repair slot, and keep the generic shadow-selector tool
   for future policies with a broader context gate.
+
+## E075 — seventh chronological S08 holdout / final pre-submit check
+
+- Downloaded the two S08 episodes completed after E072 (`96314456` and
+  `96328165`).  Exact S08 reproduced both recorded final banks before candidate
+  results were accepted.
+- S08, N39 and exact V36 all won `2/2`.  N39 margins were `+3110` and `+2152`
+  (`+2631` average); V36 margins were `+21806` and `+6777` (`+14291.5`
+  average), versus S08's `+1503` average.  Margin remains diagnostic only.
+- Across all 63 chronological S08 episodes, N39 and V36 now each win `50/63`;
+  their outcome union rises from `60/61` to `62/63`.
+- Decision: no last-minute policy change.  Submit N39 first and exact V36
+  second after the UTC quota reset, then preserve at least one repair slot.

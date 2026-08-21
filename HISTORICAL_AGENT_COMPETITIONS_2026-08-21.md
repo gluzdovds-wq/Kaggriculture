@@ -455,3 +455,7 @@ the leaderboard only as a noisy measurement of the current live meta.
   not identify the future market/opponent regime.  N53 was rejected and the
   safer N39/V36 submission pair restored; the shadow runner remains useful as
   infrastructure, not as evidence that this particular classifier transfers.
+- Two still-later S08 games completed immediately before the quota reset.  S08,
+  N39 and V36 all won both after exact replay reproduction; V36's diagnostic
+  average margin was `+14291.5` and N39's `+2631`.  The complementary pair now
+  covers `62/63` chronological outcomes and remains the final submission plan.
