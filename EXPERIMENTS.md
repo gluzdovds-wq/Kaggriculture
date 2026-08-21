@@ -949,3 +949,32 @@ arena timing instrumentation preserves both one- and two-argument agents.
 - Decision: reject N41 without a broad holdout or leaderboard slot. Weed
   removal has an opportunity cost coupled to hiring, travel and production;
   nearest-task overrides are not a compatible reactive planner. Keep N39.
+
+## E062 — fourth chronological S08 replay holdout
+
+- Downloaded fourteen later S08 public episodes, disjoint from the prior 32.
+  Exact S08 again reproduced every recorded final bank before candidates were
+  accepted. S08 and N39 each won `8/14`; N31 also won `8/14`, while N36 won
+  `7/14`.
+- N39 improved one S08 loss (digitalChaos, `-469` to `+169`) and regressed one
+  narrow S08 win (Audric LOKO, `+151` to `-2560`). Its average margin was
+  `+1065.93`, versus S08's `+370.79`, a `+695.14` mean delta.
+- Across all 46 disjoint chronological S08 episodes, S08/N36/N39 won `36/46`,
+  `36/46`, and `38/46`; average margins were `+3267.09`, `+3813.41`, and
+  `+3907.70`. N39 remains the strongest aggregate candidate, but the shop
+  selector now has one documented live-meta regression.
+
+## E063 — N42 one-turn YARN response probe / rejected
+
+- The kevin park improvement and Audric regression are observationally
+  identical through step 72: both opponents expose the same farm and first
+  `YARN_STORE`. Under a common Moon action at step 72, their step-73 public
+  responses differ: kevin has five active hands and Audric two.
+- N42 used Moon's step-72 action as a probe, then selected X544 for at least
+  four opponent hands and Moon otherwise. The signal classified the two tapes
+  as intended and retained Audric at `+161`, but the late X continuation was
+  state-incompatible and worsened kevin from N39's `+6111` to `-9945`.
+- Decision: reject N42. The distinguishing information arrives after the
+  first incompatible action. Randomizing that action only trades the two
+  outcomes; it does not improve their expected win rate. Keep deterministic
+  N39 and retain N31 as policy diversity.

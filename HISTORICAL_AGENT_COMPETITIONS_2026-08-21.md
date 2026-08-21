@@ -382,3 +382,19 @@ the leaderboard only as a noisy measurement of the current live meta.
   general. A viable planner must compare the full opportunity cost of hiring,
   travel, current production and later harvest/sale tasks. N39 remains the
   promoted artifact and N31 the conservative independent candidate.
+
+## Execution checkpoint: N42 and fourth live holdout
+
+- Fourteen later exact S08 replays form a fourth disjoint holdout. N39 tied
+  S08 at `8/14`, with one improvement and one regression, but added `+695.14`
+  average margin. Across all 46 episodes N39 leads at `38/46`, versus `36/46`
+  for both S08 and N36.
+- The new Audric regression and the earlier kevin improvement expose an
+  information-timing limit. Their public farms and YARN_STORE context are
+  identical through the first incompatible route action. A common Moon probe
+  reveals different hiring responses one step later, but switching to X at
+  that point is already state-incompatible and loses badly.
+- This is the precise place where epsilon exploration fails: it can reveal a
+  latent class only after the decision it was meant to improve. Keep N39 for
+  aggregate strength and N31 as a genuinely different conservative policy;
+  do not spend a slot on the N42 probe.
