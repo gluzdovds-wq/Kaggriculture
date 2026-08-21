@@ -1116,3 +1116,25 @@ arena timing instrumentation preserves both one- and two-argument agents.
   they produce no outcome gain on 42 broad/replay games and the dynamic
   selector has not encountered a genuinely different useful worker.  Retain
   `make_terminal_nearby_variant.py` as the safer reactive-planner scaffold.
+
+## E072 — sixth chronological S08 holdout and donor refresh
+
+- Downloaded the five public S08 episodes completed after E068 (`96286975` to
+  `96296132`).  Exact S08 reproduced all recorded final banks before accepting
+  any candidate result.  S08 won `2/5`; N39 won `5/5`, N31 `4/5`, and exact
+  V36 `3/5`.  N39 flipped all three S08 losses with no regression.
+- The N50 nearby-worker terminal planner preserved V36's `3/5` and improved
+  only the kumanomi loss by 35 coins (`+7` mean), again without an outcome
+  flip.  Its trigger selected actor 9 and liquidated the same nine items, so
+  the new live block does not justify the terminal overlay.
+- Re-evaluated exact V36, Soil and C95 on the combined latest fifteen episodes.
+  V36 won `12/15` with `+4043.5` average margin, versus Soil `9/15` and
+  `-1410.7`, C95 `8/15` and `+1838.1`, and S08 `5/15`.  N39 is `10/15` on the
+  same span.  Thus V36 remains the strongest current-meta whole-policy donor
+  despite N39's perfect newest-five rebound.
+- Across all 61 disjoint chronological S08 episodes, N39 and V36 are now both
+  `48/61`, but their time profiles differ sharply.  Their outcome oracle wins
+  all five new episodes and rises from `55/56` to `60/61` overall.
+- Decision: keep the post-reset pair and order unchanged: submit N39 first,
+  then exact V36.  The newest-five shift strengthens the need for diversity;
+  it does not support replacing V36 with the more correlated N31, Soil or C95.

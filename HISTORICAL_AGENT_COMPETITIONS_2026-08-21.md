@@ -434,3 +434,8 @@ the leaderboard only as a noisy measurement of the current live meta.
   nearby-worker planner selected that same worker in every trigger because
   V36's late task graph is stable. This is too small for a leaderboard slot;
   exact V36 remains the lower-risk portfolio member.
+- Five still-later S08 games reversed toward N39 (`5/5`) while V36 won `3/5`;
+  nevertheless V36 led Soil and C95 decisively on the combined latest fifteen
+  (`12/15` versus `9/15` and `8/15`). N39 and V36 now each win `48/61`
+  chronological replays and their two-policy oracle covers `60/61`, confirming
+  that temporal complementarity is more valuable than selecting one winner.
