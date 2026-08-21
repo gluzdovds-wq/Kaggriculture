@@ -448,3 +448,10 @@ the leaderboard only as a noisy measurement of the current live meta.
   outcome oracle covers all `61/61`.  This is the safe form of in-match
   adaptation: deterministic context selection at a verified compatible state,
   not random action-level exploration or a late task-graph splice.
+- A fresh matched BAKERY gate then overturned that apparent promotion.  On one
+  V36 and two X544 BAKERY seeds N53 preserved four wins, but on the remaining
+  X544 seed it changed both seats from N39's `+4148` win to `-97` loss.  The
+  prefix was compatible in every case, proving that shop identity alone did
+  not identify the future market/opponent regime.  N53 was rejected and the
+  safer N39/V36 submission pair restored; the shadow runner remains useful as
+  infrastructure, not as evidence that this particular classifier transfers.

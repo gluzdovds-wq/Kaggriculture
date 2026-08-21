@@ -1170,3 +1170,27 @@ arena timing instrumentation preserves both one- and two-argument agents.
   by exact V36.  This is deterministic contextual exploitation, not per-turn
   epsilon noise: the selector changes policy only at a verified compatible
   checkpoint and otherwise remains byte-for-byte N39 in game outcomes.
+
+## E074 — fresh BAKERY transfer gate / N53 promotion reversed
+
+- A pass-agent seed screen was intentionally not accepted: three seeds that
+  revealed `BAKERY` under pass/pass produced other shops with real agents,
+  because farm evolution changes environment RNG consumption before step 72.
+  Fresh context discovery must therefore run the actual N39/opponent pair.
+- An eight-seed, four-family N39 screen produced no BAKERY cases.  A second
+  sixteen-seed screen against V36 and X544 found three independent BAKERY
+  matchup-seeds.  Because N39 and N53 are identical before the reveal, each
+  could then be repeated as a controlled two-seat A/B.
+- Against V36 seed `20266047`, N53 preserved both wins but changed the margin
+  from `+3614` to `+3309` (`-305` per seat).  Against X544 seed `20266047`, it
+  preserved both wins and improved `+2392` to `+2558` (`+166`).  Against X544
+  seed `20266040`, however, it regressed both seats from N39's `+4148` win to
+  a `-97` loss (`-4245` per seat).
+- Every case selected the override with a compatible prefix and zero mismatch,
+  so this is not a state-grafting bug.  `BAKERY` alone is insufficient context:
+  the FERTILIZER+WOOL timing response also depends on the opponent task graph
+  and later shared-market trajectory.
+- Decision: reject N53 for leaderboard submission despite its historical 8/8
+  BAKERY result.  Restore the post-reset plan to deterministic N39 followed by
+  exact V36, retain one repair slot, and keep the generic shadow-selector tool
+  for future policies with a broader context gate.
