@@ -351,3 +351,20 @@ the leaderboard only as a noisy measurement of the current live meta.
   exploration: move only an already scheduled sale, keep a debt ledger, and
   gate the timing by a compatible macro route.  N39 is now `main.py`
   (`6073f67f...`); N31 remains the independent conservative candidate.
+
+## Execution checkpoint: N40 diagnostics
+
+- A third disjoint chronological batch of twelve exact public S08 replays
+  preserved N39 at `11/12`. Across all 32 episodes, S08/N36/N39 are now
+  `28/32`, `29/32`, and `30/32` respectively.
+- The only new common loss has an easy public fingerprint at step 12, but the
+  donor policies that beat it diverge at the unobservable simultaneous step-0
+  opening. A C95-prefix hybrid won that tape and collapsed to `1/12` on the
+  batch, demonstrating why opponent classification alone is insufficient.
+- Bounded sheep-to-cow substitutions, route changes, broad sale leads and
+  wool-only timing all failed. The successful donors combine animal mix,
+  feeding, placement, cleaning and market timing as a coupled task graph; the
+  pieces are not independently composable.
+- No N40 candidate was promoted. The next useful architecture is a compatible
+  reactive planner over whole task graphs, trained or searched beneath the
+  legal rule layer, rather than a late policy splice or epsilon action noise.

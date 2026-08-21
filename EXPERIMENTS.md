@@ -888,3 +888,47 @@ arena timing instrumentation preserves both one- and two-argument agents.
   The evaluated candidate is 312,190 bytes / `e56a070f...`; the promoted
   `main.py` is text-identical after newline normalization, 312,188 bytes and
   SHA-256 `6073f67f394f7f6161dd60c8406106b130e7ca702974a4accbe1e8e163b8fa1d`.
+
+## E059 — third chronological S08 replay holdout
+
+- Downloaded the next twelve completed public S08 episodes after the two
+  previously frozen ten-episode batches. Exact S08 reproduced every recorded
+  final bank, so counterfactual fidelity passed again.
+- S08 won `11/12` with average margin `+1670.33`; N31 and N36 each won
+  `11/12` at `+2018.25`; N39 won `11/12` at `+2021.17`. There were no outcome
+  improvements or regressions inside this batch; the common loss was Johnson
+  Chishimba at seed `1934914969` from seat 0.
+- Across all 32 disjoint chronological S08 episodes, S08 won `28/32`, N36
+  won `29/32`, and N39 won `30/32`. This third batch independently preserves
+  N39's earlier gains and gives no reason to roll back the promoted lead-2
+  artifact.
+
+## E060 — N40 Johnson public-response diagnostics / rejected
+
+- The losing opening is publicly distinctive by step 12: six active hands,
+  money near 285, four pastures, eight plant tiles, seven wheat, one
+  strawberry, one cow and three sheep. The fingerprint is observable and uses
+  no private or replay-only field, but it arrives after the simultaneous
+  step-0 opening.
+- Full-policy donors proved that the loss is not unavoidable: C95 scored
+  `+53201`, V36 `+29029`, Soil `+27728`, and scored V16 `+23386`. They do not
+  transfer globally: on the complete twelve-episode batch they won only
+  `7/12`, `8/12`, `6/12`, and `6/12`, versus N39's `11/12`.
+- Simple policy switching was incompatible. Only C95 through step 24 and then
+  N39 flipped Johnson (`+7452`); applied to all twelve episodes that hybrid
+  won `1/12`, with eleven regressions. N39-to-donor switches never flipped the
+  loss. A donor prefix is therefore not a safe online counter-policy.
+- Public farm traces showed a coupled difference: N39 finished with six cows,
+  eight sheep and 19 DIG actions, versus nine/four/47 for C95 and eight/four/42
+  for V36. Four opponent-conditioned sheep-to-cow windows were then tested.
+  Even the smallest two-animal change worsened margin by `-11590`; wider
+  windows lost `-20934` to `-24383`. The production mix cannot be transplanted
+  without its feed, placement, care and cleaning plan.
+- X-route sale leads 1--24 and wool-only timing also failed to flip Johnson;
+  the best observed global lead improved the S08 margin by only 326 coins.
+  Stacking a second generated market overlay exposed recursive global-name
+  capture and produced an invalid 3000-bank candidate, which the exact replay
+  gate rejected before any leaderboard use.
+- Decision: no N40 promotion. Keep N39 and require a compatible task-graph
+  continuation or a genuinely common step-0 opening before adding another
+  opponent-classified branch.

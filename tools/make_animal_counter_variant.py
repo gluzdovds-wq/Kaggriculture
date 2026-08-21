@@ -1,9 +1,8 @@
 """Append a bounded opponent-conditioned animal substitution overlay.
 
-The overlay recognizes one public step-112 farm fingerprint, then replaces an
-already scheduled COW purchase with SHEEP and translates only the matching
-subsequent pickups/placements.  It does not invent an animal purchase and does
-not alter unrelated COW actions when no purchase was translated.
+The overlay recognizes a named public farm fingerprint, then replaces an
+already scheduled animal purchase and translates only the matching subsequent
+pickups/placements.  It does not invent a purchase or alter unrelated actions.
 """
 
 from __future__ import annotations
@@ -18,6 +17,7 @@ TEMPLATE = r'''
 import copy as _ac_copy
 
 _AC_BASE_AGENT = agent
+_AC_PROFILE = {fingerprint_profile!r}
 _AC_FINGERPRINT_STEP = {fingerprint_step}
 _AC_START = {start}
 _AC_STOP = {stop}
@@ -27,6 +27,7 @@ _AC_ACTIVE = {{0: False, 1: False}}
 _AC_PENDING_PICKUP = {{0: 0, 1: 0}}
 _AC_PENDING_PLACE = {{0: 0, 1: 0}}
 _AC_TELEMETRY = {{
+    "profile": _AC_PROFILE,
     "fingerprint_step": _AC_FINGERPRINT_STEP,
     "active": False,
     "purchased": 0,
@@ -50,6 +51,7 @@ def _ac_matches(obs, seat):
     hands = list(_ac_get(farm, "hands", []) or [])
     kinds = {{}}
     crops = {{}}
+    animals = {{}}
     for row in _ac_get(farm, "tiles", []) or []:
         for tile in row or []:
             if not isinstance(tile, dict):
@@ -59,14 +61,31 @@ def _ac_matches(obs, seat):
             crop = tile.get("crop")
             if crop:
                 crops[str(crop)] = crops.get(str(crop), 0) + 1
-    return (
-        len(hands) == 4
-        and kinds.get("PASTURE", 0) == 5
-        and kinds.get("PLANT", 0) == 13
-        and crops.get("WHEAT", 0) == 5
-        and crops.get("MELON", 0) == 5
-        and crops.get("STRAWBERRY", 0) == 3
-    )
+            animal = tile.get("animal")
+            if animal:
+                animals[str(animal)] = animals.get(str(animal), 0) + 1
+    if _AC_PROFILE == "uri":
+        return (
+            len(hands) == 4
+            and kinds.get("PASTURE", 0) == 5
+            and kinds.get("PLANT", 0) == 13
+            and crops.get("WHEAT", 0) == 5
+            and crops.get("MELON", 0) == 5
+            and crops.get("STRAWBERRY", 0) == 3
+        )
+    if _AC_PROFILE == "johnson":
+        money = float(_ac_get(farm, "money", 0) or 0)
+        return (
+            len(hands) == 6
+            and 250 <= money <= 320
+            and kinds.get("PASTURE", 0) == 4
+            and kinds.get("PLANT", 0) == 8
+            and crops.get("WHEAT", 0) == 7
+            and crops.get("STRAWBERRY", 0) == 1
+            and animals.get("COW", 0) == 1
+            and animals.get("SHEEP", 0) == 3
+        )
+    return False
 
 
 def _ac_translate_unit(order, seat):
@@ -132,6 +151,7 @@ animal_counter_kaggle_entrypoint = agent
 def render_variant(
     source: str,
     *,
+    fingerprint_profile: str = "uri",
     fingerprint_step: int,
     start: int,
     stop: int,
@@ -139,6 +159,8 @@ def render_variant(
     to_animal: str,
     label: str,
 ) -> str:
+    if fingerprint_profile not in {"uri", "johnson"}:
+        raise ValueError("fingerprint profile must be uri or johnson")
     if fingerprint_step < 0:
         raise ValueError("fingerprint step must be non-negative")
     if not 0 <= start < stop:
@@ -149,6 +171,7 @@ def render_variant(
     if from_animal == to_animal:
         raise ValueError("source and target animal must differ")
     return source.rstrip() + "\n" + TEMPLATE.format(
+        fingerprint_profile=fingerprint_profile,
         fingerprint_step=fingerprint_step,
         start=start,
         stop=stop,
@@ -162,6 +185,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source", type=Path)
     parser.add_argument("destination", type=Path)
+    parser.add_argument("--fingerprint-profile", choices=("uri", "johnson"), default="uri")
     parser.add_argument("--fingerprint-step", type=int, default=112)
     parser.add_argument("--start", type=int, default=264)
     parser.add_argument("--stop", type=int, default=276)
@@ -172,6 +196,7 @@ def main() -> None:
     try:
         generated = render_variant(
             args.source.read_text(encoding="utf-8"),
+            fingerprint_profile=args.fingerprint_profile,
             fingerprint_step=args.fingerprint_step,
             start=args.start,
             stop=args.stop,

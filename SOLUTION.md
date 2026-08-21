@@ -41,11 +41,11 @@ own-state terminal and market-timing overlays.
 - A separate full-feedback audit froze each isolated-shadow route on two new
   seeds and 32 contexts. N36 chose an outcome-optimal route in `32/32`, with
   mean outcome `0.875` versus `0.625` fixed X544 and `0.6875` fixed Moon.
-- Across twenty chronological public S08 ladder episodes, exact S08 and N31
-  reproduced `17/20`, N36 scored `18/20`, and N39 scored `19/20`. N39 improved
-  average margin by `+776.3` versus S08, flipped two recorded S08 losses and
-  introduced no replay regression. It also preserved N36's `8/10` outcome on
-  the older S05 replay set.
+- Across 32 chronological public S08 ladder episodes, exact S08 scored
+  `28/32`, N36 `29/32`, and N39 `30/32`. N39's two earlier outcome improvements
+  persisted through a third disjoint twelve-episode batch with no replay
+  regression. It also preserved N36's `8/10` outcome on the older S05 replay
+  set.
 - On an exact eight-family transfer panel, N03 had no outcome regression and
   improved every same-seed family margin by +1.5 to +134. A separate four-seed,
   both-seat holdout preserved public-family outcomes and added +50.75 to
@@ -54,7 +54,7 @@ own-state terminal and market-timing overlays.
   each candidate (64 games each). Macro/micro outcome rose from 0.390625 for
   fixed X544 to 0.78125; average margin rose from +274 to +3,192; worst-family
   outcome rose from 0 to 0.375. V36 and Soil banks were exactly unchanged.
-- Runtime/artifact gate: 59/59 tests, `py_compile`, official
+- Runtime/artifact gate: 61/61 tests, `py_compile`, official
   `get_last_callable`, and path-loaded full games all pass. Maximum observed
   action time in the replay holdout was 315.3 ms.
 
@@ -80,7 +80,7 @@ C:\Users\Dmitry\.venvs\kg\Scripts\python.exe tools\make_shop_aware_selector.py `
 
 Current promoted artifact: 312,188 bytes, SHA-256
 `6073f67f394f7f6161dd60c8406106b130e7ca702974a4accbe1e8e163b8fa1d`.
-Final preflight passed 59/59 unit tests, `py_compile`, official last-callable
+Final preflight passed 61/61 unit tests, `py_compile`, official last-callable
 loading and full games. N39 is held for the first post-reset autonomous slot;
 N31 is the second candidate and the current final Kaggle slot remains reserved.
 
