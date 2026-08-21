@@ -368,3 +368,17 @@ the leaderboard only as a noisy measurement of the current live meta.
 - No N40 candidate was promoted. The next useful architecture is a compatible
   reactive planner over whole task graphs, trained or searched beneath the
   legal rule layer, rather than a late policy splice or epsilon action noise.
+
+## Execution checkpoint: N41 diagnostics
+
+- Keeping N39's common step-0 opening and inserting even a short C95 prefix
+  remained incompatible: return points 12, 24 and 48 all performed far worse
+  than unchanged N39 on the exact Johnson loss.
+- A bounded, opponent-conditioned weed task then tested the smallest useful
+  reactive planner. Idle workers were unavailable; diverting moving empty
+  workers added up to 39 DIG actions but reduced score. Hiring a nominally
+  dedicated cleaner also reduced score at every weed threshold.
+- This rejects distance-only task assignment, not reactive planning in
+  general. A viable planner must compare the full opportunity cost of hiring,
+  travel, current production and later harvest/sale tasks. N39 remains the
+  promoted artifact and N31 the conservative independent candidate.

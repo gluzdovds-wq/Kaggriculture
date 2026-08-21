@@ -54,7 +54,7 @@ own-state terminal and market-timing overlays.
   each candidate (64 games each). Macro/micro outcome rose from 0.390625 for
   fixed X544 to 0.78125; average margin rose from +274 to +3,192; worst-family
   outcome rose from 0 to 0.375. V36 and Soil banks were exactly unchanged.
-- Runtime/artifact gate: 61/61 tests, `py_compile`, official
+- Runtime/artifact gate: 63/63 tests, `py_compile`, official
   `get_last_callable`, and path-loaded full games all pass. Maximum observed
   action time in the replay holdout was 315.3 ms.
 
@@ -80,7 +80,7 @@ C:\Users\Dmitry\.venvs\kg\Scripts\python.exe tools\make_shop_aware_selector.py `
 
 Current promoted artifact: 312,188 bytes, SHA-256
 `6073f67f394f7f6161dd60c8406106b130e7ca702974a4accbe1e8e163b8fa1d`.
-Final preflight passed 61/61 unit tests, `py_compile`, official last-callable
+Final preflight passed 63/63 unit tests, `py_compile`, official last-callable
 loading and full games. N39 is held for the first post-reset autonomous slot;
 N31 is the second candidate and the current final Kaggle slot remains reserved.
 

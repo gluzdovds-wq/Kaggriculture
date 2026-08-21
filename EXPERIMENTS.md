@@ -932,3 +932,20 @@ arena timing instrumentation preserves both one- and two-argument agents.
 - Decision: no N40 promotion. Keep N39 and require a compatible task-graph
   continuation or a genuinely common step-0 opening before adding another
   opponent-classified branch.
+
+## E061 — N41 common-opening and reactive-cleaner diagnostics / rejected
+
+- Preserving N39's shared step-0 action did not make a donor continuation
+  compatible. Switching to C95 at step 1 and back to N39 at steps 12, 24 or
+  48 scored `-130678`, `-72670` and `-88936` on the Johnson replay, versus
+  N39's `-11745`.
+- A public-fingerprint weed task was then tested only after Johnson was
+  identified at step 12. Idle-worker routing never triggered. Allowing the
+  nearest empty worker to leave an existing movement task produced 26--39
+  extra DIG actions but worsened the best replay to `-22497`.
+- Hiring and routing one extra nominal cleaner also failed. Thresholds 3, 5
+  and 8 weeds scored `-34574`, `-24316` and `-19657`; the least aggressive
+  form still lost 7,912 more coins than N39.
+- Decision: reject N41 without a broad holdout or leaderboard slot. Weed
+  removal has an opportunity cost coupled to hiring, travel and production;
+  nearest-task overrides are not a compatible reactive planner. Keep N39.
