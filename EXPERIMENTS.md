@@ -1022,3 +1022,22 @@ arena timing instrumentation preserves both one- and two-argument agents.
   whole policy on this tape, and the earlier N38 timing diagnostic's best
   `-51` did not flip it. Keep N31/repair capacity in reserve rather than
   chasing the final oracle miss.
+
+## E067 — official ladder/final-evaluation audit
+
+- The official Evaluation page confirms a five-submission daily limit, but
+  only the latest two valid submissions are tracked and used for final
+  evaluation. The public leaderboard displays the better-scoring one of those
+  two; duplicating a policy does not create an ensemble or average its rating.
+- Each episode changes a policy's skill rating from only win/loss/tie and the
+  opponent rating. Final-bank margin is deliberately ignored. Newer agents
+  receive episodes more frequently, and the displayed rating can therefore
+  rise or fall as evidence accumulates.
+- There is no private leaderboard. After the September 30 deadline, new
+  submissions are locked and games continue until approximately October 15
+  or rating convergence, followed by a Bradley-Terry fit over the episodes.
+- Four submissions already counted in the current UTC day (S05, S07, S06r
+  and S08), so the fifth slot remains unused for validation failure recovery.
+  After the UTC reset, submit N39 and then exact V36: this makes the tested
+  complementary pair, rather than copies, the two simultaneously active
+  final-evaluation candidates. N31 remains a local artifact/repair reserve.

@@ -93,6 +93,22 @@ loading and full games. N39 is held for the first post-reset autonomous slot;
 exact V36 is the second current-meta policy, and N31 is retained as the daily
 validation/repair reserve.
 
+## Evaluation-aware submission policy
+
+- Kaggriculture allows five submissions per UTC day, but only the latest two
+  valid submissions keep playing and enter final evaluation. The leaderboard
+  shows the better rating of those two.
+- Ratings are updated from win/loss/tie against similarly rated opponents;
+  coin margin has no effect. They remain noisy until enough games accumulate.
+- There is no hidden private split. After submissions lock on September 30,
+  games continue for roughly two weeks and the final leaderboard is produced
+  with a Bradley-Terry tournament over the accumulated episodes.
+- Therefore use copies only for infrastructure checks, not as a final
+  portfolio. The current final pair is deterministic N39 plus exact V36,
+  whose replay wins are complementary (`45/46` outcome oracle). Keep N31
+  locally for emergency repair; submitting any third policy would evict the
+  older member of the active pair.
+
 ## Original baseline strategy
 
 ## Strategy
