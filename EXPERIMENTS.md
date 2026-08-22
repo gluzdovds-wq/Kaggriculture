@@ -1261,3 +1261,42 @@ arena timing instrumentation preserves both one- and two-argument agents.
 - Decision: retain both active submissions and all three remaining daily
   slots.  Wait for stronger opponents or an actual loss before building a
   best-response residual from live data.
+
+## E079 — bounded X544-route timing sweep / N39 x2 retained
+
+- Reused the same twelve fresh seeds, four public families and both seats for
+  a controlled sweep of the X544-route market-sale lead.  N31 and the
+  shop-aware N36 provide the `x1` arms; N39 is `x2`; newly generated variants
+  provide `x3` and `x4`.  Moon-route timing and all other policy code remain
+  fixed.
+- Relative to N39, both `x1` arms produced zero outcome improvements and six
+  regressions over 96 matches, with `-351.9` average margin delta.  Their
+  largest damage was against Soil, where outcome rate fell from `22/24` to
+  `17/24`.
+- `x3` and `x4` preserved all 96 outcomes, but improved none.  They changed
+  margins on 74/96 matches and reduced average margin by `-81.9` and `-106.1`
+  respectively.  Every family had a negative average delta; no public-context
+  branch supplied a positive class for a conditional selector.
+- Decision: retain deterministic `x2` in N39.  Reject `x1`, `x3` and `x4` for
+  leaderboard use.  This is a local discrete optimum on the controlled panel,
+  not evidence that random per-action exploration is safe.
+
+## E080 — stronger live matchmaking / no-loss evidence still non-discriminative
+
+- Downloaded four further completed public episodes for each of S09 and S10.
+  N39 is now `10/10` on the locally archived S09 episodes and exact V36 is
+  `9/9` on S10.  All new games were wins; two additional S09 games were still
+  in progress at capture time.
+- Matchmaking is visibly strengthening.  N39's first four archived margins
+  averaged `+108749.5`, while its newest four averaged only `+11113.5`.
+  V36's first four averaged `+37796.25`, while its newest four averaged
+  `+12545.0`.  The latest single margins were `+11665` for N39 and `+9788` for
+  V36.
+- The live trajectory widgets briefly reached about `1756` for N39 and `1688`
+  for V36 while cached submission rows displayed lower values.  Both ratings
+  are still moving rapidly, and neither has yet reached the older S08/S05
+  region around `2200+`.
+- Decision: keep N39 and V36 as the two active policies and preserve all three
+  remaining UTC-day slots.  Do not submit copies or infer superiority from the
+  current ordering; wait for a completed loss, stable score, or the 24-hour
+  gate before spending the next two research slots.
