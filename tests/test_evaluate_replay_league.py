@@ -2,8 +2,9 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
-from rl.evaluate_replay_league import load_case, parse_named_path, summarize
+from rl.evaluate_replay_league import ReplayCase, load_case, parse_named_path, run_task, summarize
 
 
 class ReplayLeagueTests(unittest.TestCase):
@@ -50,6 +51,26 @@ class ReplayLeagueTests(unittest.TestCase):
     def test_requires_named_path(self):
         with self.assertRaises(ValueError):
             parse_named_path("missing")
+
+    @patch("rl.evaluate_replay_league.play")
+    def test_run_task_keeps_public_selector_context(self, mocked_play):
+        mocked_play.return_value = {
+            "candidate_bank": 10,
+            "opponent_bank": 9,
+            "margin": 1,
+            "outcome": 1.0,
+            "candidate_artifact": {"sha256": "abc"},
+            "candidate_latency": {"max_ms": 2},
+            "candidate_telemetry": {},
+            "shop_unlock_events": [{"step": 72, "new_shops": ["BAKERY"]}],
+            "opponent_public_checkpoints": [{"step": 72, "opponent": {}}],
+            "public_context_checkpoints": [{"step": 72, "shops": ["BAKERY"]}],
+        }
+        case = ReplayCase(1, "r.json", 2, 0, "opponent", "tape.py", 10, 9)
+        row = run_task(("candidate", "candidate.py", case))
+        self.assertEqual(row["shop_unlock_events"][0]["step"], 72)
+        self.assertEqual(row["opponent_public_checkpoints"][0]["step"], 72)
+        self.assertEqual(row["public_context_checkpoints"][0]["shops"], ["BAKERY"])
 
 
 if __name__ == "__main__":

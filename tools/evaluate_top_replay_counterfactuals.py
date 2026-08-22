@@ -181,6 +181,11 @@ def run_one(task: tuple[str, str, DonorCase]) -> dict:
         "outcome": result["outcome"],
         "max_action_ms": result["candidate_latency"]["max_ms"],
         "candidate_telemetry": result.get("candidate_telemetry", {}),
+        "shop_unlock_events": result.get("shop_unlock_events", []),
+        "opponent_public_checkpoints": result.get(
+            "opponent_public_checkpoints", []
+        ),
+        "public_context_checkpoints": result.get("public_context_checkpoints", []),
     }
 
 

@@ -1676,3 +1676,29 @@ arena timing instrumentation preserves both one- and two-argument agents.
   replay-specific selector to five changed cases.  Preserve N39/V36, the
   reserve slot and today's already-used two autonomous submissions; retain the
   opening-response idea only as a future pre-registered public-state hypothesis.
+
+## E096 — chronological public-state route-tree transfer / rejected
+
+- Extended both exact-replay evaluators to retain the arena's inference-legal
+  public-context checkpoints and shop events.  Added a standalone full-feedback
+  contextual-bandit fitter that verifies X544/Moon contexts are identical at
+  the step-72 branch, excludes identity/rank/replay/future/private-opponent
+  fields, and limits the learned policy to one split with minimum leaf five.
+- Generated complete fixed-route labels on a chronological S08 training block
+  of 46 games, the independent current top-20 holdout of 40 target seats and
+  the still-newer 24-game live-focus holdout.  Every donor baseline reproduced
+  exactly and all `110/110` paired step-72 contexts matched.  X544/Moon/oracle
+  outcomes were `26/36/40`, `17/27/27` and `15/23/23` respectively: both future
+  panels contained zero X544-only wins.
+- The frozen depth-one model learned the legal rule `candidate money <= 44 ->
+  X544; otherwise Moon`.  It scored `38/46` on train and also `38/46` under
+  leave-one-out, improving two Moon losses without a train regression.  On the
+  unseen top-20 panel it fell to `26/40` versus Moon's `27/40`, changing the
+  peikopon seat in episode `96487659` from `+457` to `-8071`.  On live-focus it
+  tied Moon at `23/24`; five X544 choices added no outcome and had mixed margin.
+- Across the three panels the learned selector and N39 both score `87/110`, but
+  the selector merely exchanges one current top-20 win for N39's fresh loss.
+  Decision: reject candidate generation and submission.  Public-state ML is
+  viable infrastructure, but this label is temporally non-stationary; require a
+  repeated X544-only gain in a later frozen block before retraining or adding a
+  deeper tree.  Full suite passes `106/106`.

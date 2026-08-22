@@ -1,9 +1,12 @@
 import unittest
+from unittest.mock import patch
 
 from tools.evaluate_top_replay_counterfactuals import (
+    DonorCase,
     find_named_seat,
     parse_named_path,
     requested_target_matches,
+    run_one,
     summarize,
 )
 
@@ -52,6 +55,25 @@ class EvaluateTopReplayCounterfactualsTests(unittest.TestCase):
         self.assertEqual(result["outcome_improvements"], 1)
         self.assertEqual(result["outcome_regressions"], 1)
         self.assertEqual(result["average_bank_delta_vs_donor"], -2.5)
+
+    @patch("tools.evaluate_top_replay_counterfactuals.play")
+    def test_run_one_keeps_public_selector_context(self, mocked_play):
+        mocked_play.return_value = {
+            "candidate_bank": 10,
+            "opponent_bank": 9,
+            "margin": 1,
+            "outcome": 1.0,
+            "candidate_latency": {"max_ms": 2},
+            "candidate_telemetry": {},
+            "shop_unlock_events": [{"step": 72, "new_shops": ["BAKERY"]}],
+            "opponent_public_checkpoints": [{"step": 72, "opponent": {}}],
+            "public_context_checkpoints": [{"step": 72, "shops": ["BAKERY"]}],
+        }
+        case = DonorCase(1, 2, 0, "target", 1, 3, "target.py", "opp", "opp.py", 10, 9)
+        row = run_one(("candidate", "candidate.py", case))
+        self.assertEqual(row["shop_unlock_events"][0]["step"], 72)
+        self.assertEqual(row["opponent_public_checkpoints"][0]["step"], 72)
+        self.assertEqual(row["public_context_checkpoints"][0]["shops"], ["BAKERY"])
 
 
 if __name__ == "__main__":

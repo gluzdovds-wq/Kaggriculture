@@ -625,3 +625,20 @@ the leaderboard only as a noisy measurement of the current live meta.
   or result.  This cleanly separates safe exploration plumbing from useful
   exploration: the former now exists, while the latter still requires a learned
   or searched counterfactual value estimate over the complete task graph.
+
+## Execution checkpoint: chronological public-state route learning
+
+- The exact-replay pipeline now preserves only inference-visible public
+  checkpoints for paired compatible continuations.  A depth-one
+  full-feedback contextual-bandit tree can therefore learn a route predicate
+  without opponent identity, rating, replay id, future state or private shed.
+- On 46 chronological S08 games, fixed X544/Moon scored `26/46` and `36/46`;
+  their outcome oracle reached `40/46`.  The learned step-72 rule used own
+  public money (`<=44 -> X544`) and reached `38/46`, including leave-one-out.
+- The apparent learned gain did not transfer.  On 40 newer top-20 cases the
+  tree scored `26/40` versus Moon's `27/40`, and on the newest 24 cases both
+  scored `23/24`.  Neither future block contained a single X544-only outcome.
+  This is a concrete negative result for N27: legal public features and full
+  feedback are not enough when the best-response label drifts with the live
+  population.  Keep the tiny-tree pipeline, but require a repeated new X544
+  residual before refitting; do not increase depth to memorize old lineages.
