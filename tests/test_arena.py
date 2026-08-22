@@ -1,8 +1,15 @@
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 
-from arena import agent_telemetry, private_storage_totals, public_farm_signature, timed_agent
+from arena import (
+    agent_telemetry,
+    private_storage_totals,
+    public_context_checkpoints,
+    public_farm_signature,
+    timed_agent,
+)
 
 
 class ArenaTests(unittest.TestCase):
@@ -37,6 +44,36 @@ class ArenaTests(unittest.TestCase):
         self.assertEqual(signature["crops"], {"WHEAT": 1})
         self.assertEqual(signature["animals"], {"COW": 1})
         self.assertNotIn("private", signature)
+
+    def test_public_context_checkpoint_excludes_private_state(self):
+        farm = {
+            "money": 22,
+            "farmer": [4, 4],
+            "hands": [],
+            "hires_today": 0,
+            "unlocked_quadrants": ["NW"],
+            "tiles": [[None]],
+            "private": {"shed": {"WHEAT": 99}},
+        }
+        observation = {
+            "day": 0,
+            "hour": 1,
+            "farms": [farm, {**farm, "money": 17}],
+            "market": {
+                "inventory": {"WHEAT": 9999},
+                "prices": {"WHEAT": 32},
+            },
+            "town": {"unlocked_shops": ["BAKERY"]},
+            "private": {"shed": {"MILK": 77}},
+        }
+        state = SimpleNamespace(observation=observation)
+        env = SimpleNamespace(steps=[[state, state], [state, state]])
+        row = public_context_checkpoints(env, 0)[0]
+        self.assertEqual(row["shops"], ["BAKERY"])
+        self.assertEqual(row["market_prices"], {"WHEAT": 32})
+        self.assertEqual(row["candidate"]["money"], 22)
+        self.assertEqual(row["opponent"]["money"], 17)
+        self.assertNotIn("private", repr(row))
 
     def test_instrumentation_preserves_two_argument_agent_signature(self):
         with tempfile.TemporaryDirectory() as directory:

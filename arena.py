@@ -215,6 +215,40 @@ def opponent_public_checkpoints(env, candidate_seat: int) -> list[dict]:
     return checkpoints
 
 
+def public_context_checkpoints(env, candidate_seat: int) -> list[dict]:
+    """Record selector features that are visible to the live candidate."""
+    opponent_seat = 1 - candidate_seat
+    checkpoints = []
+    for step in PUBLIC_CHECKPOINT_STEPS:
+        if step >= len(env.steps):
+            continue
+        observation = env.steps[step][candidate_seat].observation
+        farms = _public_get(observation, "farms", []) or []
+        market = _public_get(observation, "market", {}) or {}
+        town = _public_get(observation, "town", {}) or {}
+        inventory = _public_get(market, "inventory", {}) or {}
+        prices = _public_get(market, "prices", {}) or {}
+        checkpoints.append(
+            {
+                "step": step,
+                "day": int(_public_get(observation, "day", 0) or 0),
+                "hour": int(_public_get(observation, "hour", 0) or 0),
+                "shops": list(_public_get(town, "unlocked_shops", []) or []),
+                "market_inventory": {
+                    str(key): int(value or 0)
+                    for key, value in sorted(dict(inventory).items())
+                },
+                "market_prices": {
+                    str(key): int(value or 0)
+                    for key, value in sorted(dict(prices).items())
+                },
+                "candidate": public_farm_signature(farms[candidate_seat]),
+                "opponent": public_farm_signature(farms[opponent_seat]),
+            }
+        )
+    return checkpoints
+
+
 def private_storage_totals(observation) -> tuple[int, int]:
     """Return own shed and carried counts; seeds do not consume shed capacity."""
     private = _public_get(observation, "private", {}) or {}
@@ -332,6 +366,7 @@ def play(candidate_spec: str, opponent_spec: str, seed: int, candidate_seat: int
         "opponent_artifact": opponent_meta,
         "shop_unlock_events": shop_unlock_events(env),
         "opponent_public_checkpoints": opponent_public_checkpoints(env, candidate_seat),
+        "public_context_checkpoints": public_context_checkpoints(env, candidate_seat),
         "candidate_storage_pressure": candidate_storage_pressure(env, candidate_seat),
     }
 
