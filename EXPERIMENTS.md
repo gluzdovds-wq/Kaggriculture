@@ -1358,3 +1358,29 @@ arena timing instrumentation preserves both one- and two-argument agents.
   aliased throughout the usable switch window.  Seek repeated public
   market-context evidence or a jointly optimized common policy before
   promoting a third submission.
+
+## E083 — Orbit Wars transfer and factorized macro-action audit
+
+- Reviewed the primary 2026 Orbit Wars write-ups.  First place used a 200M
+  transformer and 15B PPO self-play steps; second used a 4.3M model and 10B
+  steps.  Both rewrote the simulator and changed the action representation.
+  Sixth/seventh combined RL with forward features, analytic planning or
+  inference search; the 19th-place BC+PPO pipeline reported a GPU simulator
+  around three orders of magnitude faster than the reference CPU engine.
+- Benchmarked the current official Kaggriculture Python environment with eight
+  `pass/pass` games and four workers.  It processed 5,760 transitions in
+  12.489 seconds, about 461 transitions/s including startup overhead.  Even at
+  that optimistic no-policy rate, 10B steps would take roughly 251 days.
+- Added `rl/analyze_macro_vocabulary.py` and three unit tests.  Across both N24
+  imitation splits, the 8,376 non-noop rows contain 258 flat task+market
+  labels.  Top-8/top-32 joint labels cover only `40.3%/69.4%`, so a flat macro
+  classifier remains too diffuse.
+- Factorized coverage is much stronger: top-16 task families cover `83.7%`
+  and top-8 market operations cover `96.5%`.  This supports separate
+  task/market/route/quantity heads beneath a rule-based legality and
+  conservation layer, matching the strongest attainable Orbit Wars pattern.
+- Decision: do not launch raw-action PPO in the official engine.  Gate serious
+  RL on a parity-tested native/vectorized simulator, and next build a
+  factorized macro candidate ranker with exact forward ETA/cashflow features.
+  Continue selecting candidates by the existing historical/recent opponent
+  league, not imitation loss or one live rating.

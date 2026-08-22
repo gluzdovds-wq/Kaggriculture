@@ -20,6 +20,11 @@ exact simulation available.
   winner used HandyRL after roughly three weeks and about 16M self-play games.
   Lux S1's winner used distributed IMPALA-style RL with UPGO/TD-lambda,
   curriculum reward shaping and teacher-policy KL regularization.
+- Orbit Wars 2026 is the clearest recent scaling result: first place trained a
+  200M-parameter transformer for 15B PPO self-play steps, while second place
+  trained a 4.3M model for 10B steps.  Both first rewrote the environment and
+  simplified or structured the action representation; several other gold
+  solutions combined RL with analytic planning, forward features or search.
 - Imitation learning is a strong shortcut when high-quality replays exist.
   Lux S3's third-place agent surpassed its rule-based predecessor after a few
   hours of UNet imitation training on carefully reconstructed observable
@@ -141,6 +146,51 @@ Transfer: replay IL is the fastest learned baseline; stochastic mixtures help
 only at tactically uncertain, state-compatible decisions; opponent pools and
 teacher KL are mandatory for a serious RL line.
 
+### Orbit Wars 2026 — 1st/2nd/6th/7th RL, 19th BC+RL
+
+The first-place agent is a genuine end-to-end scaling result: a 200M-parameter
+entity transformer trained for 15B PPO self-play steps.  The author rewrote the
+environment in Rust and parity-tested it against replays, changed the original
+angle action into target selection, trained on up to four 8xB200 nodes, and
+used quantization plus a small-model runtime fallback to satisfy submission
+limits.  This establishes that pure RL can win, but only after roughly 2,400
+B200-hours and substantial systems engineering.
+
+Second place followed a useful progression: heuristics reached top 50,
+behavior cloning reached top 10, RL fine-tuning reached top 5, and a final
+4.3M-parameter model trained from scratch for 10B steps placed second.  Its
+action space was deliberately reduced to no-op or all-in target selection.  A
+19-turn no-action forward rollout was encoded as input, and a local arena plus
+pool leaderboard replaced training loss as the selection metric.
+
+Sixth place combined a 2.5M transformer, league RL, engineered pairwise
+forward features and a two-step inference search worth roughly 30–40 rating
+points.  Seventh place combined a 9M PPO policy with an analytic planner that
+generated/masked feasible targets; nearly 200 isolated 100M-step experiments
+were judged by local round robins of about 512 games per matchup.  Observation
+features, model size and planner improvements were the largest levers.
+
+The 19th-place pipeline is the most attainable template for Kaggriculture.  It
+rewrote the simulator from roughly 150–300 CPU transitions/s to 300k–700k
+batched GPU transitions/s, used behavior cloning as an architecture and action
+space gate, then PPO against historical checkpoints.  The policy had separate
+heads for launch count, target and fleet size; deterministic deployment biases
+were calibrated by direct head-to-head games.
+
+Sources:
+
+- https://www.kaggle.com/competitions/orbit-wars/writeups/1st-place-solution-scaling-reinforcement-learnin
+- https://www.kaggle.com/competitions/orbit-wars/writeups/2nd-place-solution-for-orbit-wars
+- https://www.kaggle.com/competitions/orbit-wars/writeups/6th-rl-league-search-with-a-custom-edge-atte
+- https://www.kaggle.com/competitions/orbit-wars/writeups/7th-place-solution-how-structured-experiments-sa
+- https://www.kaggle.com/competitions/orbit-wars/writeups/19th-place-gold-writeup
+
+Transfer: do not train PPO on raw farmer/worker actions in the official Python
+environment.  First build a parity-tested fast simulator, expose rule-generated
+task-graph candidates through factorized heads, feed exact ETA/cashflow/service
+lookahead to the ranker, and select checkpoints by a historical-opponent
+round-robin rather than training loss or one live rating.
+
 ## New experiment bank N16–N29
 
 ### N16 — shadow policy bank from step 0
@@ -237,6 +287,54 @@ macro candidates for 6–24 turns using the exact fast simulator and score them
 with terminal feasibility plus a learned value residual.  Pass only if the
 selected action improves official-engine paired outcome and stays within the
 1-second action budget.
+
+## Orbit Wars addendum — new experiment bank
+
+### N51 — parity-tested native simulator throughput gate
+
+Reimplement the exact Kaggriculture transition core in a vectorized native
+backend.  Require replay/official-engine parity on random and edge-case
+trajectories before training.  A serious RL line starts only after at least
+50k transitions/s locally; otherwise spend compute on replay counterfactuals,
+macro bandits and search rather than pretending hundreds of games are PPO.
+
+### N52 — factorized macro action heads
+
+Do not classify the complete joint action or even one flat task+market macro.
+Generate legal task-graph candidates in rules and predict separate task-family,
+market-operation, route/target and bounded quantity scores.  Recombine only
+through the conservation/legality layer.  Gate with held-out replay top-k
+coverage, critical-action recall and official-engine outcome.
+
+### N54 — exact forward features beneath the learned ranker
+
+For every candidate task graph compute 6–24-turn ETA, resource feasibility,
+cashflow, service deadlines, predicted shared-market collision and terminal
+inventory using the exact simulator.  The model ranks these consequences; it
+does not relearn movement, crop timing or accounting from pixels/state alone.
+
+### N55 — checkpoint league as the model-selection metric
+
+Every learned or searched checkpoint must play a fixed historical pool plus
+recent baselines on both seats.  Use isolated changes, fixed seeds, direct
+head-to-head confidence and a local BT/OpenSkill-style table.  Training loss,
+imitation accuracy and a single live rating are diagnostics, never promotion
+criteria.
+
+## Execution checkpoint: N51–N52 pilot
+
+- Eight `pass/pass` games in the official Python environment, run with four
+  worker processes, completed 5,760 environment transitions in 12.489 seconds:
+  only about 461 transitions/s including process/import overhead.  At that
+  optimistic rate 10B transitions would take roughly 251 days before policy
+  inference.  Full self-play RL is therefore blocked on N51, not on the choice
+  between PPO and another algorithm.
+- The combined N24 pilot/holdout corpus contains 8,376 non-noop decision turns
+  from scored S05, V16 and v25.  A flat task+market label has 258 values; top-8
+  and top-32 cover only 40.3% and 69.4%.  Flat macro classification is rejected.
+  Factorization is materially better: top-16 task families cover 83.7%, while
+  top-8 market operations cover 96.5%.  N52 should therefore use separate
+  heads plus rule-based recombination, not a fixed shortlist of joint labels.
 
 ## Execution checkpoint: N16–N22
 
