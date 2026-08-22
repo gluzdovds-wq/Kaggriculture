@@ -476,6 +476,7 @@ def evaluate(
         "all": {
             "candidate_accuracy": accuracy(decision, truth),
             "current_money_accuracy": accuracy(current, truth),
+            "legal_marked_accuracy": accuracy(legal, truth),
         }
     }
     for checkpoint in ANCHORS:
@@ -494,14 +495,21 @@ def evaluate(
         }
     rank_checks["all"]["strict_gain"] = (
         rank_checks["all"]["candidate_accuracy"]
-        > rank_checks["all"]["current_money_accuracy"] + 1e-12
+        > max(
+            rank_checks["all"]["current_money_accuracy"],
+            rank_checks["all"]["legal_marked_accuracy"],
+        )
+        + 1e-12
     )
     for scope, row in rank_checks.items():
         if scope == "all":
             continue
         row["pass"] = (
             row["candidate_accuracy"] + 1e-12
-            >= row["current_money_accuracy"]
+            >= max(
+                row["current_money_accuracy"],
+                row["legal_marked_accuracy"],
+            )
         )
     phase_value_report = evaluate_frozen(phase_model, transfer_paths)
     terminal_magnitude = {

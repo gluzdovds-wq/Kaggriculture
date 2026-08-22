@@ -929,3 +929,39 @@ head for ordering.  Freeze coefficients and thresholds before acquiring a
 second unseen policy block.  Require no paired-winner regression overall or at
 360/600/648, retained terminal MAE gains, then lower counterfactual macro-plan
 regret and official both-seat improvement within 600 ms before submission.
+
+## Execution checkpoint: pairwise rank transfer
+
+- The antisymmetric ridge/confidence ranker was frozen as commit `3781215`,
+  together with 80 forbidden train/prior-transfer EpisodeIds, before a second
+  block was queried.  Training uses two legal viewpoints as two supervised
+  examples and fits their feature difference plus its negation; no deployed
+  leaf reads the opponent private payload.
+- Grouped top-20 OOF accuracy rose 13.7 percentage points over current-money
+  ordering.  On 20 untouched S08/S05 games it retained a 6.8-point gain over
+  current money and a 4.6-point gain over legal-marked value.  It beat both at
+  every registered anchor: 60% at step 360, 80% at 600 and 90% at 648.
+- The independent magnitude head also kept the terminal benefit on this second
+  distribution, reducing final MAE by roughly 27% at step 600 and 37% at 648
+  versus the strongest simple baseline while improving winner accuracy.
+- N75 passes as a legal replay-ordering primitive.  It is not yet a stronger
+  agent: branch ordering can differ from recorded-trajectory ordering, and
+  search candidate generation remains narrow.  Require counterfactual regret
+  before integration or submission.
+
+### N76 — pairwise-ranked enriched macro search
+
+Expand N72's nine reactive task graphs with task templates proposed by
+shadow-running N39, V36 and strong replay donors from step zero.  A shadow may
+propose/de-duplicate crop, animal, land, hire, fertilizer, logistics and
+liquidation task graphs, but no future action tape may enter a branch and no
+switch may inherit an incompatible private/task state.
+
+At day/shop/terminal decision points, simulate every compatible task graph for
+6/12/24 turns against multiple reactive opponent families and shared future
+random seeds.  Compare current lower-quartile money, N74 terminal magnitude and
+an N75 pairwise tournament against the forbidden full-state long-horizon
+oracle.  Require higher oracle-best top-3 recall, lower regret at
+360/600/648, a non-collapsed winning-plan distribution, max action below 600 ms
+including feature construction, then an untouched official both-seat gain over
+N39.  Only that complete chain authorizes a submission.

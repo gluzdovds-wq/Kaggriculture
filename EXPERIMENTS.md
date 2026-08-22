@@ -1943,3 +1943,40 @@ arena timing instrumentation preserves both one- and two-argument agents.
   antisymmetric pairwise/ordinal value with a train-CV confidence gate back to
   current money, freeze it, and use a second untouched policy block.  Full
   suite passes `136/136`; no submission was spent.
+
+## E105 — frozen antisymmetric pairwise leaf rank / fresh transfer pass
+
+- Added `rl/pairwise_leaf_rank.py`, five tests and the tracked
+  `rl/frozen_pairwise_rank_e105.json`.  Each training example subtracts the two
+  independently legal controlled-seat feature vectors at one
+  episode/checkpoint.  Fitting both `x,y` and `-x,-y` forces an antisymmetric
+  scalar score.  The score can override current-money ordering only when the
+  pair is within a frozen money threshold and the ridge confidence exceeds a
+  frozen threshold.  Complete EpisodeIds remain in one CV fold; each phase
+  requires a net repair of at least `max(2, 2% of pairs)` and no current-money
+  regression at its registered anchors.
+- On `1,080` grouped top-20 pairs, OOF accuracy improved `53.15% → 66.85%`.
+  The four phases improved `39.06 → 60.00%`, `52.71 → 64.79%`, `66.88 →
+  75.62%` and `74.17 → 81.67%`.  Registered anchors improved step 360
+  `52.5 → 70.0%`, step 600 `72.5 → 77.5%`, and step 648 `80.0 → 87.5%`.
+  All 80 EpisodeIds from training, prior live-focus and E104 fresh transfer
+  were serialized as forbidden evaluation provenance.  Coefficients and
+  thresholds were pushed in commit `3781215` before S08/S05 episodes were
+  listed or downloaded.
+- The second untouched block contains 20 S08/S05 games and `540` non-tied
+  episode-checkpoint pairs with zero forbidden overlap.  The frozen ranker
+  improved overall accuracy to `63.5%` versus current money `56.7%` and
+  legal-marked value `58.9%`.  It passed every registered anchor against both
+  baselines: step 360 `60%` versus `55%/55%`, step 600 `80%` versus `75%/70%`,
+  and step 648 `90%` versus `85%/70%`.
+- N74's magnitude head retained its terminal transfer on this new policy
+  block.  At step 600 final MAE/winner were `2,979 / 80%` versus the best
+  simple baselines' `4,093 / 75%`; at step 648 they were `2,301 / 90%` versus
+  `3,655 / 85%`.  Some aggregate and short-horizon N74 gates remain failed,
+  so only terminal magnitude—not the whole phase-value package—is retained.
+- Decision: N75 passes the replay-level rank and terminal-magnitude
+  prerequisite.  Do not submit yet: replay winner prediction is not evidence
+  that the same score orders counterfactual branches.  Proceed to N76 with a
+  richer shadow-policy macro vocabulary and require lower full-state-oracle
+  plan regret, top-3 recall, under-600-ms latency and then official both-seat
+  outcome over N39.  Full suite passes `141/141`; no submission was spent.
