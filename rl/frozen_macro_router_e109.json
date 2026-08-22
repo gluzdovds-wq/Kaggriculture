@@ -1,0 +1,274 @@
+{
+  "schema": "kaggriculture-cost-sensitive-macro-router-v1",
+  "frozen_utc": "2026-08-22T10:59:15.512056+00:00",
+  "training_report": "artifacts\\e108-counterfactual-rank-h48.json",
+  "training_episode_ids": [
+    96024687,
+    96026965,
+    96029241,
+    96031535,
+    96033831,
+    96036110,
+    96038401,
+    96058999,
+    96074608,
+    96093069,
+    96286975,
+    96289251,
+    96291530,
+    96293891,
+    96296132,
+    96314456,
+    96328165,
+    96353169,
+    96357660,
+    96366561
+  ],
+  "feature_names": [
+    "carried_total",
+    "day",
+    "forward_animal_next_yield_days_mean",
+    "forward_animal_next_yield_days_min",
+    "forward_carried_to_shed_eta_min",
+    "forward_carried_to_shed_reachable_today",
+    "forward_carried_units",
+    "forward_critical_animals",
+    "forward_critical_plants",
+    "forward_crop_first_yield_days_mean",
+    "forward_crop_first_yield_days_min",
+    "forward_decay_turns_min",
+    "forward_fertilized_tiles",
+    "forward_fertilizer_available_tiles",
+    "forward_fertilizer_eta_mean",
+    "forward_fertilizer_eta_min",
+    "forward_fertilizer_reachable_today",
+    "forward_fertilizer_targets",
+    "forward_harvest_eta_mean",
+    "forward_harvest_eta_min",
+    "forward_harvest_reachable_today",
+    "forward_harvest_targets",
+    "forward_pending_care_bonus",
+    "forward_ready_yield_units",
+    "forward_ready_yield_value",
+    "forward_service_eta_mean",
+    "forward_service_eta_min",
+    "forward_service_reachable_today",
+    "forward_service_targets",
+    "forward_terminal_stranded_objects",
+    "forward_weed_eta_mean",
+    "forward_weed_eta_min",
+    "forward_weed_reachable_today",
+    "forward_weed_targets",
+    "hands",
+    "hour",
+    "legal_marked_margin",
+    "market_carrot",
+    "market_egg",
+    "market_fertilizer",
+    "market_melon",
+    "market_milk",
+    "market_strawberry",
+    "market_tomato",
+    "market_wheat",
+    "market_wool",
+    "money_delta",
+    "opponent_animal_cow",
+    "opponent_animal_goose",
+    "opponent_animal_sheep",
+    "opponent_animals_unfed",
+    "opponent_crop_carrot",
+    "opponent_crop_melon",
+    "opponent_crop_strawberry",
+    "opponent_crop_tomato",
+    "opponent_crop_wheat",
+    "opponent_hands",
+    "opponent_hires_today",
+    "opponent_money",
+    "opponent_plants_unwatered",
+    "opponent_public_marked_value",
+    "opponent_tile_coop",
+    "opponent_tile_pasture",
+    "opponent_tile_plant",
+    "opponent_tile_weed",
+    "opponent_tiles_with_yield",
+    "opponent_unlocked",
+    "own_animal_cow",
+    "own_animal_goose",
+    "own_animal_sheep",
+    "own_animals_unfed",
+    "own_crop_carrot",
+    "own_crop_melon",
+    "own_crop_strawberry",
+    "own_crop_tomato",
+    "own_crop_wheat",
+    "own_hires_today",
+    "own_money",
+    "own_plants_unwatered",
+    "own_private_marked_value",
+    "own_tile_coop",
+    "own_tile_pasture",
+    "own_tile_plant",
+    "own_tile_weed",
+    "own_tiles_with_yield",
+    "price_carrot",
+    "price_egg",
+    "price_fertilizer",
+    "price_melon",
+    "price_milk",
+    "price_strawberry",
+    "price_tomato",
+    "price_wheat",
+    "price_wool",
+    "seed_carrot",
+    "seed_melon",
+    "seed_strawberry",
+    "seed_tomato",
+    "seed_wheat",
+    "shed_carrot",
+    "shed_egg",
+    "shed_fertilizer",
+    "shed_melon",
+    "shed_milk",
+    "shed_strawberry",
+    "shed_tomato",
+    "shed_total",
+    "shed_wheat",
+    "shed_wool",
+    "shop_bakery",
+    "shop_brunch_spot",
+    "shop_farmers_market",
+    "shop_ice_cream_shop",
+    "shop_pet_cafe",
+    "shop_pizza_shop",
+    "shop_smoothie_shop",
+    "shop_yarn_store",
+    "step",
+    "unlocked"
+  ],
+  "checkpoint_models": {
+    "360": {
+      "checkpoint": 360,
+      "spec": {
+        "depth": 2,
+        "min_leaf": 4
+      },
+      "constant_plan": "strawberry_hold_land",
+      "tree": {
+        "plan": "strawberry_hold_land",
+        "training_rows": 40,
+        "training_regret": 72986.25,
+        "feature": "own_money",
+        "threshold": 18339.5,
+        "split_training_regret": 12671.75,
+        "left": {
+          "plan": "strawberry_hold_land",
+          "training_rows": 27,
+          "training_regret": 11506.5,
+          "feature": "market_milk",
+          "threshold": 9990.5,
+          "split_training_regret": 1071.5,
+          "left": {
+            "plan": "cow_lean",
+            "training_rows": 4,
+            "training_regret": 1071.5
+          },
+          "right": {
+            "plan": "strawberry_hold_land",
+            "training_rows": 23,
+            "training_regret": 0.0
+          }
+        },
+        "right": {
+          "plan": "cow_lean",
+          "training_rows": 13,
+          "training_regret": 1165.25,
+          "feature": "market_wool",
+          "threshold": 10047.0,
+          "split_training_regret": 1112.0,
+          "left": {
+            "plan": "cow_lean",
+            "training_rows": 9,
+            "training_regret": 0.0
+          },
+          "right": {
+            "plan": "strawberry_hold_land",
+            "training_rows": 4,
+            "training_regret": 1112.0
+          }
+        }
+      }
+    },
+    "600": {
+      "checkpoint": 600,
+      "spec": {
+        "depth": 1,
+        "min_leaf": 4
+      },
+      "constant_plan": "strawberry_hold_land",
+      "tree": {
+        "plan": "strawberry_hold_land",
+        "training_rows": 40,
+        "training_regret": 61971.5,
+        "feature": "market_wool",
+        "threshold": 10042.0,
+        "split_training_regret": 3598.75,
+        "left": {
+          "plan": "maintain_workers",
+          "training_rows": 14,
+          "training_regret": 3598.75
+        },
+        "right": {
+          "plan": "strawberry_hold_land",
+          "training_rows": 26,
+          "training_regret": 0.0
+        }
+      }
+    },
+    "648": {
+      "checkpoint": 648,
+      "spec": {
+        "depth": 1,
+        "min_leaf": 4
+      },
+      "constant_plan": "maintain_workers",
+      "tree": {
+        "plan": "maintain_workers",
+        "training_rows": 40,
+        "training_regret": 53329.0,
+        "feature": "market_strawberry",
+        "threshold": 10048.5,
+        "split_training_regret": 12307.0,
+        "left": {
+          "plan": "strawberry_hold_land",
+          "training_rows": 14,
+          "training_regret": 5341.0
+        },
+        "right": {
+          "plan": "maintain_workers",
+          "training_rows": 26,
+          "training_regret": 6966.0
+        }
+      }
+    }
+  },
+  "selection_contract": {
+    "folds": 5,
+    "group": "complete EpisodeId",
+    "depths": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "min_leaves": [
+      4,
+      8
+    ],
+    "objective": "mean full-feedback terminal-money regret"
+  },
+  "leakage_contract": {
+    "features": "119 controlled-observation legal features",
+    "labels": "offline full-state terminal oracle only",
+    "forbidden_at_inference": "identity, EpisodeId, source seed, replay actions, opponent private"
+  }
+}

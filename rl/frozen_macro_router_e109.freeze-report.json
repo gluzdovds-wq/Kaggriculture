@@ -1,0 +1,725 @@
+{
+  "schema": "kaggriculture-cost-sensitive-macro-router-freeze-v1",
+  "model": {
+    "schema": "kaggriculture-cost-sensitive-macro-router-v1",
+    "frozen_utc": "2026-08-22T10:59:15.512056+00:00",
+    "training_report": "artifacts\\e108-counterfactual-rank-h48.json",
+    "training_episode_ids": [
+      96024687,
+      96026965,
+      96029241,
+      96031535,
+      96033831,
+      96036110,
+      96038401,
+      96058999,
+      96074608,
+      96093069,
+      96286975,
+      96289251,
+      96291530,
+      96293891,
+      96296132,
+      96314456,
+      96328165,
+      96353169,
+      96357660,
+      96366561
+    ],
+    "feature_names": [
+      "carried_total",
+      "day",
+      "forward_animal_next_yield_days_mean",
+      "forward_animal_next_yield_days_min",
+      "forward_carried_to_shed_eta_min",
+      "forward_carried_to_shed_reachable_today",
+      "forward_carried_units",
+      "forward_critical_animals",
+      "forward_critical_plants",
+      "forward_crop_first_yield_days_mean",
+      "forward_crop_first_yield_days_min",
+      "forward_decay_turns_min",
+      "forward_fertilized_tiles",
+      "forward_fertilizer_available_tiles",
+      "forward_fertilizer_eta_mean",
+      "forward_fertilizer_eta_min",
+      "forward_fertilizer_reachable_today",
+      "forward_fertilizer_targets",
+      "forward_harvest_eta_mean",
+      "forward_harvest_eta_min",
+      "forward_harvest_reachable_today",
+      "forward_harvest_targets",
+      "forward_pending_care_bonus",
+      "forward_ready_yield_units",
+      "forward_ready_yield_value",
+      "forward_service_eta_mean",
+      "forward_service_eta_min",
+      "forward_service_reachable_today",
+      "forward_service_targets",
+      "forward_terminal_stranded_objects",
+      "forward_weed_eta_mean",
+      "forward_weed_eta_min",
+      "forward_weed_reachable_today",
+      "forward_weed_targets",
+      "hands",
+      "hour",
+      "legal_marked_margin",
+      "market_carrot",
+      "market_egg",
+      "market_fertilizer",
+      "market_melon",
+      "market_milk",
+      "market_strawberry",
+      "market_tomato",
+      "market_wheat",
+      "market_wool",
+      "money_delta",
+      "opponent_animal_cow",
+      "opponent_animal_goose",
+      "opponent_animal_sheep",
+      "opponent_animals_unfed",
+      "opponent_crop_carrot",
+      "opponent_crop_melon",
+      "opponent_crop_strawberry",
+      "opponent_crop_tomato",
+      "opponent_crop_wheat",
+      "opponent_hands",
+      "opponent_hires_today",
+      "opponent_money",
+      "opponent_plants_unwatered",
+      "opponent_public_marked_value",
+      "opponent_tile_coop",
+      "opponent_tile_pasture",
+      "opponent_tile_plant",
+      "opponent_tile_weed",
+      "opponent_tiles_with_yield",
+      "opponent_unlocked",
+      "own_animal_cow",
+      "own_animal_goose",
+      "own_animal_sheep",
+      "own_animals_unfed",
+      "own_crop_carrot",
+      "own_crop_melon",
+      "own_crop_strawberry",
+      "own_crop_tomato",
+      "own_crop_wheat",
+      "own_hires_today",
+      "own_money",
+      "own_plants_unwatered",
+      "own_private_marked_value",
+      "own_tile_coop",
+      "own_tile_pasture",
+      "own_tile_plant",
+      "own_tile_weed",
+      "own_tiles_with_yield",
+      "price_carrot",
+      "price_egg",
+      "price_fertilizer",
+      "price_melon",
+      "price_milk",
+      "price_strawberry",
+      "price_tomato",
+      "price_wheat",
+      "price_wool",
+      "seed_carrot",
+      "seed_melon",
+      "seed_strawberry",
+      "seed_tomato",
+      "seed_wheat",
+      "shed_carrot",
+      "shed_egg",
+      "shed_fertilizer",
+      "shed_melon",
+      "shed_milk",
+      "shed_strawberry",
+      "shed_tomato",
+      "shed_total",
+      "shed_wheat",
+      "shed_wool",
+      "shop_bakery",
+      "shop_brunch_spot",
+      "shop_farmers_market",
+      "shop_ice_cream_shop",
+      "shop_pet_cafe",
+      "shop_pizza_shop",
+      "shop_smoothie_shop",
+      "shop_yarn_store",
+      "step",
+      "unlocked"
+    ],
+    "checkpoint_models": {
+      "360": {
+        "checkpoint": 360,
+        "spec": {
+          "depth": 2,
+          "min_leaf": 4
+        },
+        "constant_plan": "strawberry_hold_land",
+        "tree": {
+          "plan": "strawberry_hold_land",
+          "training_rows": 40,
+          "training_regret": 72986.25,
+          "feature": "own_money",
+          "threshold": 18339.5,
+          "split_training_regret": 12671.75,
+          "left": {
+            "plan": "strawberry_hold_land",
+            "training_rows": 27,
+            "training_regret": 11506.5,
+            "feature": "market_milk",
+            "threshold": 9990.5,
+            "split_training_regret": 1071.5,
+            "left": {
+              "plan": "cow_lean",
+              "training_rows": 4,
+              "training_regret": 1071.5
+            },
+            "right": {
+              "plan": "strawberry_hold_land",
+              "training_rows": 23,
+              "training_regret": 0.0
+            }
+          },
+          "right": {
+            "plan": "cow_lean",
+            "training_rows": 13,
+            "training_regret": 1165.25,
+            "feature": "market_wool",
+            "threshold": 10047.0,
+            "split_training_regret": 1112.0,
+            "left": {
+              "plan": "cow_lean",
+              "training_rows": 9,
+              "training_regret": 0.0
+            },
+            "right": {
+              "plan": "strawberry_hold_land",
+              "training_rows": 4,
+              "training_regret": 1112.0
+            }
+          }
+        }
+      },
+      "600": {
+        "checkpoint": 600,
+        "spec": {
+          "depth": 1,
+          "min_leaf": 4
+        },
+        "constant_plan": "strawberry_hold_land",
+        "tree": {
+          "plan": "strawberry_hold_land",
+          "training_rows": 40,
+          "training_regret": 61971.5,
+          "feature": "market_wool",
+          "threshold": 10042.0,
+          "split_training_regret": 3598.75,
+          "left": {
+            "plan": "maintain_workers",
+            "training_rows": 14,
+            "training_regret": 3598.75
+          },
+          "right": {
+            "plan": "strawberry_hold_land",
+            "training_rows": 26,
+            "training_regret": 0.0
+          }
+        }
+      },
+      "648": {
+        "checkpoint": 648,
+        "spec": {
+          "depth": 1,
+          "min_leaf": 4
+        },
+        "constant_plan": "maintain_workers",
+        "tree": {
+          "plan": "maintain_workers",
+          "training_rows": 40,
+          "training_regret": 53329.0,
+          "feature": "market_strawberry",
+          "threshold": 10048.5,
+          "split_training_regret": 12307.0,
+          "left": {
+            "plan": "strawberry_hold_land",
+            "training_rows": 14,
+            "training_regret": 5341.0
+          },
+          "right": {
+            "plan": "maintain_workers",
+            "training_rows": 26,
+            "training_regret": 6966.0
+          }
+        }
+      }
+    },
+    "selection_contract": {
+      "folds": 5,
+      "group": "complete EpisodeId",
+      "depths": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "min_leaves": [
+        4,
+        8
+      ],
+      "objective": "mean full-feedback terminal-money regret"
+    },
+    "leakage_contract": {
+      "features": "119 controlled-observation legal features",
+      "labels": "offline full-state terminal oracle only",
+      "forbidden_at_inference": "identity, EpisodeId, source seed, replay actions, opponent private"
+    }
+  },
+  "training_rows": 120,
+  "selection": {
+    "360": {
+      "selected": {
+        "depth": 2,
+        "min_leaf": 4
+      },
+      "selected_oof": {
+        "rows": 40,
+        "top1_recall": 0.575,
+        "top3_recall": 0.95,
+        "mean_terminal_money_regret": 1252.06875,
+        "p95_terminal_money_regret": 8225.374999999993,
+        "exact_search_router_agreement": 0.475,
+        "selected_plan_counts": {
+          "cow_lean": 13,
+          "strawberry_hold_land": 27
+        }
+      },
+      "candidates": [
+        {
+          "spec": {
+            "depth": 0,
+            "min_leaf": 4
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.425,
+            "top3_recall": 0.975,
+            "mean_terminal_money_regret": 1824.65625,
+            "p95_terminal_money_regret": 8583.049999999994,
+            "exact_search_router_agreement": 0.75,
+            "selected_plan_counts": {
+              "strawberry_hold_land": 40
+            }
+          }
+        },
+        {
+          "spec": {
+            "depth": 1,
+            "min_leaf": 4
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.525,
+            "top3_recall": 0.95,
+            "mean_terminal_money_regret": 1363.71875,
+            "p95_terminal_money_regret": 8225.374999999993,
+            "exact_search_router_agreement": 0.525,
+            "selected_plan_counts": {
+              "cow_lean": 11,
+              "strawberry_hold_land": 29
+            }
+          }
+        },
+        {
+          "spec": {
+            "depth": 1,
+            "min_leaf": 8
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.525,
+            "top3_recall": 0.95,
+            "mean_terminal_money_regret": 1363.71875,
+            "p95_terminal_money_regret": 8225.374999999993,
+            "exact_search_router_agreement": 0.525,
+            "selected_plan_counts": {
+              "cow_lean": 11,
+              "strawberry_hold_land": 29
+            }
+          }
+        },
+        {
+          "spec": {
+            "depth": 2,
+            "min_leaf": 4
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.575,
+            "top3_recall": 0.95,
+            "mean_terminal_money_regret": 1252.06875,
+            "p95_terminal_money_regret": 8225.374999999993,
+            "exact_search_router_agreement": 0.475,
+            "selected_plan_counts": {
+              "cow_lean": 13,
+              "strawberry_hold_land": 27
+            }
+          }
+        },
+        {
+          "spec": {
+            "depth": 2,
+            "min_leaf": 8
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.525,
+            "top3_recall": 0.95,
+            "mean_terminal_money_regret": 1363.71875,
+            "p95_terminal_money_regret": 8225.374999999993,
+            "exact_search_router_agreement": 0.525,
+            "selected_plan_counts": {
+              "cow_lean": 11,
+              "strawberry_hold_land": 29
+            }
+          }
+        },
+        {
+          "spec": {
+            "depth": 3,
+            "min_leaf": 4
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.575,
+            "top3_recall": 0.95,
+            "mean_terminal_money_regret": 1252.06875,
+            "p95_terminal_money_regret": 8225.374999999993,
+            "exact_search_router_agreement": 0.475,
+            "selected_plan_counts": {
+              "cow_lean": 13,
+              "strawberry_hold_land": 27
+            }
+          }
+        },
+        {
+          "spec": {
+            "depth": 3,
+            "min_leaf": 8
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.525,
+            "top3_recall": 0.95,
+            "mean_terminal_money_regret": 1363.71875,
+            "p95_terminal_money_regret": 8225.374999999993,
+            "exact_search_router_agreement": 0.525,
+            "selected_plan_counts": {
+              "cow_lean": 11,
+              "strawberry_hold_land": 29
+            }
+          }
+        }
+      ]
+    },
+    "600": {
+      "selected": {
+        "depth": 1,
+        "min_leaf": 4
+      },
+      "selected_oof": {
+        "rows": 40,
+        "top1_recall": 0.825,
+        "top3_recall": 1.0,
+        "mean_terminal_money_regret": 89.96875,
+        "p95_terminal_money_regret": 322.71249999999947,
+        "exact_search_router_agreement": 0.775,
+        "selected_plan_counts": {
+          "maintain_workers": 14,
+          "strawberry_hold_land": 26
+        }
+      },
+      "candidates": [
+        {
+          "spec": {
+            "depth": 0,
+            "min_leaf": 4
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.425,
+            "top3_recall": 0.575,
+            "mean_terminal_money_regret": 2956.525,
+            "p95_terminal_money_regret": 10856.2625,
+            "exact_search_router_agreement": 0.325,
+            "selected_plan_counts": {
+              "maintain_workers": 8,
+              "strawberry_hold_land": 32
+            }
+          }
+        },
+        {
+          "spec": {
+            "depth": 1,
+            "min_leaf": 4
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.825,
+            "top3_recall": 1.0,
+            "mean_terminal_money_regret": 89.96875,
+            "p95_terminal_money_regret": 322.71249999999947,
+            "exact_search_router_agreement": 0.775,
+            "selected_plan_counts": {
+              "maintain_workers": 14,
+              "strawberry_hold_land": 26
+            }
+          }
+        },
+        {
+          "spec": {
+            "depth": 1,
+            "min_leaf": 8
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.825,
+            "top3_recall": 1.0,
+            "mean_terminal_money_regret": 89.96875,
+            "p95_terminal_money_regret": 322.71249999999947,
+            "exact_search_router_agreement": 0.775,
+            "selected_plan_counts": {
+              "maintain_workers": 14,
+              "strawberry_hold_land": 26
+            }
+          }
+        },
+        {
+          "spec": {
+            "depth": 2,
+            "min_leaf": 4
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.725,
+            "top3_recall": 1.0,
+            "mean_terminal_money_regret": 126.75625,
+            "p95_terminal_money_regret": 680.474999999999,
+            "exact_search_router_agreement": 0.675,
+            "selected_plan_counts": {
+              "carrot_hold_land": 6,
+              "maintain_workers": 8,
+              "strawberry_hold_land": 26
+            }
+          }
+        },
+        {
+          "spec": {
+            "depth": 2,
+            "min_leaf": 8
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.825,
+            "top3_recall": 1.0,
+            "mean_terminal_money_regret": 89.96875,
+            "p95_terminal_money_regret": 322.71249999999947,
+            "exact_search_router_agreement": 0.775,
+            "selected_plan_counts": {
+              "maintain_workers": 14,
+              "strawberry_hold_land": 26
+            }
+          }
+        },
+        {
+          "spec": {
+            "depth": 3,
+            "min_leaf": 4
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.725,
+            "top3_recall": 1.0,
+            "mean_terminal_money_regret": 126.75625,
+            "p95_terminal_money_regret": 680.474999999999,
+            "exact_search_router_agreement": 0.675,
+            "selected_plan_counts": {
+              "carrot_hold_land": 6,
+              "maintain_workers": 8,
+              "strawberry_hold_land": 26
+            }
+          }
+        },
+        {
+          "spec": {
+            "depth": 3,
+            "min_leaf": 8
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.825,
+            "top3_recall": 1.0,
+            "mean_terminal_money_regret": 89.96875,
+            "p95_terminal_money_regret": 322.71249999999947,
+            "exact_search_router_agreement": 0.775,
+            "selected_plan_counts": {
+              "maintain_workers": 14,
+              "strawberry_hold_land": 26
+            }
+          }
+        }
+      ]
+    },
+    "648": {
+      "selected": {
+        "depth": 1,
+        "min_leaf": 4
+      },
+      "selected_oof": {
+        "rows": 40,
+        "top1_recall": 0.55,
+        "top3_recall": 0.725,
+        "mean_terminal_money_regret": 751.25,
+        "p95_terminal_money_regret": 3501.249999999995,
+        "exact_search_router_agreement": 0.625,
+        "selected_plan_counts": {
+          "maintain_workers": 28,
+          "strawberry_hold_land": 12
+        }
+      },
+      "candidates": [
+        {
+          "spec": {
+            "depth": 0,
+            "min_leaf": 4
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.15,
+            "top3_recall": 0.325,
+            "mean_terminal_money_regret": 2034.35,
+            "p95_terminal_money_regret": 5198.5,
+            "exact_search_router_agreement": 0.175,
+            "selected_plan_counts": {
+              "maintain_workers": 16,
+              "strawberry_hold_land": 24
+            }
+          }
+        },
+        {
+          "spec": {
+            "depth": 1,
+            "min_leaf": 4
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.55,
+            "top3_recall": 0.725,
+            "mean_terminal_money_regret": 751.25,
+            "p95_terminal_money_regret": 3501.249999999995,
+            "exact_search_router_agreement": 0.625,
+            "selected_plan_counts": {
+              "maintain_workers": 28,
+              "strawberry_hold_land": 12
+            }
+          }
+        },
+        {
+          "spec": {
+            "depth": 1,
+            "min_leaf": 8
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.5,
+            "top3_recall": 0.675,
+            "mean_terminal_money_regret": 931.5,
+            "p95_terminal_money_regret": 5102.0,
+            "exact_search_router_agreement": 0.575,
+            "selected_plan_counts": {
+              "maintain_workers": 30,
+              "strawberry_hold_land": 10
+            }
+          }
+        },
+        {
+          "spec": {
+            "depth": 2,
+            "min_leaf": 4
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.425,
+            "top3_recall": 0.75,
+            "mean_terminal_money_regret": 954.325,
+            "p95_terminal_money_regret": 3501.249999999995,
+            "exact_search_router_agreement": 0.525,
+            "selected_plan_counts": {
+              "carrot_hold_land": 10,
+              "maintain_workers": 18,
+              "strawberry_hold_land": 12
+            }
+          }
+        },
+        {
+          "spec": {
+            "depth": 2,
+            "min_leaf": 8
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.325,
+            "top3_recall": 0.725,
+            "mean_terminal_money_regret": 1157.85,
+            "p95_terminal_money_regret": 4483.549999999998,
+            "exact_search_router_agreement": 0.35,
+            "selected_plan_counts": {
+              "carrot_hold_land": 12,
+              "maintain_workers": 18,
+              "strawberry_hold_land": 10
+            }
+          }
+        },
+        {
+          "spec": {
+            "depth": 3,
+            "min_leaf": 4
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.475,
+            "top3_recall": 0.775,
+            "mean_terminal_money_regret": 1114.625,
+            "p95_terminal_money_regret": 5102.0,
+            "exact_search_router_agreement": 0.55,
+            "selected_plan_counts": {
+              "carrot_hold_land": 7,
+              "liquidate": 4,
+              "maintain_workers": 17,
+              "strawberry_hold_land": 12
+            }
+          }
+        },
+        {
+          "spec": {
+            "depth": 3,
+            "min_leaf": 8
+          },
+          "oof": {
+            "rows": 40,
+            "top1_recall": 0.325,
+            "top3_recall": 0.725,
+            "mean_terminal_money_regret": 1157.85,
+            "p95_terminal_money_regret": 4483.549999999998,
+            "exact_search_router_agreement": 0.35,
+            "selected_plan_counts": {
+              "carrot_hold_land": 12,
+              "maintain_workers": 18,
+              "strawberry_hold_land": 10
+            }
+          }
+        }
+      ]
+    }
+  },
+  "warning": "Commit this model before external evaluation."
+}
