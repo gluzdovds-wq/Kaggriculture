@@ -1072,3 +1072,17 @@ proposal generator.  It is no longer eligible to control the live agent.
   useful follow-up must carry a repayment/debt model: when work is advanced,
   the later redundant tape action must be identified and safely reassigned,
   otherwise apparent tactical improvements remain economically neutral.
+
+## Execution checkpoint: prepaid-action debt audit
+
+- The first explicit debt ledger recorded each idle WATER and attempted to
+  replace a later same-tile redundant WATER with a mature HARVEST.  The
+  generated runtime has a synthetic repayment test, and the audit corrected a
+  `planted_day == 0` age calculation bug shared with the macro runtime.
+- Across five fresh seeds from both seats, 86 prepaid WATER actions fired with
+  no fallback, but zero eligible repayment actions appeared.  Every final bank
+  and paired margin stayed identical to exact N39.
+- The safe `KEEP_BASE` framework remains the right integration boundary.  The
+  same-tile harvest debt hypothesis is rejected; future work should mine the
+  real downstream N39 action sequence and only build residuals around action
+  pairs observed to create usable capacity.

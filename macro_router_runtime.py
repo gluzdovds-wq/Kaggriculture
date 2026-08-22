@@ -186,7 +186,8 @@ def _choose_task(farm, private, plan, unit, day, claimed, remaining_seed):
             bonus = 10 if tile.get("crop") == plan["crop"] else 0
             first = 105 if plan["liquidate"] else 92
             crop = str(tile.get("crop"))
-            age = day - int(tile.get("planted_day", day) or day)
+            planted = tile.get("planted_day", day)
+            age = day - int(day if planted is None else planted)
             if (
                 int(tile.get("yield_units", 0) or 0) > 0
                 and age >= FIRST_YIELD_DAYS.get(crop, 0)

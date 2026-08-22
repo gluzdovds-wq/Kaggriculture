@@ -2149,3 +2149,26 @@ arena timing instrumentation preserves both one- and two-argument agents.
   Kaggle submission is justified by exact outcome neutrality.  The next
   residual must change an actual bottleneck while explicitly modelling the
   later action it repays or frees.
+
+## E112 — N78 prepaid-WATER repayment audit / no opportunity
+
+- Extended the KEEP_BASE wrapper with an optional debt ledger.  When an idle
+  actor prepays WATER on a tile, a later base WATER by the same actor on the
+  same already-watered, mature tile may be replaced by HARVEST.  A focused
+  synthetic trace exercises this exact repayment.  The audit also fixed a
+  separate `planted_day == 0` age bug in the residual and macro runtimes; zero
+  had previously been treated as a missing value.
+- On five fresh official seeds (`20260826..20260830`) from both seats, the
+  residual issued 86 prepaid WATER actions with zero fallbacks and maximum
+  observed candidate latency of `243.4 ms`.  It found zero eligible harvest
+  repayments.  All candidate banks and paired margins therefore remained
+  exactly equal to the byte-exact N39 control; mean paired margin was `$0`.
+- The negative result is structural rather than a weak estimate: the tested
+  N39 traces do not revisit a prepaid mature tile with the hypothesized
+  redundant WATER action before the daily ledger expires.  More seeds cannot
+  improve a predicate that did not produce a changed economic action.
+- Decision: retain the audited generator and regression test, but reject this
+  same-tile HARVEST repayment predicate.  Do not run a broad panel or submit.
+  The next residual should first mine exact future action pairs from traces and
+  propose a debt substitution that actually fires, instead of assuming which
+  later task was freed.

@@ -17,11 +17,16 @@ _KBR_BASE_AGENT = agent
 _KBR_START = __START__
 _KBR_STOP = __STOP__
 _KBR_MAX_PER_TURN = __MAX_PER_TURN__
+_KBR_REPAY_HARVEST = __REPAY_HARVEST__
+_KBR_FIRST_YIELD = {"WHEAT": 2, "CARROT": 2, "TOMATO": 8, "STRAWBERRY": 10, "MELON": 10}
+_KBR_PREPAID = {0: set(), 1: set()}
+_KBR_DAY = {0: -1, 1: -1}
 _KBR_TELEMETRY = {
     "start": _KBR_START,
     "stop": _KBR_STOP,
     "watered": 0,
     "turns_changed": 0,
+    "harvest_repayments": 0,
     "first_steps": [],
     "fallbacks": 0,
 }
@@ -45,6 +50,10 @@ def agent(obs, configuration=None):
         if seat >= len(farms):
             return action
         farm = farms[seat]
+        day = int(_kbr_get(obs, "day", step // 24) or 0)
+        if _KBR_DAY[seat] != day:
+            _KBR_PREPAID[seat].clear()
+            _KBR_DAY[seat] = day
         positions = [
             _kbr_get(farm, "farmer", [4, 4]),
             *list(_kbr_get(farm, "hands", []) or []),
@@ -55,6 +64,36 @@ def agent(obs, configuration=None):
             *[list(value or ["PASS"]) for value in (action.get("hands") or [])],
         ]
         changed = 0
+        if _KBR_REPAY_HARVEST:
+            for actor, position in enumerate(positions):
+                if actor >= len(orders) or not position or not orders[actor]:
+                    break
+                if orders[actor][0] != "WATER":
+                    continue
+                x, y = int(position[0]), int(position[1])
+                key = (x, y)
+                if key not in _KBR_PREPAID[seat]:
+                    continue
+                if not (0 <= y < len(tiles) and 0 <= x < len(tiles[y])):
+                    continue
+                tile = tiles[y][x]
+                crop = str(tile.get("crop", "")) if isinstance(tile, dict) else ""
+                planted = tile.get("planted_day", day) if isinstance(tile, dict) else day
+                age = day - int(day if planted is None else planted)
+                if not (
+                    isinstance(tile, dict)
+                    and tile.get("kind") == "PLANT"
+                    and tile.get("watered_today", False)
+                    and int(tile.get("yield_units", 0) or 0) > 0
+                    and age >= _KBR_FIRST_YIELD.get(crop, 0)
+                ):
+                    continue
+                orders[actor] = ["HARVEST"]
+                _KBR_PREPAID[seat].discard(key)
+                changed += 1
+                _KBR_TELEMETRY["harvest_repayments"] += 1
+                if len(_KBR_TELEMETRY["first_steps"]) < 32:
+                    _KBR_TELEMETRY["first_steps"].append([step, actor, "HARVEST_REPAY"])
         for actor, position in enumerate(positions):
             if changed >= _KBR_MAX_PER_TURN or actor >= len(orders) or not position:
                 break
@@ -71,6 +110,7 @@ def agent(obs, configuration=None):
             ):
                 continue
             orders[actor] = ["WATER"]
+            _KBR_PREPAID[seat].add((x, y))
             changed += 1
             _KBR_TELEMETRY["watered"] += 1
             if len(_KBR_TELEMETRY["first_steps"]) < 32:
@@ -91,7 +131,15 @@ keep_base_residual_kaggle_entrypoint = agent
 '''
 
 
-def render(source: str, *, start: int, stop: int, max_per_turn: int, label: str) -> str:
+def render(
+    source: str,
+    *,
+    start: int,
+    stop: int,
+    max_per_turn: int,
+    repay_harvest: bool,
+    label: str,
+) -> str:
     if not 0 <= start < stop <= 720:
         raise ValueError("window must satisfy 0 <= start < stop <= 720")
     if max_per_turn < 1:
@@ -102,6 +150,7 @@ def render(source: str, *, start: int, stop: int, max_per_turn: int, label: str)
         TEMPLATE.replace("__START__", str(start))
         .replace("__STOP__", str(stop))
         .replace("__MAX_PER_TURN__", str(max_per_turn))
+        .replace("__REPAY_HARVEST__", repr(bool(repay_harvest)))
         .replace("__LABEL__", label)
     )
     return source.rstrip() + "\n" + overlay
@@ -114,6 +163,7 @@ def main() -> None:
     parser.add_argument("--start", type=int, default=0)
     parser.add_argument("--stop", type=int, default=720)
     parser.add_argument("--max-per-turn", type=int, default=1)
+    parser.add_argument("--repay-harvest", action="store_true")
     parser.add_argument("--label", required=True)
     args = parser.parse_args()
     try:
@@ -122,6 +172,7 @@ def main() -> None:
             start=args.start,
             stop=args.stop,
             max_per_turn=args.max_per_turn,
+            repay_harvest=args.repay_harvest,
             label=args.label,
         )
     except ValueError as exc:
