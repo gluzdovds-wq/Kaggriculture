@@ -1,6 +1,11 @@
 import unittest
 
-from tools.evaluate_top_replay_counterfactuals import parse_named_path, summarize
+from tools.evaluate_top_replay_counterfactuals import (
+    find_named_seat,
+    parse_named_path,
+    requested_target_matches,
+    summarize,
+)
 
 
 class EvaluateTopReplayCounterfactualsTests(unittest.TestCase):
@@ -10,6 +15,15 @@ class EvaluateTopReplayCounterfactualsTests(unittest.TestCase):
         name, path = parse_named_path("N39=main.py")
         self.assertEqual(name, "N39")
         self.assertTrue(path.endswith("main.py"))
+
+    def test_target_name_filter_is_normalized_and_optional(self):
+        request = {"name": "S09/N39", "replay_name": "  gluzdovds  "}
+        self.assertTrue(requested_target_matches(request, ()))
+        self.assertTrue(requested_target_matches(request, ("s09/n39",)))
+        self.assertTrue(requested_target_matches(request, ("GLUZDOVDS",)))
+        self.assertFalse(requested_target_matches(request, ("Arman",)))
+        self.assertEqual(find_named_seat(["Alpha", " MiMi "], ("mimi",)), 1)
+        self.assertIsNone(find_named_seat(["Alpha", "Beta"], ("mimi",)))
 
     def test_summary_counts_donor_outcome_changes(self):
         donor = {

@@ -79,6 +79,7 @@ class ShadowPolicyAuditTests(unittest.TestCase):
         )
         self.assertEqual(telemetry["immediate_samples"][0]["step"], 2)
         self.assertTrue(telemetry["immediate_samples"][0]["valid"])
+        self.assertEqual(telemetry["valid_immediate_samples"][0]["step"], 2)
         self.assertEqual(telemetry["longest_joint_equal_streak"], 2)
 
     def test_uses_seat_stable_day_hour_clock(self):

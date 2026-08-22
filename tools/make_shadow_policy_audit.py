@@ -67,6 +67,7 @@ def _spa_reset():
         "candidate_immediate_valid_for_base_pass": 0,
         "candidate_immediate_nonredundant_for_base_pass": 0,
         "immediate_samples": [],
+        "valid_immediate_samples": [],
         "executed": 0,
         "executed_by_operation": {},
         "filtered_by_context": 0,
@@ -267,8 +268,12 @@ def _spa_record(base_action, candidate_action, step, obs):
             _SPA_TELEMETRY["candidate_immediate_nonredundant_for_base_pass"] += int(nonredundant)
             context["base_same_tile_operations"] = same_tile_operations
             context["redundant"] = redundant
+            context.update({"step": step, "valid": valid})
+            if valid and len(_SPA_TELEMETRY["valid_immediate_samples"]) < 32:
+                _SPA_TELEMETRY["valid_immediate_samples"].append(
+                    _spa_copy.deepcopy(context)
+                )
             if len(_SPA_TELEMETRY["immediate_samples"]) < 32:
-                context.update({"step": step, "valid": valid})
                 _SPA_TELEMETRY["immediate_samples"].append(context)
 
 

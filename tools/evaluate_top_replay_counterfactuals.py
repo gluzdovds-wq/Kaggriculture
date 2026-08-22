@@ -38,11 +38,38 @@ def parse_named_path(value: str) -> tuple[str, str]:
     return name, str(path)
 
 
-def build_cases(manifest: dict, generated_dir: Path, max_rank: int) -> list[DonorCase]:
+def requested_target_matches(request: dict, target_names: tuple[str, ...]) -> bool:
+    if not target_names:
+        return True
+    targets = {normalize_name(name) for name in target_names}
+    request_names = {
+        normalize_name(request.get("name", "")),
+        normalize_name(request.get("replay_name", "")),
+    }
+    return bool(targets & request_names)
+
+
+def find_named_seat(names: list[str], target_names: tuple[str, ...]) -> int | None:
+    targets = {normalize_name(name) for name in target_names}
+    return next(
+        (seat for seat, name in enumerate(names) if normalize_name(name) in targets),
+        None,
+    )
+
+
+def build_cases(
+    manifest: dict,
+    generated_dir: Path,
+    max_rank: int,
+    target_names: tuple[str, ...] = (),
+    episode_ids: tuple[int, ...] = (),
+) -> list[DonorCase]:
     generated_dir.mkdir(parents=True, exist_ok=True)
     cases = []
     seen = set()
     for episode in manifest.get("episodes", []):
+        if episode_ids and int(episode["episode_id"]) not in episode_ids:
+            continue
         replay = json.loads(Path(episode["path"]).read_text(encoding="utf-8"))
         names = player_names(replay)
         normalized = [normalize_name(name) for name in names]
@@ -51,6 +78,8 @@ def build_cases(manifest: dict, generated_dir: Path, max_rank: int) -> list[Dono
         for request in episode.get("requested_for", []):
             rank = request.get("rank")
             if request.get("cohort") != "top20" or rank is None or int(rank) > max_rank:
+                continue
+            if not requested_target_matches(request, target_names):
                 continue
             key = (int(request["submission_id"]), int(episode["episode_id"]))
             if key in seen:
@@ -88,6 +117,54 @@ def build_cases(manifest: dict, generated_dir: Path, max_rank: int) -> list[Dono
     return cases
 
 
+def build_opponent_cases(
+    manifest: dict,
+    generated_dir: Path,
+    opponent_names: tuple[str, ...],
+    episode_ids: tuple[int, ...] = (),
+) -> list[DonorCase]:
+    generated_dir.mkdir(parents=True, exist_ok=True)
+    leaderboard_by_name = {
+        normalize_name(entry["name"]): entry
+        for entry in manifest.get("leaderboard_entries", [])
+    }
+    cases = []
+    for episode in manifest.get("episodes", []):
+        if episode_ids and int(episode["episode_id"]) not in episode_ids:
+            continue
+        replay = json.loads(Path(episode["path"]).read_text(encoding="utf-8"))
+        names = player_names(replay)
+        opponent_seat = find_named_seat(names, opponent_names)
+        if opponent_seat is None or len(names) != 2:
+            continue
+        target_seat = 1 - opponent_seat
+        target_meta = leaderboard_by_name.get(normalize_name(names[target_seat]), {})
+        target_tape = generated_dir / f"episode-{episode['episode_id']}-seat-{target_seat}.py"
+        opponent_tape = generated_dir / f"episode-{episode['episode_id']}-seat-{opponent_seat}.py"
+        if not target_tape.is_file():
+            target_tape.write_text(render_agent(replay, target_seat), encoding="utf-8")
+        if not opponent_tape.is_file():
+            opponent_tape.write_text(render_agent(replay, opponent_seat), encoding="utf-8")
+        rewards = [float(value or 0) for value in replay.get("rewards", [])]
+        cases.append(
+            DonorCase(
+                episode_id=int(episode["episode_id"]),
+                seed=int((replay.get("info", {}) or {}).get("seed", 0) or 0),
+                target_seat=target_seat,
+                target_name=names[target_seat],
+                target_rank=int(target_meta.get("rank", 10_000)),
+                target_submission_id=int(target_meta.get("submission_id", 0)),
+                target_tape=str(target_tape.resolve()),
+                opponent_name=names[opponent_seat],
+                opponent_tape=str(opponent_tape.resolve()),
+                recorded_target_bank=rewards[target_seat],
+                recorded_opponent_bank=rewards[opponent_seat],
+            )
+        )
+    cases.sort(key=lambda case: case.episode_id)
+    return cases
+
+
 def run_one(task: tuple[str, str, DonorCase]) -> dict:
     candidate_name, candidate_path, case = task
     result = play(candidate_path, case.opponent_tape, case.seed, case.target_seat)
@@ -103,6 +180,7 @@ def run_one(task: tuple[str, str, DonorCase]) -> dict:
         "margin": result["margin"],
         "outcome": result["outcome"],
         "max_action_ms": result["candidate_latency"]["max_ms"],
+        "candidate_telemetry": result.get("candidate_telemetry", {}),
     }
 
 
@@ -178,16 +256,35 @@ def main() -> None:
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--generated-dir", type=Path, required=True)
     parser.add_argument("--max-rank", type=int, default=5)
+    parser.add_argument("--target-name", action="append", default=[])
+    parser.add_argument("--opponent-name", action="append", default=[])
+    parser.add_argument("--episode-id", action="append", type=int, default=[])
     parser.add_argument("--candidate", action="append", default=[])
     parser.add_argument("--jobs", type=int, default=1)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    if args.target_name and args.opponent_name:
+        parser.error("--target-name and --opponent-name are mutually exclusive")
     try:
         candidates = dict(parse_named_path(value) for value in args.candidate)
     except ValueError as error:
         parser.error(str(error))
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
-    cases = build_cases(manifest, args.generated_dir, args.max_rank)
+    if args.opponent_name:
+        cases = build_opponent_cases(
+            manifest,
+            args.generated_dir,
+            tuple(args.opponent_name),
+            tuple(args.episode_id),
+        )
+    else:
+        cases = build_cases(
+            manifest,
+            args.generated_dir,
+            args.max_rank,
+            tuple(args.target_name),
+            tuple(args.episode_id),
+        )
     report = evaluate(cases, candidates, max(1, args.jobs))
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")

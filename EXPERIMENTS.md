@@ -1553,3 +1553,66 @@ arena timing instrumentation preserves both one- and two-argument agents.
   predicates/tasks, not wholesale replacements.  Do not submit a top-1 clone;
   preserve the live N39/V36 pair while the new submissions are still rapidly
   rating.
+
+## E091 — top-three residual and MiMi opponent donor matrices
+
+- Replayed the six exact top-three target cases with N39, V36, C95, exact V16,
+  exact v25, Moon, Soil, V39, X544 and the current multi-route policy.  The two
+  N39 regressions were both Arman cases, but they are not one route family.
+  Against tetsuya, N39 scored `-8582` while V36 scored `+12203`; against MiMi,
+  the original Arman tape won by `+8313`, N39 was the closest reusable policy
+  at `-3811`, and every other known policy lost by between `-4271` and
+  `-36474`.
+- Reframed every available episode containing MiMi so that MiMi's exact tape
+  remained the opponent.  Across three such seeds, N39 scored `1/3` with
+  average margin `+4503.3`; Moon and the multi-route policy produced the same
+  outcomes, while V36/C95/V16/v25/Soil/V39 each improved one outcome and
+  regressed two.  No whole-policy donor transferred consistently.
+- Extended the exact-replay evaluator with normalized target/opponent filters,
+  arbitrary named-seat replacement and tests.  This permits counterfactuals
+  against a policy wherever it appears in a public replay, rather than only
+  when that policy was the requested leaderboard target.
+- Decision: reject a MiMi-specific whole-route switch.  The Arman win is a
+  state-specific trajectory, not evidence that its action tape or a known
+  route generalizes to new MiMi seeds.
+
+## E092 — current 24-replay N39/V36 full-feedback panel
+
+- Downloaded the eight newest public games for each of S09/N39, S10/V36 and
+  MiMi: 24 unique exact-seed cases and 743 MB of replay state.  N39 won `22/24`
+  with average margin `+12258.8`; V36 won `18/24` at `+7833.7`; the recorded
+  donors won `17/24`.  By source cohort N39 scored `7/8`, `7/8`, `8/8`, versus
+  V36 `7/8`, `6/8`, `5/8` respectively.
+- Their outcome oracle is `24/24`: V36 fixes both N39 losses, tetsuya
+  (`-3984` to `+44449`) and Andrey Chankin (`-206` to `+7574`).  But V36 also
+  loses six cases that N39 wins.  A global 95/5 start-of-game mixture therefore
+  has expected score `21.8/24`, below deterministic N39's `22/24`.
+- N39 and V36 diverge at step zero.  The legal public start state is otherwise
+  identical across the panel: both farms have 3000 coins, one unlocked NW
+  quadrant, no hands, crops or animals, fixed initial market and no shop.  The
+  only available split is seat; choosing V36 on seat 0 and N39 on seat 1 scores
+  only `20/24`.
+- Decision: retain N39 as the deterministic base and V36 as portfolio
+  diversity, but reject a combined public selector.  The `24/24` oracle is not
+  implementable without future information or opponent identity leakage.
+
+## E093 — V36 shadow-task extraction on the two N39 residuals
+
+- Added replay episode filters and candidate telemetry to the exact-replay
+  evaluator.  The shadow audit now keeps a separate bounded sample of valid
+  late interventions instead of filling its sample buffer with early invalid
+  actions.  The full 24-game outcome-neutral audit exactly reproduced N39.
+- V36 and N39 matched their complete joint action on only `5/719` turns.  V36
+  proposed 269–360 non-PASS actions for actors idle under N39, but only 6–9
+  were locally valid and non-redundant per game.  The two N39 losses averaged
+  8.0 such opportunities versus 8.3 in the 22 wins, so opportunity count does
+  not identify the residual family.
+- On the two losses, screened separate allowlisted HARVEST, CARE, WATER,
+  COLLECT_FERTILIZER and DROP overlays.  CARE/WATER/COLLECT/DROP executed the
+  eligible actions but changed neither loss.  HARVEST executed three and four
+  actions; it left tetsuya at `-3984` and worsened Andrey from `-206` to
+  `-910`.
+- Decision: reject all five V36 task grafts and make no new submission.  The
+  active ratings are still moving (`2541.0` N39, `2158.1` V36), today's two
+  autonomous slots are already used, and the reserve remains intact.  The
+  complete suite passes `102/102`.
