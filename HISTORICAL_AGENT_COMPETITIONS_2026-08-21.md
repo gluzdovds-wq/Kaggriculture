@@ -642,3 +642,21 @@ the leaderboard only as a noisy measurement of the current live meta.
   feedback are not enough when the best-response label drifts with the live
   population.  Keep the tiny-tree pipeline, but require a repeated new X544
   residual before refitting; do not increase depth to memorize old lineages.
+
+## Execution checkpoint: synthesized common opening
+
+- N18 was tested as a genuinely third prefix rather than another late policy
+  splice.  N39 and C95 were shadow-run from step zero while the executed action
+  combined consensus actor tasks with intersected market orders, or crossed
+  one policy's field plan with the other's market plan.  Both continuations of
+  each candidate therefore received the same physical prefix.
+- Across seven synthesis rules, five branch steps and both continuations, only
+  the effective C95 opening preserved C95's Excluding residual win.  A novel
+  N39-field/C95-market first action also won, but its C95 continuation was
+  exactly trajectory-equivalent to C95 on all eight Arman cases, while its N39
+  continuation fell to `0/8`.
+- This rejects component recombination as a common-opening construction.  The
+  Halite/Lux transfer remains valid but must be implemented one level higher:
+  jointly optimize a third role/task allocation whose state contract explicitly
+  supports both downstream planners, rather than voting over their immediate
+  actions.

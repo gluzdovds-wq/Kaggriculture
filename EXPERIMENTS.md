@@ -1702,3 +1702,31 @@ arena timing instrumentation preserves both one- and two-argument agents.
   viable infrastructure, but this label is temporally non-stationary; require a
   repeated X544-only gain in a later frozen block before retraining or adding a
   deeper tree.  Full suite passes `106/106`.
+
+## E097 — N39/C95 synthesized common-prefix lattice / rejected
+
+- Added a deterministic common-prefix generator that shadow-runs N39 and C95
+  with isolated RNG from step zero, executes a third action before branching,
+  and then fixes either continuation.  Screened seven component rules across
+  steps `1,12,24,48,72`: per-actor consensus with PASS on disagreement, N39 or
+  C95 field actions, market-order intersection, and both cross combinations of
+  one policy's field with the other's market.  Both generated branches share
+  the exact executed prefix by construction.
+- The first residual screen evaluated `70` synthesized branches on the exact
+  Arman-versus-Excluding episode.  Only two C95 continuations won: exact C95's
+  effective step-0 action and the new `N39 field + C95 market` step-0 hybrid,
+  both at `+5795`.  Every later prefix and every N39 continuation lost; the
+  best non-winning N39 branch was still `-14488`.
+- The hybrid pair was then run on all eight current Arman games.  Its C95
+  branch exactly reproduced original C95 in every final bank and outcome,
+  scoring `4/8`.  The N39 branch, from the identical hybrid opening, collapsed
+  from N39's `4/8` to `0/8` with average margin `-37493.1`.  The opening is
+  therefore only a trajectory-equivalent way to enter C95, not a state from
+  which both task graphs can continue.
+- Decision: reject N64's component-level common opening and do not spend a
+  broad holdout or submission slot.  Shadow memory is functioning, but the
+  incompatibility is a coupled farm/market/task-allocation contract established
+  on the first action.  A real shared opening must be optimized as a third
+  reactive task planner with both downstream values in its objective; mixing
+  incumbent joint-action components is insufficient.  Full suite passes
+  `110/110`.
