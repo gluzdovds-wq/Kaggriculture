@@ -37,6 +37,15 @@ def feature_matrix(rows: list[dict], names: list[str]) -> np.ndarray:
     )
 
 
+def select_feature_names(rows: list[dict], excluded_prefixes: tuple[str, ...] = ()) -> list[str]:
+    return sorted({
+        name
+        for row in rows
+        for name in row["features"]
+        if not any(name.startswith(prefix) for prefix in excluded_prefixes)
+    })
+
+
 def softmax(scores: np.ndarray) -> np.ndarray:
     shifted = scores - scores.max(axis=1, keepdims=True)
     values = np.exp(shifted)
@@ -123,12 +132,16 @@ def main() -> None:
     parser.add_argument("--epochs", type=int, default=300)
     parser.add_argument("--learning-rate", type=float, default=0.05)
     parser.add_argument("--l2", type=float, default=0.0001)
+    parser.add_argument("--exclude-prefix", action="append", default=[])
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
 
     train_rows = load_rows(args.train, args.agent)
     holdout_rows = load_rows(args.holdout, args.agent)
-    names = sorted({name for row in train_rows for name in row["features"]})
+    excluded_prefixes = tuple(args.exclude_prefix)
+    names = select_feature_names(train_rows, excluded_prefixes)
+    if not names:
+        raise ValueError("no features remain after --exclude-prefix filtering")
     raw_train_labels = [label_value(row, args.target) for row in train_rows]
     counts = Counter(raw_train_labels)
     kept = sorted(label for label, count in counts.items() if count >= args.min_count)
@@ -171,6 +184,7 @@ def main() -> None:
         "target": args.target,
         "split": "disjoint complete season datasets",
         "feature_count": len(names),
+        "excluded_feature_prefixes": list(excluded_prefixes),
         "labels": labels,
         "label_counts": dict(sorted(counts.items())),
         "optimization": {

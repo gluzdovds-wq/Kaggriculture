@@ -1404,3 +1404,34 @@ arena timing instrumentation preserves both one- and two-argument agents.
   analysis/candidate-generation primitive.  Reject top-1 or epsilon-driven
   live control from the current linear heads.  N54 forward ETA, feasibility,
   cashflow and deadline features are the next promotion gate.
+
+## E085 — N54 forward geometry/cashflow feature ablation
+
+- Added an inference-visible forward layer in two parts.  The replay builder
+  now records 32 position/object-clock features: static lower-bound worker ETA,
+  service/harvest reachability before end of day, ready yield/value, critical
+  service streaks, production/decay clocks and carried-inventory return ETA.
+  `rl/augment_forward_features.py` adds 37 clock, feasibility, storage,
+  hire/land and 6/12/24-turn known-demand/liquidation features.
+- The copied default market formula reproduced every observed price for all
+  nine products on 25,884 rows across the old and new train/holdout corpora:
+  zero parity mismatches.  Projections crossing a future random shop unlock
+  are explicitly flagged incomplete rather than presented as exact.
+- On the old S05 disjoint season, adding the reconstructable 37 features
+  improved decision-turn joint top-3×3 from `52.95%` to `58.72%` and top-8×5
+  from `80.12%` to `82.85%`.  V16/v25 also improved at the wide shortlist.
+- Collected a larger current-meta corpus on four fresh seeds: N39, exact V16
+  and exact v25 on both seats against current N39, 8,628 rows per split.  V16
+  and v25 lost all eight direct games each, independently reconfirming that
+  their historical notebook scores do not make them a current base.
+- On 2,776 non-noop N39 holdout turns, the best target-specific hybrid uses
+  all forward features for the task head but geometry/object clocks only for
+  the market head.  Joint top-1 rose `17.51% → 25.47%`, top-3×3
+  `46.76% → 61.28%`, and top-8×5 `74.06% → 79.47%`.  Full forward heads raised
+  V16 top-3×3 `33.11% → 42.31%` and v25 `39.90% → 50.11%`.
+- Added process-parallel `--jobs` dataset collection and repeatable
+  `--exclude-prefix` feature ablations; the full suite passes `83/83`.
+  Decision: N54 passes as an offline
+  ranking feature layer, but no learned action is deployed.  Cashflow features
+  must remain head-specific; the next gate is a legal candidate generator plus
+  official-engine outcome, latency and worst-family testing.

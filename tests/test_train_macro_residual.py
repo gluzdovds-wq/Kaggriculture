@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from rl.train_macro_residual import evaluate, softmax
+from rl.train_macro_residual import evaluate, select_feature_names, softmax
 
 
 class MacroResidualTests(unittest.TestCase):
@@ -15,6 +15,10 @@ class MacroResidualTests(unittest.TestCase):
         report = evaluate(scores, np.asarray([0, 1]), ["service", "move"], "task_macro")
         self.assertEqual(report["accuracy"], 1.0)
         self.assertEqual(report["critical_macro_detection"]["service"]["recall"], 1.0)
+
+    def test_feature_prefix_ablation(self):
+        rows = [{"features": {"base": 1.0, "forward_eta": 2.0}}]
+        self.assertEqual(select_feature_names(rows, ("forward_",)), ["base"])
 
 
 if __name__ == "__main__":

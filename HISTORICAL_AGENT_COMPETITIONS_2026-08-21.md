@@ -356,6 +356,31 @@ criteria.
   live agent.  Prioritize N54 exact ETA/cashflow/deadline features and require
   official-engine league gains before any learned head controls behavior.
 
+## Execution checkpoint: N54 forward-feature ablation
+
+- Implemented only inference-visible consequences.  New full-observation rows
+  retain static worker-to-task ETA, end-of-day reachability, object production
+  and decay clocks, ready yield/value and carried-inventory return ETA.  A
+  second deterministic layer computes hire/land affordability, storage
+  overflow and sequential liquidation values after 6/12/24 turns of demand
+  from currently visible shops.
+- The copied official price curve has zero mismatches across all nine products
+  on both old and new corpora.  A horizon crossing a not-yet-visible random
+  shop unlock is marked incomplete.  It is not silently labeled an exact
+  forecast.
+- On four new seeds with N39/V16/v25 playing both seats against current N39,
+  the N39 target-specific hybrid improved exact-pair shortlist recall from
+  `46.76%` to `61.28%` at task top-3 × market top-3, and from `74.06%` to
+  `79.47%` at top-8 × top-5.  V16 and v25 showed broad gains too, while both
+  lost every direct current-meta game to N39.
+- Geometry/object clocks provide most of N39's gain.  Adding cashflow to both
+  heads slightly hurts its broad market shortlist, while helping V16/v25.
+  Therefore features and regularization must be head-specific: all forward
+  features for N39 task ranking, geometry/object clocks for market ranking.
+- N54 passes its offline ablation gate, not its deployment gate.  Next generate
+  legal candidate task graphs, rank them with these features, and require
+  direct official-engine outcome lift with latency and worst-family controls.
+
 ## Execution checkpoint: N16–N22
 
 - V16-RC5 is exactly V2 / `scriptVersionId=341905759`, Best Score 2913.3,
