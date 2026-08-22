@@ -2379,3 +2379,88 @@ arena timing instrumentation preserves both one- and two-argument agents.
   but remains unsubmitted because the only remaining daily slot is the reserve.
   Artifact: 319,877 bytes, SHA-256
   `397c57c026329864aa37089f848355a49042a45d07519ed1d3ed2ef6070b8fe1`.
+
+## E121 — N83 independent live transfer / confirmed
+
+- By the next checkpoint S11 had 27 public games, a `2295.0` rating and a
+  `24W/3L` record; S12 had 19 public games, a `1814.1` rating and a `16W/3L`
+  record.  The newly acquired holdout contains eight S11 games, all matching
+  the public `3 COW / 2 SHEEP` gate, and twelve S12 games, six of them active.
+  None of these fourteen active trajectories was used to select N83's five
+  sale points.
+- Added `tools/evaluate_live_replay_cohort.py` to classify a submission's
+  public family gate, extract both action tapes, require exact recorded-bank
+  reproduction and evaluate named candidates on the original seed/seat.  The
+  tool keeps gate classification on the target's legal public observation and
+  labels opponent tapes explicitly as offline controls.
+- On the eight new active S11 tapes N83 improved recorded S11 margin by
+  `+$10/+$8/+$15/+$9/+$7/+$166/+$5/+$38`: mean `+$32.25`, minimum `+$5`.
+  N81 averaged `+$30.25`; N83's two added points contributed another `+$2`
+  mean.  All eight N83 runs advanced and later repaid exactly ten WHEAT and
+  eleven FERTILIZER units.
+- On the six new active S12 tapes N83 margin deltas were
+  `$0/+$40/+$38/+$14/+$11/+$40`: mean `+$23.83`, minimum `$0`.  N81 averaged
+  `+$18.17`; S12's FERTILIZER step-240 rule was again exactly neutral versus
+  S11 in all six.  N83 improved both recorded losses without flipping them and
+  caused no outcome regression.
+- Across all 24 active public trajectories collected so far, N83 has total
+  margin gain `+$479`, mean `+$19.96`, minimum `$0` and zero outcome
+  regressions.  It exceeds N81 by `+$64` total (`+$2.67` mean).  Decision: N83
+  is live-confirmed as the first post-reset submission.  Do not consume the
+  final current-day reserve slot; use the new S11 block for N84 discovery and
+  the new S12 block only for transfer.
+
+## E122 — N84 third-stage component discovery / five transfer candidates
+
+- Aggregated V36-shadow sale availability on the eight newest active S11
+  trajectories and screened fourteen single conserved-debt additions on top of
+  N83.  The discovery gate required every candidate to repay the exact advanced
+  quantity, preserve every episode outcome and have minimum incremental margin
+  at least `$0` versus N83.
+- Five points passed the discovery gate: FERTILIZER step 410/cap 3 averaged
+  `+$3.25` with minimum `$0`; WHEAT step 596/cap 3 averaged `+$0.375`; and
+  FERTILIZER step 533/cap 1, WHEAT step 308/cap 2, and WHEAT step 311/cap 2
+  each averaged `+$0.125`.  WHEAT step 595 was exactly neutral but reduced one
+  recorded bank by `$1`, so it was not advanced.
+- Positive mean was not enough for selection.  SHEEP step 593 averaged
+  `+$6.375` but regressed one episode by `$26`; WHEAT steps 278 and 312 caused
+  outcome regressions and mean losses of `$636.125` and `$229.125`.  WHEAT
+  steps 466/467/608, SHEEP step 552 and MAIZE step 648 also had at least one
+  negative episode.  The five strict survivors were frozen before inspecting
+  the S12 transfer cohort.
+
+## E123 — N84 frozen S12 component transfer / F410 only
+
+- Evaluated the five frozen discovery survivors independently on the six
+  untouched active S12 trajectories, using exact recorded opponent tapes and
+  the original seed/seat.  FERTILIZER step 410/cap 3 produced incremental N83
+  deltas `$0/$0/$0/+$12/$0/$0`: mean `+$2`, minimum `$0`, with complete debt
+  repayment and no outcome regression.
+- FERTILIZER step 533 and WHEAT steps 311/596 were exactly neutral on all six
+  games.  WHEAT step 308 lost `$1` once and was rejected.  Only F410 therefore
+  transferred as a causal rule; neutral additions were deliberately excluded
+  from the final policy.
+
+## E124 — N84 six-rule live-safe market debt / ready, reserve held
+
+- Final N84 is exact N83 plus `SELL FERTILIZER 3` at step 410 under the same
+  latched public `3 COW / 2 SHEEP` gate, with exact later repayment.  A final
+  holdout on the ten older active public tapes added `$19` over N83 with
+  minimum `$0`; the discovery S11 block added `$26`, and the frozen S12 block
+  added `$12`.
+- Across all 24 active public trajectories F410 adds `+$57` over N83, mean
+  `+$2.375`, minimum `$0`, and zero outcome regressions.  Relative to the
+  actually submitted S11/S12 baselines, N84's total gain is `+$536`, mean
+  `+$22.33`, minimum `$0`; every advanced WHEAT and FERTILIZER unit was repaid.
+- On four fresh seeds from both seats (`20260879..20260882`), N84 beat N83 by
+  `+$3.0` average margin and had positive summed pair margin on every seed.
+  One asymmetric seed produced `+592/-586`, so the evidence is the positive
+  matched pair sum rather than an individual-seat outcome claim.
+- A final broad panel against V36, C95 and exact scored V16/v25 on seed
+  `20260883` rejected the family gate in all eight games and reproduced both
+  N39 banks exactly in every game.  Maximum measured candidate latency was
+  `205.9 ms`; the full suite passes `173` tests.
+- Decision: N84 supersedes N83 as the first post-reset submission, but the
+  current-day final slot remains reserved.  The authoritative tested artifact
+  is 319,892 bytes, SHA-256
+  `3d27f81d3e74e98f2f1fef60d92efb0aef1cdd2f5a04f1daffbb8b6687d9477a`.

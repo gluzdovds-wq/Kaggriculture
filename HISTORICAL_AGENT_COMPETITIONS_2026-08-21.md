@@ -1182,3 +1182,38 @@ proposal generator.  It is no longer eligible to control the live agent.
 - N83 also beat N81 by `+$4` mean over eight fresh matched games and preserved
   exact N39 behavior in eight broad controls.  N83 (SHA prefix `397c57c0`) now
   supersedes N81 for the next quota reset; the reserve remains untouched.
+
+## Execution checkpoint: independent N83 live transfer
+
+- Fourteen newly acquired active-family trajectories were kept disjoint from
+  N83 construction: eight from S11 and six from S12.  Exact replay controls
+  reproduced every recorded bank before any candidate comparison.
+- N83 improved all eight S11 margins by at least `$5` (mean `+$32.25`) and all
+  six S12 margins by at least `$0` (mean `+$23.83`).  Every advanced unit was
+  repaid, both newly observed losses were improved, and no outcome regressed.
+- The full active-live panel is now 24 games.  N83 gains `+$479` total margin
+  (`+$19.96` mean, minimum `$0`) and beats N81 by `+$64` total.  This is much
+  stronger evidence than mirror self-play: the residual changes shared market
+  state against 24 real opponent tapes while retaining the submitted base
+  everywhere outside the public gate.
+- N83 is therefore the first candidate after quota reset.  The remaining slot
+  stays reserved; subsequent timing discovery uses the newest S11 block and
+  must transfer without refitting to the newest S12 block.
+
+## Execution checkpoint: transferred FERTILIZER-410 residual
+
+- A third-stage screen tested fourteen new single market timings on the eight
+  newest active S11 tapes.  Five rules were non-negative on every discovery
+  episode, but a frozen transfer to the six untouched active S12 tapes left
+  only FERTILIZER step 410/cap 3 with a real positive effect (`+$12` total,
+  minimum `$0`).  Three rules were neutral and one lost `$1`, so none was kept.
+- The promoted N84 policy is consequently a one-rule causal extension of N83,
+  not a union of every discovery survivor.  F410 also added `$19` on the ten
+  older active holdouts and `$26` on its S11 discovery block.  Across all 24
+  active public trajectories it adds `+$57` over N83 with minimum `$0`, while
+  N84's total improvement over the submitted S11/S12 baselines is `+$536`.
+- Four fresh both-seat seeds gave N84 a `+$3` mean margin over N83 with positive
+  summed pair margin on every seed.  Eight broad V36/C95/scored-V16/v25 controls
+  remained exact N39 identities, and all advanced quantities were repaid.
+- N84 (319,892 bytes, SHA prefix `3d27f81d`) is now the first candidate after
+  quota reset.  It has not consumed the final current-day reserve slot.
