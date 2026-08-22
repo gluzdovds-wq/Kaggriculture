@@ -1439,3 +1439,26 @@ arena timing instrumentation preserves both one- and two-argument agents.
   ranking feature layer, but no learned action is deployed.  Cashflow features
   must remain head-specific; the next gate is a legal candidate generator plus
   official-engine outcome, latency and worst-family testing.
+
+## E086 — N57 exact known-demand gate for bounded scheduled sales
+
+- Extended `tools/make_market_timing_variant.py` with the official nine-product
+  price curve, exact sequential-sale revenue and visible-shop demand projection.
+  A generated overlay can now advance an already scheduled sale only when its
+  current revenue clears a configurable fraction of the known-demand future
+  revenue. Horizons crossing an unobserved random shop unlock retain the
+  previously validated fixed-lead behavior instead of pretending the forecast
+  is complete.
+- Screened ratios `1.00`, `0.98` and `0.95` against V36, C95, exact V16 and
+  exact v25. Ratio `1.00` was the strongest threshold, so it and unmodified
+  N39 were extended to four fresh seeds, both seats and all four families.
+- Across the resulting 32 matched games both policies won `32/32`; no outcome
+  changed. The gate added only `+67.47` to candidate bank per game and changed
+  competitive margin by `-3.03` on average. Family margin deltas were V36
+  `-2.75`, C95 `-17.25`, V16 `-113.75` and v25 `+121.63`.
+- Telemetry confirms the gate was active, especially rejecting future MILK
+  and some WOOL advances, so the null result is not an identity-test artifact.
+  Decision: keep N57 as legal market-planning infrastructure, but reject it as
+  a submission candidate because it changes no outcomes and has no robust
+  worst-family gain. The full suite passes `87/87`. Preserve the N39/V36 live
+  pair and submission reserve.

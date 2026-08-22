@@ -605,3 +605,13 @@ the leaderboard only as a noisy measurement of the current live meta.
   N39 and V36 all won both after exact replay reproduction; V36's diagnostic
   average margin was `+14291.5` and N39's `+2631`.  The complementary pair now
   covers `62/63` chronological outcomes and remains the final submission plan.
+- N57 then tested a narrower, fully legal reactive market overlay: an exact
+  price-curve gate compared current revenue with the known-demand revenue at
+  the original scheduled sale turn and kept the base fixed lead whenever an
+  unseen future shop unlock made the projection incomplete. On four fresh
+  seeds, both seats and V36/C95/V16/v25, N39 and the best ratio-1.00 gate both
+  won all `32/32` matched games. The gate changed candidate bank by only
+  `+67.47` and competitive margin by `-3.03` per game, with no outcome flips
+  and a `-113.75` family-margin delta against V16. This is safe reactive
+  machinery but not a promotion: exact one-factor forecasting still does not
+  replace full task-graph opportunity cost or policy diversity.
