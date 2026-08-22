@@ -37,6 +37,11 @@ class MacroPlanRecallTest(unittest.TestCase):
                 encoding="utf-8"
             )
         )
+        router = json.loads(
+            (root / "fast_sim" / "frozen_search_router_e108.json").read_text(
+                encoding="utf-8"
+            )
+        )
         self.assertEqual(shortlist["full_plan_count"], 18)
         self.assertEqual(len(shortlist["plan_indices"]), 7)
         self.assertEqual(len(shortlist["plan_names"]), 7)
@@ -44,6 +49,8 @@ class MacroPlanRecallTest(unittest.TestCase):
             self.assertIn(f'"{name}"', source)
         self.assertIn("plan_indices = parse_indices", source)
         self.assertIn("for (int plan_index : plan_indices)", source)
+        self.assertEqual(router["candidate_plan_indices"], shortlist["plan_indices"])
+        self.assertEqual(router["candidate_plan_names"], shortlist["plan_names"])
 
     def test_particle_selection_rejects_same_episode(self):
         train = [

@@ -1,0 +1,53 @@
+{
+  "schema": "kaggriculture-frozen-search-router-v1",
+  "frozen_utc": "2026-08-22T12:30:00Z",
+  "source_experiment": "E107",
+  "candidate_plan_indices": [0, 1, 2, 4, 8, 9, 14],
+  "candidate_plan_names": [
+    "maintain",
+    "liquidate",
+    "maintain_workers",
+    "carrot_hold_land",
+    "strawberry_hold_land",
+    "strawberry_expand",
+    "cow_lean"
+  ],
+  "horizon": 48,
+  "particle_method": "history",
+  "particle_count": 10,
+  "future_seeds": [2026082201, 2026082229],
+  "opponent_response_plans": ["maintain", "liquidate"],
+  "aggregation": "lower_quartile",
+  "decision_routes": [
+    {
+      "start": 24,
+      "stop": 624,
+      "score_field": "leaf_legal_margin"
+    },
+    {
+      "start": 648,
+      "stop": 719,
+      "score_field": "leaf_money_margin"
+    }
+  ],
+  "forbidden_inputs": [
+    "opponent_private_observation",
+    "replay_future_action_tape",
+    "replay_source_seed",
+    "opponent_name",
+    "episode_id"
+  ],
+  "promotion_gate": {
+    "transfer": "third untouched replay block",
+    "checkpoints": [360, 600, 648],
+    "baseline": "same frozen seven plans with horizon 24 and q25 legal-marked score",
+    "requirements": [
+      "top3 recall no worse at every checkpoint",
+      "mean terminal-money regret no worse at every checkpoint",
+      "strict aggregate regret improvement",
+      "non-collapsed terminal-oracle labels",
+      "maximum native case time below 600 ms"
+    ],
+    "next": "official both-seat paired arena versus N39 before any submission"
+  }
+}

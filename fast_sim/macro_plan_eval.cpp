@@ -3,6 +3,8 @@
 // shared market on every simulated turn.  Recorded actions are used only to
 // reconstruct the checkpoint root; no future action tape enters a branch.
 #include "sim.hpp"
+#include "legal_leaf_features.hpp"
+#include "frozen_phase_value_e104.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -17,6 +19,7 @@
 #include <vector>
 
 using namespace kag;
+using namespace kag_leaf;
 
 struct Turn { Action action[2]; };
 
@@ -493,7 +496,8 @@ static void emit_rollout(
     int seat,
     uint64_t future_seed,
     const MacroPlan& plan,
-    const MacroPlan& opponent_plan
+    const MacroPlan& opponent_plan,
+    const char* scenario_override = nullptr
 ) {
     Sim branch = original;
     apply_particle(branch, 1 - seat, particle);
@@ -513,9 +517,21 @@ static void emit_rollout(
     const double money_delta =
         (branch.st.farms[seat].money - original.st.farms[seat].money) -
         (branch.st.farms[1 - seat].money - original.st.farms[1 - seat].money);
+    const LegalFeatureVector features = legal_leaf_features(branch, seat);
+    const PairwisePhase* rank_phase = pairwise_phase_for_step(original.st.step);
+    const double leaf_rank_score = rank_phase
+        ? scalar_rank_score(features, *rank_phase)
+        : 0.0;
+    const FinalValuePhase* value_phase =
+        final_value_phase_for_step(original.st.step);
+    const double leaf_n74_final_value = value_phase
+        ? frozen_final_margin_value(features, *value_phase)
+        : features[FEAT_MONEY_DELTA];
+    const double leaf_money_margin =
+        branch.st.farms[seat].money - branch.st.farms[1 - seat].money;
     std::printf(
-        "%s\t%llu\t%d\t%s\t%s\t%.6f\t%.6f\t%.6f\t%.6f\n",
-        particle.label.c_str(),
+        "%s\t%llu\t%d\t%s\t%s\t%.6f\t%.6f\t%.6f\t%.6f\t%d\t%.6f\t%.6f\t%.17g\t%s\t%.17g\t%s\n",
+        scenario_override ? scenario_override : particle.label.c_str(),
         static_cast<unsigned long long>(future_seed),
         horizon,
         plan.name,
@@ -523,16 +539,50 @@ static void emit_rollout(
         score,
         own_end,
         opponent_end,
-        money_delta
+        money_delta,
+        branch.st.step,
+        leaf_money_margin,
+        features[FEAT_LEGAL_MARKED_MARGIN],
+        leaf_rank_score,
+        rank_phase ? rank_phase->name : "none",
+        leaf_n74_final_value,
+        value_phase ? value_phase->name : "none"
     );
 }
 
 int main(int argc, char** argv) {
+    if (argc == 5 && std::string(argv[2]) == "--root-features") {
+        uint64_t replay_seed = 0;
+        Config config;
+        std::vector<Turn> turns;
+        if (!load_trace(argv[1], replay_seed, config, turns)) {
+            std::fprintf(stderr, "invalid trace\n"); return 2;
+        }
+        const int prefix = std::atoi(argv[3]);
+        const int seat = std::atoi(argv[4]);
+        if (prefix < 0 || prefix >= static_cast<int>(turns.size()) ||
+            seat < 0 || seat > 1) {
+            std::fprintf(stderr, "invalid feature arguments\n"); return 2;
+        }
+        config.seed = replay_seed;
+        Sim snapshot(config);
+        for (int step = 0; step < prefix; ++step)
+            snapshot.step(turns[step].action[0], turns[step].action[1]);
+        const LegalFeatureVector features = legal_leaf_features(snapshot, seat);
+        std::printf("index\tfeature\tvalue\n");
+        for (std::size_t index = 0; index < N_LEGAL_FEATURES; ++index)
+            std::printf(
+                "%zu\t%s\t%.17g\n",
+                index, LEGAL_FEATURE_NAMES[index], features[index]
+            );
+        return 0;
+    }
     if (argc < 6) {
         std::fprintf(
             stderr,
             "usage: macro_plan_eval TRACE PARTICLES PREFIX SEAT FUTURE_SEEDS "
-            "[HORIZONS] [PLAN_INDICES]\n"
+            "[HORIZONS] [PLAN_INDICES] [terminal-oracle]\n"
+            "   or: macro_plan_eval TRACE --root-features PREFIX SEAT\n"
         );
         return 2;
     }
@@ -577,7 +627,12 @@ int main(int argc, char** argv) {
     for (int step = 0; step < prefix; ++step)
         snapshot.step(turns[step].action[0], turns[step].action[1]);
 
-    std::printf("scenario\tfuture_seed\thorizon\tplan\tresponse\tscore\town_value\topponent_value\tmoney_delta\n");
+    std::printf(
+        "scenario\tfuture_seed\thorizon\tplan\tresponse\tscore\town_value\t"
+        "opponent_value\tmoney_delta\tbranch_step\tleaf_money_margin\t"
+        "leaf_legal_margin\tleaf_rank_score\trank_phase\t"
+        "leaf_n74_final_value\tvalue_phase\n"
+    );
     for (const Particle& particle : particles)
         for (uint64_t future_seed : future_seeds)
             for (int horizon : horizons)
@@ -589,5 +644,28 @@ int main(int argc, char** argv) {
                             future_seed, plan, PLANS[response]
                         );
                 }
+    const bool emit_terminal_oracle =
+        argc > 8 && std::string(argv[8]) == "terminal-oracle";
+    if (emit_terminal_oracle) {
+        const auto oracle = std::find_if(
+            particles.begin(), particles.end(),
+            [](const Particle& particle) { return particle.oracle; }
+        );
+        if (oracle == particles.end()) {
+            std::fprintf(stderr, "terminal oracle requested without oracle particle\n");
+            return 2;
+        }
+        const int terminal_horizon = static_cast<int>(turns.size()) - prefix;
+        for (uint64_t future_seed : future_seeds)
+            for (int plan_index : plan_indices) {
+                const MacroPlan& plan = PLANS[plan_index];
+                for (const int response : {0, 1})
+                    emit_rollout(
+                        snapshot, turns, *oracle, prefix, terminal_horizon,
+                        seat, future_seed, plan, PLANS[response],
+                        "oracle_terminal"
+                    );
+            }
+    }
     return 0;
 }

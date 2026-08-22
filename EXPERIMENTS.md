@@ -2019,3 +2019,43 @@ arena timing instrumentation preserves both one- and two-argument agents.
   scenario with the N75 confidence gate, and compare that tournament with a
   longer-horizon full-state oracle before any official game or submission.
   No submission was spent.
+
+## E107 — exact native leaf parity and terminal-oracle depth sweep
+
+- Generated native N75 and N74 headers directly from their frozen JSON files
+  and implemented the complete `119`-feature legal leaf extractor in the C++
+  simulator.  It reads the controlled farm's private shed/seeds/inventories and
+  public farms/market/town only.  On all 20 independent S08/S05 games, both
+  seats and checkpoints `24/360/600/648`, Python and C++ matched on
+  `19,040/19,040` feature values within `1e-9`; maximum absolute error was
+  `9.1e-13`.
+- Replaced the prior horizon-24 hand-value label with a forbidden full-state
+  rollout to the official terminal money margin.  Seven frozen plans, two
+  synthetic future seeds and maintenance/liquidation opponent responses were
+  evaluated on `120` seat-checkpoint cases.  Remaining oracle horizons were
+  `359/119/71` turns at roots `360/600/648`; recorded actions still stopped at
+  the root.  Oracle winners were non-collapsed: four plan families at steps 360
+  and 600 and five at 648, including cow lean and liquidation.
+- N75 did not transfer from recorded-trajectory ordering to branch ordering.
+  With history particles and horizon 24 it only nudged step-360 mean terminal
+  regret `$1,831.70 → $1,824.66` at unchanged `97.5%` top-3 recall.  At step
+  600 it regressed `$1,251.93 → $3,199.14` and top-3 `70.0 → 52.5%`; at 648 it
+  regressed `$479.73 → $1,508.00` and `87.5 → 57.5%`.  N74 final magnitude
+  also failed counterfactual transfer at the late roots (`$2,934/$964` regret),
+  despite its earlier replay-terminal MAE gains.  Predicting the value of a
+  recorded trajectory is not sufficient to rank interventions.
+- A fixed depth sweep showed that search horizon, not ML, is the strong lever.
+  Six and twelve turns were inadequate; 24 was much better; 48 improved again.
+  At horizon 48, q25 legal-marked selection reached top-3/regret
+  `97.5%/$1,696.51` at step 360 and `100%/$70.70` at 600.  At step 648,
+  q25 terminal money was strongest at `95%/$161.93` versus legal-marked
+  `87.5%/$245.12`.  Native process mean/p95/max were
+  `405.5/437.5/456.2 ms`, including 119-feature leaves and the additional
+  full-to-terminal oracle label but excluding Python particle construction.
+- Decision: reject N75 and N74 as deployable counterfactual leaf scores; retain
+  them as replay-analysis primitives.  Freeze E108 before acquiring any new
+  EpisodeId: seven plans, horizon 48, history particles, q25 legal-marked
+  through root 624 and q25 money from 648.  Require transfer against the same
+  horizon-24 legal baseline on a third untouched block, all checkpoints below
+  600 ms, then official both-seat outcomes over N39.  Full suite passes
+  `151/151`; no submission was spent.

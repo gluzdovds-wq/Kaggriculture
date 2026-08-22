@@ -988,3 +988,40 @@ N39.  Only that complete chain authorizes a submission.
   against Python at replay roots, run a confidence-gated pairwise tournament
   over counterfactual leaves and judge its selected plan against a longer-
   horizon forbidden full-state oracle.
+
+## Execution checkpoint: exact counterfactual value gate
+
+- All 119 inference-visible Python features now have a native C++ equivalent;
+  19,040 cross-language values on the untouched S08/S05 block matched within
+  `1e-9`.  N75 coefficients and N74 final-value coefficients are generated
+  reproducibly from the tracked frozen JSON artifacts rather than copied by
+  hand.
+- A new label rolls the forbidden full state all the way to the official final
+  money objective under shared future seeds and reactive opponent responses.
+  This reverses the earlier conclusion based on horizon-24 hand value: the
+  plan labels remain diverse, but both learned replay evaluators fail as search
+  evaluators.  N75's small step-360 gain becomes a 2.6× regret regression at
+  600 and 3.1× at 648; N74 terminal magnitude also loses to legal-marked leaves.
+- Iterative depth is the transferable signal.  Forty-eight reactive turns beat
+  6/12/24 at all three registered roots while the measured native maximum
+  remained 456 ms.  A simple phase-aware score also follows the exact game
+  objective: legal-marked assets in broad/mid late play, current money close to
+  terminal.  This is closer to a Stockfish-style searched hand evaluator than
+  AlphaZero: the current gain comes from deeper simulation and action ordering,
+  not a learned value network.
+
+### N77 — frozen 48-turn phase-routed macro search
+
+Freeze `fast_sim/frozen_search_router_e108.json` before listing or downloading
+a third replay block.  Keep the E106 seven-plan vocabulary, history-kNN10
+particles, two shared synthetic future seeds and maintenance/liquidation
+opponent responses.  Search exactly 48 reactive turns; aggregate the legal-
+marked leaf margin by lower quartile through decision step 624 and switch to
+lower-quartile money margin at step 648 and later.
+
+On the third untouched block, compare this exact router with the same seven
+plans at horizon 24 and q25 legal-marked value.  Require no top-3 or mean
+terminal-money-regret regression at steps 360/600/648, a strict aggregate
+regret gain, non-collapsed terminal-oracle labels and native max below 600 ms.
+Only after that transfer may it enter an official both-seat paired arena versus
+N39; no submission is authorized by offline regret alone.
