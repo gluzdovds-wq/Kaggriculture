@@ -687,3 +687,38 @@ observation-to-belief initialization, then compare handcrafted beam search,
 PUCT with a handcrafted value and PUCT with a learned residual.  Use 6/12/24-turn
 rollouts, hard-stop at 600 ms inside the one-second action limit, and promote
 only on untouched both-seat official-engine games with no deadline failures.
+
+## Execution checkpoint: native search fork gate
+
+- The complete patched simulator is only `7,728` bytes and trivially copyable.
+  A new benchmark forks competitive trajectories at early, middle and terminal
+  prefixes, applies distinct root-action variants and rolls them for 6/12/24
+  turns.  All `12/12` fork states matched an independent linear replay under
+  semantic field-by-field comparison, while all `13/13` original official
+  parity traces remain exact for 719 transitions.
+- The worst raw 600 ms capacity across the measured prefixes and both seats was
+  about `33k`, `17k` and `7k` branches at horizons 6, 12 and 24 respectively.
+  This decisively clears the transition-throughput gate for an offline macro
+  search pilot.
+- Online PUCT is not yet justified: a live observation omits the opponent's
+  shed/seeds/unit inventories and the episode seed used for future random
+  events.  The next gate is a legal observation-to-belief particle initializer
+  and robustness test; full-state oracle search would otherwise leak unavailable
+  information even if its local score looked excellent.
+
+### N69 — legal observation-to-belief particles
+
+Maintain particles from step zero using only the observation/configuration and
+the agent's own persistent history.  Public farms, market changes and visible
+town events constrain opponent purchases, production and sales; sample the
+remaining opponent shed/seeds/carried inventory and future RNG outcomes rather
+than reading the second seat's private replay state or source seed.  At each
+macro checkpoint, rank the same top-K plans across all particles with a robust
+lower-quantile or majority value, not the most favorable determinization.
+
+First audit hidden-state mass at steps 72/360/648 on disjoint replays.  Then
+compare a full-state oracle, the legal particle ensemble and a public-only
+neutral prior on held-out traces.  Pass only if the legal ensemble retains the
+oracle's winning plan in top-3 often enough to improve official-engine both-seat
+outcomes, stays under the 600 ms internal budget and never consumes replay ID,
+opponent name, opponent private state or source seed at inference.

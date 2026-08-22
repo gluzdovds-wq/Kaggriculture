@@ -23,6 +23,14 @@ silently vendoring someone else's notebook.
    `export_trace.py`, then require `validate.exe` to print `719 steps exact` for
    every trace before using the simulator for research.
 
+For the N68 midgame search gate, compile `fast_sim/branch_bench.cpp` against the
+patched `sim.hpp`, then pass a competitive trace, prefix and repetition count.
+The benchmark verifies semantically identical replay from two independent
+midgame forks (field-by-field, excluding irrelevant C++ struct padding) and
+reports 6/12/24-turn branch throughput plus an optimistic 600 ms capacity.
+That capacity excludes candidate generation, belief construction and value
+inference, so it is an upper bound rather than a submission latency claim.
+
 ## Evidence on this PC
 
 - 13/13 official traces matched at every one of 719 transitions: nine
@@ -30,6 +38,13 @@ silently vendoring someone else's notebook.
   in both seat orders.
 - Total validated transitions: 9,347.
 - MSVC benchmark: about 441 episodes/s (2.27 ms/episode) on a competitive trace.
+- N68 midgame fork gate: `State` is 7,672 bytes and `Sim` is 7,728 bytes;
+  both are trivially copyable.  Four early/middle/late, both-seat cases passed
+  all `12/12` semantic fork-versus-linear replay checks.  Across the measured
+  competitive cases, the worst optimistic 600 ms capacities were about 33,489
+  six-turn, 17,613 twelve-turn and 6,990 twenty-four-turn branches.
 
 This is a partial pass, not a blanket proof. New action families and every
-future engine version still require fresh official traces.
+future engine version still require fresh official traces.  The branch counts
+exclude legal belief-state construction, policy proposals and value inference;
+they prove offline search throughput, not a deployable online search agent.

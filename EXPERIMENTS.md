@@ -1730,3 +1730,27 @@ arena timing instrumentation preserves both one- and two-argument agents.
   reactive task planner with both downstream values in its objective; mixing
   incumbent joint-action components is insufficient.  Full suite passes
   `110/110`.
+
+## E098 — native midgame snapshot/fork search gate / throughput pass
+
+- Added `fast_sim/branch_bench.cpp`, a reproducible competitive-trace benchmark
+  for copying a complete midgame simulator, applying four distinct root-action
+  variants, and rolling each branch forward for `6`, `12` or `24` turns.  The
+  test uses semantic field-by-field state equality: raw `memcmp` was rejected
+  after correctly exposing irrelevant C++ padding differences near the terminal
+  prefix.
+- The patched 1.32.7 simulator still reproduces all `13/13` official traces at
+  every one of `719` transitions (`9,347` total).  `State` is `7,672` bytes,
+  complete `Sim` is `7,728` bytes, and both are trivially copyable.  Snapshot
+  forks at steps `72`, `360` and `648`, covering both candidate seats, matched
+  independent linear replay on all `12/12` horizon checks.
+- With cheap result evaluation, the worst measured optimistic capacity inside
+  `600 ms` was `33,489` six-turn, `17,613` twelve-turn and `6,990` twenty-four-
+  turn branches.  The midgame step-360 cases reached about `7,601–8,310`
+  twenty-four-turn branches per 600 ms; early step 72 reached `15,255`.
+- Decision: N68 passes the native snapshot/throughput gate for offline search,
+  but not the online-agent gate.  These numbers exclude task-graph generation,
+  value inference and, most importantly, reconstructing a legal belief over the
+  hidden opponent private inventory and unknown future RNG seed.  Build and
+  validate observation-to-belief initialization before implementing PUCT or
+  spending a submission slot.  No candidate was submitted.
