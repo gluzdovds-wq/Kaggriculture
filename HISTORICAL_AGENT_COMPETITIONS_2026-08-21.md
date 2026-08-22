@@ -849,5 +849,44 @@ set with the learned leaf value under the exact simulator.  Pass only if grouped
 and top20-to-live value error improves, oracle plan labels are no longer almost
 entirely maintenance/liquidation, the public/own selector reduces oracle regret,
 and the selected planner improves official-engine both-seat outcomes over N39
-within the 600 ms budget.  Hidden particles remain dormant unless this stronger
-value/proposal system demonstrates measurable sensitivity to them.
+  within the 600 ms budget.  Hidden particles remain dormant unless this stronger
+  value/proposal system demonstrates measurable sensitivity to them.
+
+## Execution checkpoint: legal residual value transfer
+
+- A leakage-constrained evaluator compared nine direct/residual ridge, kNN and
+  shallow-tree families on all 27 day-boundary checkpoints.  Both seats and all
+  rows from an EpisodeId remained in one fold; the frozen transfer trained on
+  40 top-20 games and evaluated 23 non-overlapping live-focus games.
+- Residual learning contains real but modest transferable signal.  The +24-turn
+  ridge residual reduced CV and live MAE by about 2.5%; the final-margin ridge
+  residual reduced live MAE 3.4% and was especially useful at step 360.  This
+  is evidence that a Stockfish-like leaf evaluator can beat a hand score in the
+  middle of the season without names, replay actions, opponent private state or
+  source-seed leakage.
+- One global value is not phase consistent.  The +24 head lost at 16 of 27
+  individual checkpoints despite its aggregate gain.  At step 648 the final
+  head doubled the current-money MAE and reduced paired winner accuracy from
+  87.0% to 65.2%.  This is distribution/target mismatch, not a reason to hide
+  the slice: money approaches the true terminal objective while a model trained
+  across the whole season continues to price long-run assets and trajectories.
+- N73 therefore fails the planner gate.  Preserve the evaluator and data, but
+  do not add its output to macro-plan scoring or spend a submission until a
+  phase-gated value passes each registered slice and then counterfactual plan
+  regret plus official both-seat outcomes.
+
+### N74 — phase-gated horizon and terminal value
+
+Replace the single final-margin head with two deployment-aligned quantities:
+`current margin + predicted Δmargin` over a fixed short horizon, and a separate
+paired win/rank head for broad midgame.  Choose phase buckets and a monotone
+blend using complete-EpisodeId training CV only.  Beyond a frozen late cutoff,
+fall back to current money or exact fast-simulator rollout to terminal rather
+than extrapolating a midgame asset value.
+
+Freeze the cutoff, models and fallback before downloading a new replay block.
+Require improvement over the strongest simple baseline in aggregate and at
+steps 360/600/648, with no regression in paired winner accuracy.  Only after
+that fresh transfer may the value score a richer shadow-policy macro set; then
+require lower oracle plan regret, under-600-ms inference and official-engine
+both-seat gains over N39 before submission.

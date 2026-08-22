@@ -1869,3 +1869,40 @@ arena timing instrumentation preserves both one- and two-argument agents.
   but current plan choice does not benefit from its extra history information.
   Move to N73: calibrate an inference-visible learned leaf value and enrich the
   policy-derived task vocabulary before revisiting belief search.
+
+## E103 — inference-visible residual leaf value / partial transfer, gate failed
+
+- Added `rl/evaluate_leaf_value.py` with an explicit deployment contract: all
+  `119` inputs come from the controlled seat's legal observation (public farms,
+  market and town plus its own shed, seeds and carried inventories).  Replay
+  actions, names, EpisodeId, source seed and the other seat's private payload
+  are forbidden.  Ridge, kNN and shallow trees predict either the absolute
+  target or a residual to current money / a hand-marked farm value.  Complete
+  EpisodeIds, including both seats and all checkpoints, stay in one of five CV
+  folds; the fixed transfer is `40` top-20 games to `23` disjoint live-focus
+  games after excluding four overlapping EpisodeIds.
+- The full evaluation used every day boundary from step `24` through `648`:
+  `2,160` train and `1,242` holdout rows.  For the +24-turn margin, grouped CV
+  selected ridge residual-to-current-money and improved MAE `1,182.23 →
+  1,152.41` (+2.5%).  It transferred at `1,248.39 → 1,218.00` (+2.4%) and
+  Spearman `0.725 → 0.727`, but paired winner accuracy regressed `81.5% →
+  80.4%`.  It beat current money at only `11/27` individual checkpoints and
+  was worse at both registered anchors: step 360 `1,337.91 → 1,354.36` and
+  step 648 `1,145.13 → 1,193.31`; late winner accuracy fell `95.7% → 91.3%`.
+- For final margin, grouped CV selected ridge residual-to-legal-marked-value.
+  Overall holdout MAE improved over the strongest simple holdout baseline
+  `4,026.44 → 3,888.57` (+3.4%) and Spearman improved `0.386 → 0.443`.  The
+  useful signal is concentrated in midgame: at step 360 it beat checkpoint
+  mean on MAE `4,292.26 → 4,084.29` and all simple baselines on paired winner
+  accuracy (`73.9%` versus at most `65.2%`).  It failed catastrophically near
+  terminal: at step 648 current-money MAE/winner were `1,798.57 / 87.0%`, while
+  the learned head scored `3,786.26 / 65.2%`.
+- Decision: retain the legal dataset, residual infrastructure and midgame
+  signal, but reject N73's single phase-agnostic value for rollout integration,
+  official paired games or submission.  Aggregate MAE cannot override a
+  registered checkpoint failure, especially where the exact terminal money
+  baseline becomes increasingly sufficient.  Next test N74 as a separately
+  registered phase-gated value: horizon-delta / win heads in broad midgame and
+  a deterministic current-money or exact short-to-terminal fallback after a
+  training-CV-selected cutoff, then evaluate on newly downloaded unseen games.
+  Full suite passes `131/131`; no submission was spent.
