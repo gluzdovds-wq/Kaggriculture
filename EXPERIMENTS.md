@@ -2579,3 +2579,32 @@ arena timing instrumentation preserves both one- and two-argument agents.
   post-reset slot; the current-day final slot remains reserved.  Authoritative
   N86 artifact: 319,951 bytes, SHA-256
   `632566aa1b3b7d4a29675fdff7aea13e18b413dc85dd35f3d83ca8edb5e5784a`.
+
+## E135 — N86 fourth independent active-live wave / submitted as S13
+
+- Downloaded every public S11/S12 episode completed after the E127 cutoff:
+  twenty-three S11 and twenty-one S12 games.  The public `3 COW / 2 SHEEP`
+  gate was active in twenty-one and twenty games respectively, giving 41 new
+  active trajectories and three exact rejection controls.  S11/S12 reproduced
+  every recorded bank exactly on the original seed and seat.
+- On the twenty-one active S11 tapes, N84 added `$365` margin over submitted
+  S11 (mean `+$17.38`, minimum `+$6`) and N86 added `$372` (mean `+$17.71`,
+  minimum `+$6`).  F298+W631 therefore added another `$7` over N84, was positive
+  in four games, neutral in seventeen and negative in none.
+- On the twenty active S12 tapes, N84 added `$605` margin over submitted S12
+  and N86 added `$621`.  The N86 increment over N84 was `$16` total (mean
+  `+$0.8`, minimum `$0`), positive in eight games and neutral in twelve.  Both
+  N84 and N86 had one `-$22` margin episode versus S12 (`96907318`) without an
+  outcome flip; this damage predates F298/W631 and is not caused by N86's two
+  new rules.  Every N86 market debt was repaid.
+- Across all 88 active-live trajectories, N86 now adds `$54` over N84 (mean
+  `+$0.614`, minimum `$0`) and `$2,004` over the actually submitted S11/S12
+  policies (mean `+$22.77`).  There are no outcome regressions.  This fourth
+  independent wave strengthens the exact frozen N86 artifact without any
+  refit.
+- With explicit authorization to use the final daily slot, submitted the exact
+  319,951-byte artifact as S13, reference `55695334`, at 2026-08-22 16:31 UTC.
+  SHA-256 is
+  `632566aa1b3b7d4a29675fdff7aea13e18b413dc85dd35f3d83ca8edb5e5784a`.
+  Kaggle reported zero submissions remaining today; S13 was pending at the
+  logging cutoff.

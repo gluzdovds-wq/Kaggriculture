@@ -1255,3 +1255,18 @@ proposal generator.  It is no longer eligible to control the live agent.
 - N86 (319,951 bytes, SHA prefix `632566aa`) supersedes N84 as the strongest
   prepared post-reset submission.  N84 remains a clean single-residual ablation
   for a second slot, while the final current-day slot remains reserved.
+
+## Execution checkpoint: fourth live wave and S13 submission
+
+- Forty-one additional gate-active S11/S12 trajectories were collected after
+  N86 was frozen.  The exact submitted controls reproduced every bank.  N86
+  added `$7` over N84 on the 21 S11 games and `$16` on the 20 S12 games, with
+  minimum `$0` in both cohorts and no outcome regression.
+- The complete active-live panel now contains 88 trajectories.  F298/W631 add
+  `$54` over N84 with no negative episode; N86 adds `$2,004` margin over the
+  actually submitted S11/S12 policies.  One S12 trajectory is `-$22` versus
+  the submitted policy for both N84 and N86, showing that repayment and broad
+  aggregate gain do not imply per-trajectory dominance of the older residuals.
+- The exact frozen N86 artifact was submitted as S13 (`55695334`) after explicit
+  authorization to consume the fifth daily slot.  Its SHA prefix remains
+  `632566aa`; no post-holdout tuning entered the upload.
