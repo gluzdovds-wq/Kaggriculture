@@ -357,6 +357,7 @@ def evaluate(args: argparse.Namespace) -> dict:
 
     cases = []
     timings = []
+    macro_plans = set()
     ordered_examples = sorted(
         holdout_examples,
         key=lambda row: (int(row["episode_id"]), int(row["checkpoint"]), int(row["target_seat"])),
@@ -382,11 +383,14 @@ def evaluate(args: argparse.Namespace) -> dict:
             args.future_seeds,
             ",".join(map(str, horizons)),
         ]
+        if args.plan_indices:
+            command.append(args.plan_indices)
         started = time.perf_counter()
         completed = subprocess.run(command, check=True, capture_output=True, text=True)
         elapsed = time.perf_counter() - started
         timings.append(elapsed)
         engine_rows = parse_engine_output(completed.stdout)
+        macro_plans.update(row["plan"] for row in engine_rows)
         cases.append(
             {
                 "episode_id": episode_id,
@@ -400,7 +404,7 @@ def evaluate(args: argparse.Namespace) -> dict:
     summary = summarize(cases, checkpoints, horizons)
     gate = history_gate(summary, checkpoints)
     return {
-        "schema": "kaggriculture-particle-macro-plan-recall-v2",
+        "schema": "kaggriculture-particle-macro-plan-recall-v3",
         "train_replay_count": len(train_paths),
         "train_episode_count": len(train_ids),
         "holdout_replay_count": len(holdout_paths),
@@ -412,12 +416,9 @@ def evaluate(args: argparse.Namespace) -> dict:
         "blank_private_particle_count": 1,
         "synthetic_future_seeds": [int(value) for value in args.future_seeds.split(",")],
         "ranking_objective": "lower quartile across future RNG, opponent response and (for priors) hidden particles",
-        "macro_plan_count": 9,
-        "macro_plans": [
-            "maintain", "liquidate", "wheat_cycle", "carrot_cycle",
-            "strawberry_cycle", "melon_cycle", "goose_route", "cow_route",
-            "sheep_route",
-        ],
+        "macro_plan_count": len(macro_plans),
+        "macro_plans": sorted(macro_plans),
+        "candidate_plan_indices": args.plan_indices or "all",
         "opponent_response_plans": ["maintain", "liquidate"],
         "summary": summary,
         "pre_registered_history_gate": gate,
@@ -454,6 +455,7 @@ def reevaluate_cached_report(args: argparse.Namespace) -> dict:
     horizons = tuple(sorted({int(value) for value in args.horizons.split(",")}))
     cases = []
     timings = []
+    macro_plans = set()
     for previous in sorted(
         report["cases"],
         key=lambda row: (int(row["episode_id"]), int(row["checkpoint"]), int(row["seat"])),
@@ -474,11 +476,14 @@ def reevaluate_cached_report(args: argparse.Namespace) -> dict:
             args.future_seeds,
             ",".join(map(str, horizons)),
         ]
+        if args.plan_indices:
+            command.append(args.plan_indices)
         started = time.perf_counter()
         completed = subprocess.run(command, check=True, capture_output=True, text=True)
         elapsed = time.perf_counter() - started
         timings.append(elapsed)
         rows = parse_engine_output(completed.stdout)
+        macro_plans.update(row["plan"] for row in rows)
         cases.append(
             {
                 "episode_id": episode_id,
@@ -490,7 +495,7 @@ def reevaluate_cached_report(args: argparse.Namespace) -> dict:
         )
     report.update(
         {
-            "schema": "kaggriculture-particle-macro-plan-recall-v2",
+            "schema": "kaggriculture-particle-macro-plan-recall-v3",
             "horizons": list(horizons),
             "synthetic_future_seeds": [
                 int(value) for value in args.future_seeds.split(",")
@@ -500,6 +505,9 @@ def reevaluate_cached_report(args: argparse.Namespace) -> dict:
                 "(for priors) hidden particles"
             ),
             "opponent_response_plans": ["maintain", "liquidate"],
+            "macro_plan_count": len(macro_plans),
+            "macro_plans": sorted(macro_plans),
+            "candidate_plan_indices": args.plan_indices or "all",
             "summary": summarize(cases, checkpoints, horizons),
             "cases": cases,
             "latency": {
@@ -552,6 +560,10 @@ def main() -> None:
     parser.add_argument("--horizons", default="6,12,24")
     parser.add_argument("--neighbors", type=int, default=10)
     parser.add_argument("--future-seeds", default="2026082201,2026082229")
+    parser.add_argument(
+        "--plan-indices",
+        help="comma-separated frozen C++ plan indices; default evaluates all",
+    )
     parser.add_argument("--reuse-report", type=Path)
     args = parser.parse_args()
     if not args.engine.is_file():

@@ -1,0 +1,21 @@
+{
+  "schema": "kaggriculture-reactive-plan-shortlist-v1",
+  "frozen_utc": "2026-08-22T09:58:00Z",
+  "selection_report": "artifacts/e106-enriched-plan-recall.json",
+  "selection_block": "23 disjoint live-focus episodes, both seats, steps 360/648",
+  "full_plan_count": 18,
+  "plan_indices": [0, 1, 2, 4, 8, 9, 14],
+  "plan_indices_cli": "0,1,2,4,8,9,14",
+  "plan_names": [
+    "maintain",
+    "liquidate",
+    "maintain_workers",
+    "carrot_hold_land",
+    "strawberry_hold_land",
+    "strawberry_expand",
+    "cow_lean"
+  ],
+  "selection_rule": "union of full-state-oracle h24 winners at steps 360 and 648",
+  "forbidden_next_block": "no counterfactual branch from fresh-pair-e105-2026-08-22 was evaluated before this freeze",
+  "deployment_warning": "shortlist still requires N75 branch regret, feature latency and official outcomes"
+}

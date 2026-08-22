@@ -10,6 +10,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <fstream>
+#include <iterator>
 #include <limits>
 #include <sstream>
 #include <string>
@@ -33,18 +34,36 @@ struct MacroPlan {
     bool fertilize;
     bool expand;
     int target_hires;
+    int target_animals;
+    int seed_stock;
+    int sale_limit;
+    int wheat_reserve_days;
+    bool care;
+    bool collect_fertilizer;
 };
 
 static constexpr MacroPlan PLANS[] = {
-    {"maintain",       -1,         -1,    false, false, false, 1},
-    {"liquidate",      -1,         -1,    true,  false, false, 0},
-    {"wheat_cycle",    WHEAT,      -1,    false, false, true,  3},
-    {"carrot_cycle",   CARROT,     -1,    false, true,  true,  3},
-    {"strawberry_cycle", STRAWBERRY, -1,  false, true,  true,  3},
-    {"melon_cycle",    MELON,      -1,    false, true,  true,  3},
-    {"goose_route",    WHEAT,      GOOSE, false, false, true,  4},
-    {"cow_route",      WHEAT,      COW,   false, false, true,  4},
-    {"sheep_route",    WHEAT,      SHEEP, false, false, true,  4},
+    // The first two entries remain the fixed opponent response plans.
+    {"maintain", -1, -1, false, false, false, 1, 0, 0, 4, 0, true, true},
+    {"liquidate", -1, -1, true, false, false, 0, 0, 0, 8, 0, false, false},
+    {"maintain_workers", -1, -1, false, false, false, 4, 0, 0, 4, 0, true, true},
+
+    {"wheat_expand", WHEAT, -1, false, false, true, 3, 0, 4, 4, 0, true, true},
+    {"carrot_hold_land", CARROT, -1, false, true, false, 3, 0, 4, 4, 0, true, true},
+    {"carrot_expand", CARROT, -1, false, true, true, 3, 0, 4, 4, 0, true, true},
+    {"tomato_hold_land", TOMATO, -1, false, true, false, 3, 0, 4, 4, 0, true, true},
+    {"tomato_expand", TOMATO, -1, false, true, true, 3, 0, 4, 4, 0, true, true},
+    {"strawberry_hold_land", STRAWBERRY, -1, false, true, false, 3, 0, 4, 4, 0, true, true},
+    {"strawberry_expand", STRAWBERRY, -1, false, true, true, 3, 0, 4, 4, 0, true, true},
+    {"melon_hold_land", MELON, -1, false, true, false, 3, 0, 4, 4, 0, true, true},
+    {"melon_expand", MELON, -1, false, true, true, 3, 0, 4, 4, 0, true, true},
+
+    {"goose_lean", WHEAT, GOOSE, false, false, false, 3, 2, 6, 4, 3, true, true},
+    {"goose_flock", WHEAT, GOOSE, false, true, true, 5, 4, 8, 4, 4, true, true},
+    {"cow_lean", WHEAT, COW, false, false, false, 3, 2, 6, 4, 3, true, true},
+    {"cow_flock", WHEAT, COW, false, true, true, 5, 4, 8, 4, 4, true, true},
+    {"sheep_lean", WHEAT, SHEEP, false, false, false, 3, 2, 6, 4, 3, true, true},
+    {"sheep_flock", WHEAT, SHEEP, false, true, true, 5, 4, 8, 4, 4, true, true},
 };
 
 static void read_config(std::istream& input, Config& config) {
@@ -131,6 +150,16 @@ static std::vector<uint64_t> parse_seeds(const std::string& values) {
     std::string token;
     while (std::getline(input, token, ',')) {
         if (!token.empty()) result.push_back(std::strtoull(token.c_str(), nullptr, 10));
+    }
+    return result;
+}
+
+static std::vector<int> parse_indices(const std::string& values) {
+    std::vector<int> result;
+    std::stringstream input(values);
+    std::string token;
+    while (std::getline(input, token, ',')) {
+        if (!token.empty()) result.push_back(std::atoi(token.c_str()));
     }
     return result;
 }
@@ -233,9 +262,9 @@ static Task choose_field_task(
                     task.priority = 100 + bonus; task.action = {OP_FEED, 0, 1};
                 } else if (tile.yield_units > 0) {
                     task.priority = 94 + bonus; task.action = {OP_HARVEST, 0, 1};
-                } else if (tile.fertilizer_available) {
+                } else if (plan.collect_fertilizer && tile.fertilizer_available) {
                     task.priority = 82 + bonus; task.action = {OP_COLLECT_FERTILIZER, 0, 1};
-                } else if (!tile.cared_today) {
+                } else if (plan.care && !tile.cared_today) {
                     task.priority = 74 + bonus; task.action = {OP_CARE, 0, 1};
                 }
             } else if (tile.kind == T_PLANT) {
@@ -351,7 +380,9 @@ static Action reactive_action(const Sim& sim, int seat, const MacroPlan& plan) {
 
     struct Sale { int item; int value; };
     std::vector<Sale> sales;
-    const int wheat_reserve = plan.animal >= 0 ? std::max(4, animal_count(farm) * 2) : 0;
+    const int wheat_reserve = plan.animal >= 0
+        ? std::max(4, animal_count(farm) * plan.wheat_reserve_days)
+        : 0;
     for (int item = 0; item < N_PRODUCTS; ++item) {
         int quantity = farm.shed[item];
         if (item == WHEAT) quantity = std::max(0, quantity - wheat_reserve);
@@ -361,7 +392,7 @@ static Action reactive_action(const Sim& sim, int seat, const MacroPlan& plan) {
         if (left.value != right.value) return left.value > right.value;
         return left.item < right.item;
     });
-    const int sale_limit = plan.liquidate ? 8 : 4;
+    const int sale_limit = plan.sale_limit;
     for (int index = 0; index < static_cast<int>(sales.size()) && index < sale_limit; ++index) {
         const int item = sales[index].item;
         int quantity = farm.shed[item];
@@ -380,17 +411,23 @@ static Action reactive_action(const Sim& sim, int seat, const MacroPlan& plan) {
         if (plan.expand && farm.n_quadrants < 4 && farm.money > 5000 &&
             action.n_orders < sim.cfg.max_orders)
             action.orders[action.n_orders++] = {M_BUY_LAND, 0, 1};
-        if (plan.crop >= 0 && farm.seeds[plan.crop] < 4 &&
+        if (plan.crop >= 0 && farm.seeds[plan.crop] < plan.seed_stock &&
             action.n_orders < sim.cfg.max_orders) {
             action.orders[action.n_orders++] = {
-                M_BUY_SEED, static_cast<uint8_t>(plan.crop), 4 - farm.seeds[plan.crop]
+                M_BUY_SEED, static_cast<uint8_t>(plan.crop),
+                plan.seed_stock - farm.seeds[plan.crop]
             };
         }
         if (plan.animal >= 0 &&
-            board_animal_count(farm, plan.animal) + farm_item_total(farm, plan.animal) < 2 &&
+            board_animal_count(farm, plan.animal) + farm_item_total(farm, plan.animal)
+                < plan.target_animals &&
             action.n_orders < sim.cfg.max_orders)
             action.orders[action.n_orders++] = {M_BUY_ANIMAL, static_cast<uint8_t>(plan.animal), 1};
-        const int wheat_need = std::max(0, animal_count(farm) * 3 - farm_item_total(farm, WHEAT));
+        const int wheat_need = std::max(
+            0,
+            animal_count(farm) * plan.wheat_reserve_days
+                - farm_item_total(farm, WHEAT)
+        );
         if (wheat_need > 0 && action.n_orders < sim.cfg.max_orders)
             action.orders[action.n_orders++] = {M_BUY_PRODUCT, WHEAT, wheat_need};
         if (plan.fertilize && farm_item_total(farm, FERTILIZER) < 2 &&
@@ -492,7 +529,11 @@ static void emit_rollout(
 
 int main(int argc, char** argv) {
     if (argc < 6) {
-        std::fprintf(stderr, "usage: macro_plan_eval TRACE PARTICLES PREFIX SEAT FUTURE_SEEDS [HORIZONS]\n");
+        std::fprintf(
+            stderr,
+            "usage: macro_plan_eval TRACE PARTICLES PREFIX SEAT FUTURE_SEEDS "
+            "[HORIZONS] [PLAN_INDICES]\n"
+        );
         return 2;
     }
     uint64_t replay_seed = 0;
@@ -516,8 +557,19 @@ int main(int argc, char** argv) {
         while (std::getline(input, token, ','))
             if (!token.empty()) horizons.push_back(std::atoi(token.c_str()));
     }
+    std::vector<int> plan_indices;
+    if (argc > 7) {
+        plan_indices = parse_indices(argv[7]);
+    } else {
+        for (int index = 0; index < static_cast<int>(std::size(PLANS)); ++index)
+            plan_indices.push_back(index);
+    }
     if (prefix < 0 || prefix >= static_cast<int>(turns.size()) ||
-        seat < 0 || seat > 1 || future_seeds.empty() || horizons.empty()) {
+        seat < 0 || seat > 1 || future_seeds.empty() || horizons.empty() ||
+        plan_indices.empty() ||
+        std::any_of(plan_indices.begin(), plan_indices.end(), [](int index) {
+            return index < 0 || index >= static_cast<int>(std::size(PLANS));
+        })) {
         std::fprintf(stderr, "invalid arguments\n"); return 2;
     }
     config.seed = replay_seed;
@@ -529,11 +581,13 @@ int main(int argc, char** argv) {
     for (const Particle& particle : particles)
         for (uint64_t future_seed : future_seeds)
             for (int horizon : horizons)
-                for (const MacroPlan& plan : PLANS)
+                for (int plan_index : plan_indices) {
+                    const MacroPlan& plan = PLANS[plan_index];
                     for (const int response : {0, 1})
                         emit_rollout(
                             snapshot, turns, particle, prefix, horizon, seat,
                             future_seed, plan, PLANS[response]
                         );
+                }
     return 0;
 }

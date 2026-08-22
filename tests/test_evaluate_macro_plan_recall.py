@@ -1,6 +1,7 @@
 import tempfile
 import unittest
 from pathlib import Path
+import json
 
 import numpy as np
 
@@ -25,6 +26,24 @@ class MacroPlanRecallTest(unittest.TestCase):
         self.assertNotIn("turns[step].action", rollout)
         self.assertIn("reactive_action(branch, 1 - seat", rollout)
         self.assertNotIn("farms[1 - seat]", planner)
+
+    def test_frozen_enriched_shortlist_is_a_named_subset_of_cpp_lattice(self):
+        root = Path(__file__).parents[1]
+        source = (root / "fast_sim" / "macro_plan_eval.cpp").read_text(
+            encoding="utf-8"
+        )
+        shortlist = json.loads(
+            (root / "fast_sim" / "frozen_plan_shortlist_e106.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(shortlist["full_plan_count"], 18)
+        self.assertEqual(len(shortlist["plan_indices"]), 7)
+        self.assertEqual(len(shortlist["plan_names"]), 7)
+        for name in shortlist["plan_names"]:
+            self.assertIn(f'"{name}"', source)
+        self.assertIn("plan_indices = parse_indices", source)
+        self.assertIn("for (int plan_index : plan_indices)", source)
 
     def test_particle_selection_rejects_same_episode(self):
         train = [
