@@ -104,6 +104,13 @@ def ticks_in_projection(step: int, horizon: int, interval: int) -> int:
     return sum(1 for future_step in range(step, step + horizon) if future_step % interval == 0)
 
 
+def resolved_step(features: dict[str, float]) -> int:
+    """Use the shared clock because replay seat 1 may retain obs.step == 0."""
+    if "day" in features and "hour" in features:
+        return int(features.get("day", 0.0) or 0) * 24 + int(features.get("hour", 0.0) or 0)
+    return int(features.get("step", 0.0) or 0)
+
+
 def known_shop_demand(features: dict[str, float], item: str) -> int:
     demand = 0
     for shop, products in SHOPS.items():
@@ -114,7 +121,7 @@ def known_shop_demand(features: dict[str, float], item: str) -> int:
 
 
 def projected_inventory(features: dict[str, float], item: str, horizon: int) -> int:
-    step = int(features.get("step", 0.0) or 0)
+    step = resolved_step(features)
     inventory = int(features.get(f"market_{item.lower()}", 0.0) or 0)
     shop_ticks = ticks_in_projection(step, horizon, 4)
     center_ticks = ticks_in_projection(step, horizon, 24)
@@ -138,7 +145,7 @@ def liquidation_value(features: dict[str, float], horizon: int = 0) -> int:
 
 
 def forward_features(features: dict[str, float]) -> dict[str, float]:
-    step = int(features.get("step", 0.0) or 0)
+    step = resolved_step(features)
     day = int(features.get("day", step // 24) or 0)
     hour = int(features.get("hour", step % 24) or 0)
     hands = int(features.get("hands", 0.0) or 0)
@@ -235,6 +242,7 @@ def augment_payload(payload: dict, require_price_parity: bool = True) -> tuple[d
         "price_parity_mismatches": len(mismatches),
         "future_market_assumption": "no player orders; currently visible shops only",
         "random_shop_crossing_flag": "forward_projection_complete_<horizon>",
+        "clock_source": "day*24+hour (seat-stable)",
     }
     return payload, payload["forward_feature_contract"]
 

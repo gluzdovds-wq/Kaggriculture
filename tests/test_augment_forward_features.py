@@ -6,6 +6,7 @@ from rl.augment_forward_features import (
     forward_features,
     market_price,
     projected_inventory,
+    resolved_step,
     sequential_sale_revenue,
 )
 
@@ -41,7 +42,10 @@ class ForwardFeaturesTest(unittest.TestCase):
         self.assertEqual(sequential_sale_revenue("WHEAT", 10000, 2), expected)
 
     def test_clock_feasibility_and_cost_features(self):
-        report = forward_features(base_features())
+        features = base_features()
+        features["step"] = 0.0  # mirrors the stale seat-1 replay field
+        self.assertEqual(resolved_step(features), 71)
+        report = forward_features(features)
         self.assertEqual(report["forward_turns_today"], 1.0)
         self.assertEqual(report["forward_turns_to_shop_unlock"], 1.0)
         self.assertEqual(report["forward_service_capacity_today"], 3.0)

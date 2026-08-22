@@ -170,7 +170,10 @@ def observation_forward_features(obs) -> dict[str, float]:
     prices = dict(get(get(obs, "market", {}) or {}, "prices", {}) or {})
     day = int(get(obs, "day", 0) or 0)
     hour = int(get(obs, "hour", 0) or 0)
-    step = int(get(obs, "step", 0) or 0)
+    # In local replay state, seat 1 can retain observation.step == 0 while the
+    # shared day/hour clock advances normally.  The derived clock is equivalent
+    # under the fixed 24-turn day and remains inference-visible for both seats.
+    step = day * 24 + hour
     turns_today = 24 - hour
     units = _positions(farm)
     service_targets = []
@@ -291,10 +294,13 @@ def feature_vector(obs) -> dict[str, float]:
         str(value).upper()
         for value in (get(get(obs, "town", {}) or {}, "unlocked_shops", []) or [])
     )
+    day = int(get(obs, "day", 0) or 0)
+    hour = int(get(obs, "hour", 0) or 0)
+    step = day * 24 + hour
     features = {
-        "step": float(get(obs, "step", 0) or 0),
-        "day": float(get(obs, "day", 0) or 0),
-        "hour": float(get(obs, "hour", 0) or 0),
+        "step": float(step),
+        "day": float(day),
+        "hour": float(hour),
         "own_money": float(get(own, "money", 0) or 0),
         "opponent_money": float(get(opponent, "money", 0) or 0),
         "money_delta": float((get(own, "money", 0) or 0) - (get(opponent, "money", 0) or 0)),

@@ -370,9 +370,12 @@ criteria.
   forecast.
 - On four new seeds with N39/V16/v25 playing both seats against current N39,
   the N39 target-specific hybrid improved exact-pair shortlist recall from
-  `46.76%` to `61.28%` at task top-3 × market top-3, and from `74.06%` to
-  `79.47%` at top-8 × top-5.  V16 and v25 showed broad gains too, while both
+  `46.65%` to `61.46%` at task top-3 × market top-3, and from `74.17%` to
+  `80.66%` at top-8 × top-5.  V16 and v25 showed broad gains too, while both
   lost every direct current-meta game to N39.
+- A replay-fidelity audit found `obs.step` stale at zero for seat 1.  All
+  reported current-meta metrics were regenerated after deriving the public
+  clock from `day*24+hour`; both seats now cover steps `0..718` exactly.
 - Geometry/object clocks provide most of N39's gain.  Adding cashflow to both
   heads slightly hurts its broad market shortlist, while helping V16/v25.
   Therefore features and regularization must be head-specific: all forward

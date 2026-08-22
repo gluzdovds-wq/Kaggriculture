@@ -1424,13 +1424,17 @@ arena timing instrumentation preserves both one- and two-argument agents.
   and exact v25 on both seats against current N39, 8,628 rows per split.  V16
   and v25 lost all eight direct games each, independently reconfirming that
   their historical notebook scores do not make them a current base.
-- On 2,776 non-noop N39 holdout turns, the best target-specific hybrid uses
-  all forward features for the task head but geometry/object clocks only for
-  the market head.  Joint top-1 rose `17.51% → 25.47%`, top-3×3
-  `46.76% → 61.28%`, and top-8×5 `74.06% → 79.47%`.  Full forward heads raised
-  V16 top-3×3 `33.11% → 42.31%` and v25 `39.90% → 50.11%`.
+- An audit caught that the local replay object left `obs.step` stale at zero
+  for seat 1 even while the shared day/hour advanced.  The collector and
+  projector now derive the seat-stable clock as `day*24+hour`; regenerated
+  train and holdout rows contain all 719 steps (`0..718`) for both seats.
+- On 2,776 non-noop N39 holdout turns, the best broad-shortlist hybrid uses all
+  forward features for the task head but geometry/object clocks only for the
+  market head.  Joint top-3×3 rose `46.65% → 61.46%`, and top-8×5
+  `74.17% → 80.66%`; full-forward top-1 rose `17.36% → 27.88%`.  Full forward
+  heads raised V16 top-3×3 `33.01% → 45.22%` and v25 `40.26% → 53.20%`.
 - Added process-parallel `--jobs` dataset collection and repeatable
-  `--exclude-prefix` feature ablations; the full suite passes `83/83`.
+  `--exclude-prefix` feature ablations; the full suite passes `84/84`.
   Decision: N54 passes as an offline
   ranking feature layer, but no learned action is deployed.  Cashflow features
   must remain head-specific; the next gate is a legal candidate generator plus
