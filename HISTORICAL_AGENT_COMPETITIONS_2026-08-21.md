@@ -1162,3 +1162,8 @@ proposal generator.  It is no longer eligible to control the live agent.
   nine non-target live replays and eight broad donor games remained exact base
   identities.  N80 (SHA prefix `ddbfc6f2`) is ready but held for the next quota
   reset; the final daily slot remains reserved.
+- Adding the smaller non-negative FERTILIZER step-216 debt produced N81.  It
+  moved the three active-live deltas to `$0/+$5/+$30` and improved N80 by
+  exactly `$1` in every game on a matched eight-game fresh block.  All eight
+  broad controls remained exact.  N81 (SHA prefix `ac76780b`) supersedes N80
+  for the next quota cycle without consuming the reserve.

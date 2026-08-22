@@ -2302,3 +2302,25 @@ arena timing instrumentation preserves both one- and two-argument agents.
   S12 has only four public games so far; it won all four, none matched the gate,
   and its still-seeding score is `958.8`.  Hold N80 for the next reset or until
   S12 has a stable score while preserving one slot.
+
+## E117 — N81 combined live-safe FERTILIZER debts / ready, reserve held
+
+- Combined the only other non-negative active-live point, FERTILIZER step
+  216/cap 3 (`$0/+$1/+$1`), with N80's WHEAT step 120 and FERTILIZER step 340
+  rules in one wrapper.  Exact replay-tape comparison retained all three wins
+  and improved the active-live deltas from N80's `$0/+$4/+$29` to
+  `$0/+$5/+$30`; all ten FERTILIZER units and eight WHEAT units advanced and
+  were repaid in every active episode.
+- On the same four new seeds from both seats (`20260869..20260872`), N80 gained
+  `+$26.0` mean margin versus exact S11 and N81 gained `+$27.0`.  N81 improved
+  N80 by exactly `$1` in each of the eight matched games, with no outcome
+  regression.  The large apparent N80 `+$171` from the previous seed block was
+  therefore seed-specific; the matched incremental gain from F216 is small but
+  consistent.
+- A final matched broad panel against V36, C95 and exact scored V16/v25 on seed
+  `20260873` rejected all three rules and reproduced both N39 banks exactly in
+  all eight games.  Maximum measured candidate latency was `250.0 ms`.
+- Decision: N81 supersedes N80 as the prepared next-cycle artifact, but remains
+  unsubmitted to preserve the final daily slot while S12 is still seeding.
+  Artifact: 319,826 bytes, SHA-256
+  `ac76780b6b1918207cb6dd00ff317a799a66033c68889bda42d080d9e92ced11`.
