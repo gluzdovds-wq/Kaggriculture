@@ -3,7 +3,11 @@ import random
 import unittest
 from pathlib import Path
 
-from tools.make_shadow_policy_audit import parse_animal_counts, render_audit
+from tools.make_shadow_policy_audit import (
+    parse_animal_counts,
+    parse_sell_rules,
+    render_audit,
+)
 
 
 BASE = '''import random
@@ -30,7 +34,9 @@ class ShadowPolicyAuditTests(unittest.TestCase):
         execute_stop=720,
         execute_sell_items=(),
         sell_cap=0,
+        execute_sell_rules=(),
         opponent_animal_counts=None,
+        opponent_animal_gate_step=None,
         drop_only_items=(),
         drop_max_total=None,
     ):
@@ -50,7 +56,9 @@ class ShadowPolicyAuditTests(unittest.TestCase):
             execute_stop=execute_stop,
             execute_sell_items=tuple(execute_sell_items),
             sell_cap=sell_cap,
+            execute_sell_rules=tuple(execute_sell_rules),
             opponent_animal_counts=opponent_animal_counts,
+            opponent_animal_gate_step=opponent_animal_gate_step,
             drop_only_items=tuple(drop_only_items),
             drop_max_total=drop_max_total,
         )
@@ -228,6 +236,10 @@ def agent(obs, configuration=None):
             telemetry["candidate_sell_executable"], {"MILK": 4, "WOOL": 2}
         )
         self.assertEqual(
+            telemetry["candidate_sell_executable_by_step"],
+            {"7": {"MILK": 4, "WOOL": 2}},
+        )
+        self.assertEqual(
             telemetry["market_divergence_samples"][0]["executable_sell_delta"],
             {"MILK": 4, "WOOL": 2},
         )
@@ -315,6 +327,129 @@ def agent(obs, configuration=None):
         self.assertEqual(
             parse_animal_counts(["cow=3", "SHEEP=2"]),
             {"COW": 3, "SHEEP": 2},
+        )
+
+    def test_parses_multiple_sell_rules(self):
+        self.assertEqual(
+            parse_sell_rules([
+                "wheat:120:121:8",
+                "FERTILIZER:240:241:10",
+            ]),
+            (
+                ("WHEAT", 120, 121, 8),
+                ("FERTILIZER", 240, 241, 10),
+            ),
+        )
+
+    def test_multiple_sell_rules_advance_and_repay_independently(self):
+        base_source = '''def agent(obs, configuration=None):
+    market = []
+    if obs["hour"] == 2:
+        market = [["SELL", "WHEAT", 5]]
+    elif obs["hour"] == 3:
+        market = [["SELL", "FERTILIZER", 5]]
+    return {"farmer": ["PASS"], "hands": [], "market": market}
+'''
+        candidate_source = '''def agent(obs, configuration=None):
+    market = []
+    if obs["hour"] == 0:
+        market = [["SELL", "WHEAT", 2]]
+    elif obs["hour"] == 1:
+        market = [["SELL", "FERTILIZER", 3]]
+    return {"farmer": ["PASS"], "hands": [], "market": market}
+'''
+        namespace = {"__name__": "generated"}
+        exec(
+            compile(
+                self.render(
+                    base_source,
+                    candidate_source,
+                    execute_sell_rules=(
+                        ("WHEAT", 0, 1, 2),
+                        ("FERTILIZER", 1, 2, 3),
+                    ),
+                ),
+                "generated.py",
+                "exec",
+            ),
+            namespace,
+        )
+        observation = {
+            "day": 0,
+            "player": 0,
+            "private": {"shed": {"WHEAT": 5, "FERTILIZER": 5}},
+        }
+        actions = [
+            namespace["agent"]({**observation, "hour": hour})
+            for hour in range(4)
+        ]
+        self.assertEqual(actions[0]["market"], [["SELL", "WHEAT", 2]])
+        self.assertEqual(actions[1]["market"], [["SELL", "FERTILIZER", 3]])
+        self.assertEqual(actions[2]["market"], [["SELL", "WHEAT", 3]])
+        self.assertEqual(actions[3]["market"], [["SELL", "FERTILIZER", 2]])
+        telemetry = namespace["agent"].telemetry
+        self.assertEqual(
+            telemetry["market_advanced"], {"WHEAT": 2, "FERTILIZER": 3}
+        )
+        self.assertEqual(
+            telemetry["market_repaid"], {"WHEAT": 2, "FERTILIZER": 3}
+        )
+
+    def test_market_family_signature_can_be_latched_before_execution(self):
+        base_source = '''def agent(obs, configuration=None):
+    return {"farmer": ["PASS"], "hands": [], "market": []}
+'''
+        candidate_source = '''def agent(obs, configuration=None):
+    return {"farmer": ["PASS"], "hands": [], "market": [["SELL", "WHEAT", 2]]}
+'''
+        namespace = {"__name__": "generated"}
+        exec(
+            compile(
+                self.render(
+                    base_source,
+                    candidate_source,
+                    execute_start=1,
+                    execute_stop=2,
+                    execute_sell_items=("WHEAT",),
+                    sell_cap=2,
+                    opponent_animal_counts={"COW": 3, "SHEEP": 2},
+                    opponent_animal_gate_step=0,
+                ),
+                "generated.py",
+                "exec",
+            ),
+            namespace,
+        )
+        matching_tiles = [[
+            {"animal": "COW"}, {"animal": "COW"}, {"animal": "COW"},
+            {"animal": "SHEEP"}, {"animal": "SHEEP"},
+        ]]
+        changed_tiles = [[{"animal": "COW"}]]
+        common = {
+            "day": 0,
+            "player": 0,
+            "private": {"shed": {"WHEAT": 2}},
+        }
+        namespace["agent"]({
+            **common,
+            "hour": 0,
+            "farms": [{"tiles": [[None]]}, {"tiles": matching_tiles}],
+        })
+        action = namespace["agent"]({
+            **common,
+            "hour": 1,
+            "farms": [{"tiles": [[None]]}, {"tiles": changed_tiles}],
+        })
+        self.assertEqual(action["market"], [["SELL", "WHEAT", 2]])
+        telemetry = namespace["agent"].telemetry
+        self.assertEqual(telemetry["market_family_accepted"], 1)
+        self.assertEqual(
+            telemetry["market_family_observations"],
+            [{
+                "step": 0,
+                "observed": {"COW": 3, "SHEEP": 2},
+                "accepted": True,
+            }],
         )
 
     def test_drop_context_gate_rejects_mixed_or_large_inventory(self):

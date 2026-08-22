@@ -36,6 +36,23 @@ def parse_animal_counts(values: tuple[str, ...] | list[str]) -> dict[str, int]:
     return counts
 
 
+def parse_sell_rules(
+    values: tuple[str, ...] | list[str],
+) -> tuple[tuple[str, int, int, int], ...]:
+    rules = []
+    for raw in values:
+        parts = raw.split(":")
+        if len(parts) != 4:
+            raise ValueError("sell rule must be ITEM:START:STOP:CAP")
+        item = parts[0].strip().upper()
+        try:
+            start, stop, cap = (int(value) for value in parts[1:])
+        except ValueError as exc:
+            raise ValueError("sell rule bounds and cap must be integers") from exc
+        rules.append((item, start, stop, cap))
+    return tuple(rules)
+
+
 TEMPLATE = r'''"""Generated outcome-neutral shadow-policy audit."""
 import base64 as _spa_base64
 import copy as _spa_copy
@@ -60,12 +77,15 @@ _SPA_VALUE = {"HARVEST", "COLLECT_FERTILIZER", "DROP", "PLACE"}
 _SPA_EXECUTE = set(__EXECUTE_OPERATIONS__)
 _SPA_EXECUTE_START = __EXECUTE_START__
 _SPA_EXECUTE_STOP = __EXECUTE_STOP__
-_SPA_EXECUTE_SELL_ITEMS = set(__EXECUTE_SELL_ITEMS__)
+_SPA_SELL_RULES = tuple(__SELL_RULES__)
+_SPA_EXECUTE_SELL_ITEMS = {rule[0] for rule in _SPA_SELL_RULES}
 _SPA_SELL_CAP = __SELL_CAP__
 _SPA_OPPONENT_ANIMALS = __OPPONENT_ANIMALS__
+_SPA_OPPONENT_ANIMAL_GATE_STEP = __OPPONENT_ANIMAL_GATE_STEP__
 _SPA_DROP_ONLY_ITEMS = set(__DROP_ONLY_ITEMS__)
 _SPA_DROP_MAX_TOTAL = __DROP_MAX_TOTAL__
 _SPA_MARKET_DEBT = {0: {}, 1: {}}
+_SPA_MARKET_FAMILY_OK = {0: None, 1: None}
 _SPA_TELEMETRY = {}
 
 
@@ -77,8 +97,10 @@ def _spa_reset():
         "execute_start": _SPA_EXECUTE_START,
         "execute_stop": _SPA_EXECUTE_STOP,
         "execute_sell_items": sorted(_SPA_EXECUTE_SELL_ITEMS),
+        "sell_rules": [list(rule) for rule in _SPA_SELL_RULES],
         "sell_cap": _SPA_SELL_CAP,
         "opponent_animals": _SPA_OPPONENT_ANIMALS,
+        "opponent_animal_gate_step": _SPA_OPPONENT_ANIMAL_GATE_STEP,
         "turns": 0,
         "joint_equal": 0,
         "field_equal": 0,
@@ -100,6 +122,7 @@ def _spa_reset():
         "valid_immediate_samples": [],
         "candidate_sell_excess": {},
         "candidate_sell_executable": {},
+        "candidate_sell_executable_by_step": {},
         "candidate_sell_deficit": {},
         "market_divergence_samples": [],
         "market_advanced": {},
@@ -107,6 +130,7 @@ def _spa_reset():
         "market_advance_steps": [],
         "market_family_accepted": 0,
         "market_family_rejected": 0,
+        "market_family_observations": [],
         "executed": 0,
         "executed_by_operation": {},
         "filtered_by_context": 0,
@@ -296,6 +320,10 @@ def _spa_record(base_action, candidate_action, step, obs):
                 if executable > 0:
                     executable_sells[item] = executable
                     _spa_increment("candidate_sell_executable", item, executable)
+                    by_step = _SPA_TELEMETRY["candidate_sell_executable_by_step"]
+                    step_key = str(step)
+                    step_items = by_step.setdefault(step_key, {})
+                    step_items[item] = step_items.get(item, 0) + executable
             elif delta < 0:
                 _spa_increment("candidate_sell_deficit", item, -delta)
         if len(_SPA_TELEMETRY["market_divergence_samples"]) < 64:
@@ -426,8 +454,32 @@ def _spa_sell_quantities(orders):
     return quantities
 
 
+def _spa_observed_opponent_animals(obs, seat):
+    farms = list(_spa_get(obs, "farms", []) or [])
+    opponent_index = 1 - seat
+    opponent = farms[opponent_index] if opponent_index < len(farms) else {}
+    observed = {}
+    for row in list(_spa_get(opponent, "tiles", []) or []):
+        for tile in list(row or []):
+            animal = (
+                str(tile.get("animal", "")).upper()
+                if isinstance(tile, dict)
+                else ""
+            )
+            if animal:
+                observed[animal] = observed.get(animal, 0) + 1
+    return observed
+
+
+def _spa_matches_opponent_family(observed):
+    return all(
+        observed.get(animal, 0) == count
+        for animal, count in _SPA_OPPONENT_ANIMALS.items()
+    )
+
+
 def _spa_apply_market(base_action, candidate_action, obs, step, seat):
-    if not _SPA_EXECUTE_SELL_ITEMS:
+    if not _SPA_SELL_RULES:
         return base_action
     result = _spa_copy.deepcopy(base_action)
     market = [list(raw) for raw in _spa_market(result)]
@@ -448,24 +500,34 @@ def _spa_apply_market(base_action, candidate_action, obs, step, seat):
             order[2] = quantity
         repaid_market.append(order)
     market = repaid_market
-    if not _SPA_EXECUTE_START <= step < _SPA_EXECUTE_STOP:
+    if (
+        _SPA_OPPONENT_ANIMALS
+        and _SPA_OPPONENT_ANIMAL_GATE_STEP is not None
+        and step == _SPA_OPPONENT_ANIMAL_GATE_STEP
+    ):
+        observed = _spa_observed_opponent_animals(obs, seat)
+        accepted = _spa_matches_opponent_family(observed)
+        _SPA_MARKET_FAMILY_OK[seat] = accepted
+        if len(_SPA_TELEMETRY["market_family_observations"]) < 8:
+            _SPA_TELEMETRY["market_family_observations"].append({
+                "step": step,
+                "observed": observed,
+                "accepted": accepted,
+            })
+    active_rules = [
+        rule for rule in _SPA_SELL_RULES if rule[1] <= step < rule[2]
+    ]
+    if not active_rules:
         result["market"] = market
         return result
     if _SPA_OPPONENT_ANIMALS:
-        farms = list(_spa_get(obs, "farms", []) or [])
-        opponent_index = 1 - seat
-        opponent = farms[opponent_index] if opponent_index < len(farms) else {}
-        observed = {}
-        for row in list(_spa_get(opponent, "tiles", []) or []):
-            for tile in list(row or []):
-                animal = (
-                    str(tile.get("animal", "")).upper()
-                    if isinstance(tile, dict)
-                    else ""
-                )
-                if animal:
-                    observed[animal] = observed.get(animal, 0) + 1
-        if any(observed.get(animal, 0) != count for animal, count in _SPA_OPPONENT_ANIMALS.items()):
+        if _SPA_OPPONENT_ANIMAL_GATE_STEP is None:
+            family_ok = _spa_matches_opponent_family(
+                _spa_observed_opponent_animals(obs, seat)
+            )
+        else:
+            family_ok = _SPA_MARKET_FAMILY_OK[seat] is True
+        if not family_ok:
             _SPA_TELEMETRY["market_family_rejected"] += 1
             result["market"] = market
             return result
@@ -473,12 +535,12 @@ def _spa_apply_market(base_action, candidate_action, obs, step, seat):
     base_sells = _spa_sell_quantities(market)
     candidate_sells = _spa_sell_quantities(_spa_market(candidate_action))
     shed = dict((_spa_get(obs, "private", {}) or {}).get("shed", {}) or {})
-    for item in sorted(_SPA_EXECUTE_SELL_ITEMS):
+    for item, _start, _stop, rule_cap in active_rules:
         if len(market) >= 10:
             break
         excess = max(0, candidate_sells.get(item, 0) - base_sells.get(item, 0))
         available = max(0, int(shed.get(item, 0) or 0) - base_sells.get(item, 0))
-        quantity = min(excess, _SPA_SELL_CAP, available)
+        quantity = min(excess, rule_cap, available)
         if quantity <= 0:
             continue
         market.append(["SELL", item, quantity])
@@ -498,6 +560,7 @@ def agent(obs, configuration=None):
     if step == 0 or step <= _SPA_LAST[seat]:
         _SPA_RNG[seat] = {}
         _SPA_MARKET_DEBT[seat] = {}
+        _SPA_MARKET_FAMILY_OK[seat] = None
         _spa_reset()
     _SPA_LAST[seat] = step
     base_action = _spa_call("base", _SPA_BASE, obs, configuration, seat)
@@ -534,7 +597,9 @@ def render_audit(
     execute_stop: int = 720,
     execute_sell_items: tuple[str, ...] = (),
     sell_cap: int = 0,
+    execute_sell_rules: tuple[tuple[str, int, int, int], ...] = (),
     opponent_animal_counts: dict[str, int] | None = None,
+    opponent_animal_gate_step: int | None = None,
     drop_only_items: tuple[str, ...] = (),
     drop_max_total: int | None = None,
 ) -> str:
@@ -560,13 +625,43 @@ def render_audit(
     normalized_sell_items = tuple(
         sorted({str(item).strip().upper() for item in execute_sell_items})
     )
+    if execute_sell_rules and normalized_sell_items:
+        raise ValueError("use either execute_sell_rules or execute_sell_items")
+    normalized_sell_rules = tuple(
+        (
+            str(item).strip().upper(),
+            int(start),
+            int(stop),
+            int(cap),
+        )
+        for item, start, stop, cap in execute_sell_rules
+    )
+    if not normalized_sell_rules:
+        normalized_sell_rules = tuple(
+            (item, int(execute_start), int(execute_stop), int(sell_cap))
+            for item in normalized_sell_items
+        )
+    normalized_rule_items = tuple(rule[0] for rule in normalized_sell_rules)
     unknown_sell_items = sorted(set(normalized_sell_items) - allowed_sell_items)
+    unknown_sell_items.extend(
+        sorted(set(normalized_rule_items) - allowed_sell_items)
+    )
+    unknown_sell_items = sorted(set(unknown_sell_items))
     if unknown_sell_items:
         raise ValueError(
             f"unsupported sell item(s): {', '.join(unknown_sell_items)}"
         )
     if sell_cap < 0 or (normalized_sell_items and sell_cap < 1):
         raise ValueError("sell_cap must be positive when sell items are enabled")
+    for _item, start, stop, cap in normalized_sell_rules:
+        if not 0 <= start < stop <= 720:
+            raise ValueError("sell rule must satisfy 0 <= start < stop <= 720")
+        if cap < 1:
+            raise ValueError("sell rule cap must be positive")
+    for index, (item, start, stop, _cap) in enumerate(normalized_sell_rules):
+        for other_item, other_start, other_stop, _other_cap in normalized_sell_rules[index + 1:]:
+            if item == other_item and max(start, other_start) < min(stop, other_stop):
+                raise ValueError("sell rules for the same item must not overlap")
     normalized_opponent_animals = {
         str(animal).strip().upper(): int(count)
         for animal, count in (opponent_animal_counts or {}).items()
@@ -575,6 +670,8 @@ def render_audit(
         raise ValueError("opponent animal signature contains an unsupported animal")
     if any(count < 0 for count in normalized_opponent_animals.values()):
         raise ValueError("opponent animal signature counts must be non-negative")
+    if opponent_animal_gate_step is not None and not 0 <= opponent_animal_gate_step < 720:
+        raise ValueError("opponent animal gate step must be in [0, 720)")
     normalized_drop_items = tuple(
         sorted({str(item).strip().upper() for item in drop_only_items if str(item).strip()})
     )
@@ -586,9 +683,10 @@ def render_audit(
         .replace("__EXECUTE_OPERATIONS__", repr(normalized_operations))
         .replace("__EXECUTE_START__", repr(int(execute_start)))
         .replace("__EXECUTE_STOP__", repr(int(execute_stop)))
-        .replace("__EXECUTE_SELL_ITEMS__", repr(normalized_sell_items))
+        .replace("__SELL_RULES__", repr(normalized_sell_rules))
         .replace("__SELL_CAP__", repr(int(sell_cap)))
         .replace("__OPPONENT_ANIMALS__", repr(normalized_opponent_animals))
+        .replace("__OPPONENT_ANIMAL_GATE_STEP__", repr(opponent_animal_gate_step))
         .replace("__DROP_ONLY_ITEMS__", repr(normalized_drop_items))
         .replace("__DROP_MAX_TOTAL__", repr(drop_max_total))
         .replace("__LABEL__", repr(label.strip()))
@@ -606,13 +704,21 @@ def main() -> None:
     parser.add_argument("--execute-start", type=int, default=0)
     parser.add_argument("--execute-stop", type=int, default=720)
     parser.add_argument("--execute-sell-item", action="append", default=[])
+    parser.add_argument(
+        "--execute-sell-rule",
+        action="append",
+        default=[],
+        metavar="ITEM:START:STOP:CAP",
+    )
     parser.add_argument("--sell-cap", type=int, default=0)
     parser.add_argument("--opponent-animal-count", action="append", default=[])
+    parser.add_argument("--opponent-animal-gate-step", type=int)
     parser.add_argument("--drop-only-item", action="append", default=[])
     parser.add_argument("--drop-max-total", type=int)
     args = parser.parse_args()
     try:
         opponent_animal_counts = parse_animal_counts(args.opponent_animal_count)
+        execute_sell_rules = parse_sell_rules(args.execute_sell_rule)
         source = render_audit(
             args.base,
             args.candidate,
@@ -622,7 +728,9 @@ def main() -> None:
             execute_stop=args.execute_stop,
             execute_sell_items=tuple(args.execute_sell_item),
             sell_cap=args.sell_cap,
+            execute_sell_rules=execute_sell_rules,
             opponent_animal_counts=opponent_animal_counts,
+            opponent_animal_gate_step=args.opponent_animal_gate_step,
             drop_only_items=tuple(args.drop_only_item),
             drop_max_total=args.drop_max_total,
         )

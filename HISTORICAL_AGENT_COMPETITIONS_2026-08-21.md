@@ -1121,8 +1121,24 @@ proposal generator.  It is no longer eligible to control the live agent.
   `+$6` from both seats.  This is the first N78 candidate to pass both a
   compatible residual gate and a known-family no-regression gate; it was sent
   as S11 (`55690607`) for live evaluation.
-- S11 passed Kaggle validation and initially displays `600.0`.  This is not yet
-  an LB result: the episode endpoint lists only validation episode `96784245`
-  and no public matchmaking episodes.  Treat the candidate as live but
-  unevaluated until public games appear; do not spend another slot merely in
-  reaction to the provisional seed rating.
+- S11 passed Kaggle validation and then won its first six public matches while
+  the rating rose to `1502.1`.  None of those opponents matched `3 COW / 2
+  SHEEP` at steps 112 or 120, so the residual stayed off and all six games were
+  exact N39 behavior.  This confirms safe rejection on six additional live
+  families, but does not yet provide live evidence for the WHEAT intervention.
+
+## Execution checkpoint: latched multi-rule market debt
+
+- Availability-by-step telemetry exposed later repeated sale points.  A
+  five-point both-seat screen sharply separated harmful timing (WHEAT steps
+  161/165, `-$694/-$771`) from useful timing (WHEAT 215, `+$9.5`;
+  FERTILIZER 216, `+$1`; FERTILIZER 240, exactly `+$20`).
+- The family classifier must describe the opponent before the intervention,
+  not necessarily at it: N39 no longer has its early `3 COW / 2 SHEEP` mix by
+  step 240.  The runtime now latches the public step-120 classification and can
+  carry several non-overlapping market debts without nesting policy wrappers.
+- Combining the prior WHEAT step-120 debt with FERTILIZER step 240 yielded
+  `+$23.75` over eight fresh N39-family games and exactly `+$20` over byte-exact
+  S11 in eight more.  Eight matched V36/C95/V16/v25 games were exact N39
+  identities with zero advanced quantity.  The final artifact was submitted as
+  S12 (`55691344`, SHA prefix `08db65d8`), leaving the final slot in reserve.

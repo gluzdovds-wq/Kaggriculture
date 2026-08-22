@@ -2226,9 +2226,41 @@ arena timing instrumentation preserves both one- and two-argument agents.
   N39 mirror seed `20260840`.  Maximum measured latency was below `329 ms`.
 - Decision: local promotion passed.  Submitted the 318,076-byte artifact as
   S11, ref `55690607`, SHA-256 `b55eab39d745ca60a3ace65dc449040737a396ddf334691e8a1379dd59063c0e`.
-  Kaggle accepted and validated the submission.  Its initial displayed score
-  is `600.0`, but the episode API currently contains exactly one episode and it
-  is `EPISODE_TYPE_VALIDATION`; there are zero public matchmaking episodes.
-  Therefore `600.0` is only the pre-match seed rating, not evidence of a live
-  regression.  Two daily submissions remain, including the reserve.  The
-  complete suite passes `166/166`.
+  Kaggle accepted and validated the submission.  After its first six public
+  matches S11 had won all six and its still-rising score reached `1502.1`.
+  Replay audit found opponent animal signatures of `1 COW`, `5 COW`, `4 COW`,
+  `5 COW`, `3 COW / 1 SHEEP` and `3 COW / 1 SHEEP` at both steps 112 and 120.
+  Thus the `3 COW / 2 SHEEP` residual did not activate in any of those games;
+  their results are live evidence for exact N39 preservation, not yet for the
+  WHEAT improvement itself.  The complete suite now passes `169/169`.
+
+## E115 — N79 latched multi-rule market debt / local promotion and S12
+
+- Added complete availability aggregation by step and product to the shadow
+  audit, then screened five repeated V36 sale opportunities over four official
+  seeds from both seats.  Advancing WHEAT at step 161/cap 1 lost `$694.0`
+  average margin and step 165/cap 2 lost `$771.25`; both were rejected.  WHEAT
+  at step 215/cap 8 gained `$9.5`, FERTILIZER at step 216/cap 3 gained `$1.0`,
+  and FERTILIZER at step 240/cap 10 gained exactly `$20.0` in all eight games.
+- A gate evaluated only at step 240 incorrectly rejected the target N39 family
+  because its animal mix had evolved.  The generator now supports a tested
+  public-family decision latched at an earlier step and multiple independent
+  `ITEM:START:STOP:CAP` sale rules in one wrapper.  This avoids nesting agents
+  and preserves one N39 plus one isolated V36 shadow evaluation per turn.
+- The final candidate latches the already-used `3 COW / 2 SHEEP` signature at
+  step 120, advances eight WHEAT at step 120 and ten FERTILIZER at step 240,
+  then subtracts both exact quantity debts from later N39 sales.  Across four
+  fresh N39-family seeds (`20260854..20260857`) from both seats both quantities
+  advanced and repaid every time, with `+$23.75` mean paired margin and maximum
+  action latency `284.1 ms`.
+- Direct comparison against byte-exact S11 on four further seeds
+  (`20260859..20260862`) from both seats isolated the new rule: S12 gained
+  exactly `$20.0` average margin.  A matched broad preflight on seed `20260863`
+  against V36, C95 and exact scored V16/v25 rejected the family twice per game,
+  advanced zero units, and matched the N39 control exactly in all eight games;
+  maximum candidate action latency was `194.5 ms`.
+- Decision: local promotion passed.  Submitted the 319,826-byte artifact as
+  S12, ref `55691344`, SHA-256
+  `08db65d845b32160a7f5227ee39e9c7dcefce72cd580505abf8a24fad4bc50be`.
+  Initial status is PENDING.  Keep the final daily submission slot in reserve
+  while S11 and S12 accumulate public games.
