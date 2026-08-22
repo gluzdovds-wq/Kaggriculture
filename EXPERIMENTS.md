@@ -1300,3 +1300,27 @@ arena timing instrumentation preserves both one- and two-argument agents.
   remaining UTC-day slots.  Do not submit copies or infer superiority from the
   current ordering; wait for a completed loss, stable score, or the 24-hour
   gate before spending the next two research slots.
+
+## E081 — live cross-policy complement and common-opening graft rejection
+
+- Exact-replayed nine S09 episodes completed after the original four-game
+  cross-check.  N39 reproduced `9/9`; V36 won `8/9`.  On episode `96400727`
+  against Cultuurstelsel, N39's `+26509` win became a V36 `-6275` loss.
+- Exact-replayed the five corresponding new S10 episodes.  V36 reproduced
+  `5/5`; N39 won `4/5`.  On episode `96389348` against LittleScottyy, V36's
+  `+10954` win became an N39 `-1434` loss.  Across the fourteen fresh tapes,
+  each policy alone is `13/14`, while their outcome oracle is `14/14`.
+- A two-policy shadow trace disproves a delayed classifier over the existing
+  routes: N39 and V36 first disagree at step zero and disagree on `714/719` or
+  `718/719` calls on the two decisive tapes.  There is no observation of the
+  opponent before the route commitment.
+- Tested both required graft directions at steps `1`, `24` and `72`.  Starting
+  V36 then switching to N39 lost the Cultuurstelsel tape at all checkpoints
+  (margins `-29006`, `-76253`, `-124493`).  Starting N39 then switching to V36
+  also lost the LittleScottyy tape at all checkpoints (margins `-167692`,
+  `-88458`, `-53179`).
+- Decision: keep both active submissions; they are genuinely complementary.
+  Reject a post-hoc N39/V36 opponent selector and any one-action graft.  A
+  future common opening must be synthesized and jointly optimized from step
+  zero with branch compatibility as a hard constraint, not copied from either
+  incumbent.
