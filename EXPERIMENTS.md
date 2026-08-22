@@ -1647,3 +1647,32 @@ arena timing instrumentation preserves both one- and two-argument agents.
   portfolio slot; it cannot be implemented by a legal online selector.  Do
   not submit: today's two autonomous slots are already used, the active pair
   is still rating, and no new single agent passed the regression gate.
+
+## E095 — scored-policy shootout and fixed-Moon temporal transfer
+
+- Recovered and SHA-256 verified the exact scored V16 (`f029fa0c...`, public
+  score `2913.3`) and v25 (`9bdfbafb...`, public score `3009.0`) sources, then
+  replayed them with C95, Soil, X544, V39, Barnyard and Moon on all 40 current
+  top-20 target seeds/seats.  No candidate beat V36's `29/40`: V39, V16, Soil,
+  C95, Moon and v25 scored `27`, `26`, `26`, `25`, `26` and `21` wins.  Adding
+  any one to N39/V36 left the three-policy outcome oracle at `39/40`; every
+  policy still lost the shared Arman-versus-MiMi case.
+- Removed the overlay confound by freezing the current N39 source to each
+  route after its common opening.  Fixed X544 scored only `17/40`.  Fixed Moon
+  scored `27/40` at average margin `+6156.6`, exactly preserving all N39
+  outcomes on the top-20 panel, while N39's public selector scored `27/40` at
+  `+6397.5`.  On the newer independent 24-game live-focus panel Fixed Moon
+  improved N39 from `22/24` to `23/24` without an outcome regression, flipping
+  episode `96458078` from `-3984` to `+2933`.
+- The chronological 46-game S08 replay holdout rejected the apparent transfer.
+  N39 won `38/46` at average margin `+3907.7`; Fixed Moon fell to `36/46` at
+  `+3273.5`.  Relative to N39 it flipped one loss (Audric LOKO) but regressed
+  three wins (Dariush Afshar, kevin park and One-For-All).  On the eight-game
+  Arman panel it matched N39's `4/8` outcomes exactly and reduced margin in the
+  two changed trajectories.
+- Across the three independent panels Fixed Moon therefore scored `86/110`
+  versus N39's `87/110`, with two outcome improvements and three regressions.
+  Decision: reject a global Moon freeze and do not fit an opponent-name or
+  replay-specific selector to five changed cases.  Preserve N39/V36, the
+  reserve slot and today's already-used two autonomous submissions; retain the
+  opening-response idea only as a future pre-registered public-state hypothesis.
