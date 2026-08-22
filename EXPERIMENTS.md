@@ -1616,3 +1616,34 @@ arena timing instrumentation preserves both one- and two-argument agents.
   active ratings are still moving (`2541.0` N39, `2158.1` V36), today's two
   autonomous slots are already used, and the reserve remains intact.  The
   complete suite passes `102/102`.
+
+## E094 — top-20 complement and expanded Arman residual class
+
+- Completed exact counterfactuals for both N39 and V36 on all 40 target
+  seeds/seats from the current top-20 replay panel.  N39 won `27/40` with
+  average margin `+6397.5`; V36 won `29/40` at `+5881.1`; their outcome oracle
+  won `39/40`.  They disagreed on 22 outcomes (`10` N39-only and `12`
+  V36-only), so the complement is substantial rather than a marginal tie.
+- Rank bands separated the routes better than seat but are unavailable at
+  inference time: N39/V36 scored `8/10`/`6/10` on ranks 1--5 and
+  `5/10`/`8/10` on ranks 16--20.  By legal seat, both won `15/21` from seat 0;
+  from seat 1 N39/V36 won `12/19`/`14/19`.  Seat selection therefore cannot
+  realize the oracle, and opponent rank/name must not enter a submitted agent.
+- Downloaded the eight newest public Arman games and exactly reproduced every
+  donor baseline.  N39 won `4/8` at average margin `+7203.8`, V36 won `3/8`
+  at `-824.0`, and their oracle won `6/8`.  A new shared loss against Excluding
+  was distinct from the earlier MiMi loss.  C95, scored V16 and Soil each
+  flipped Excluding (`+5795`, `+7103`, `+6387`) but still lost MiMi; each won
+  `4/8`, and adding any one raised the three-policy oracle only to `7/8`.
+- Continuously shadow-ran C95 from step zero and swept N39-to-C95 switches at
+  steps `1,12,24,48,72,120,240,360`.  None flipped Excluding; margins ranged
+  from `-21037` to `-87831`.  The reverse C95-to-N39 common-opening sweep at
+  steps `1,12,24,48,72` scored `0/8`, `0/8`, `2/8`, `0/8`, `0/8` and suffered
+  very large negative margins.  No compatible branch point exists in the
+  tested range despite both policies receiving every live observation.
+- Decision: retain C95/V16/Soil as a genuine third residual-policy class but
+  reject both a whole-policy base replacement and the N39/C95 hybrid.  The
+  extra oracle coverage currently requires an independent deterministic
+  portfolio slot; it cannot be implemented by a legal online selector.  Do
+  not submit: today's two autonomous slots are already used, the active pair
+  is still rating, and no new single agent passed the regression gate.
