@@ -2059,3 +2059,71 @@ arena timing instrumentation preserves both one- and two-argument agents.
   horizon-24 legal baseline on a third untouched block, all checkpoints below
   600 ms, then official both-seat outcomes over N39.  Full suite passes
   `151/151`; no submission was spent.
+
+## E108 — frozen 48-turn router / third untouched transfer
+
+- Froze `fast_sim/frozen_search_router_e108.json` at commit `4f01e59`
+  before choosing the transfer episodes.  The third block contains 20 fixed
+  S06r/S07 episodes, ten from each policy and zero EpisodeId overlap with the
+  earlier live-focus or S08/S05 blocks.  The exact comparator remained the
+  pre-registered horizon-24, q25 legal-marked seven-plan selector.
+- The horizon-48 phase router reduced mean forbidden terminal-money regret at
+  all three anchors.  At step 360, top-1/top-3/regret changed
+  `47.5/75.0%/$3,944.55 → 47.5/82.5%/$3,103.87`; at 600,
+  `45.0/70.0%/$988.51 → 90.0/97.5%/$132.96`; and at 648,
+  `42.5/80.0%/$722.92 → 75.0/90.0%/$161.85`.  Mean anchor regret fell
+  `$1,885.33 → $1,132.89`, a `39.9%` reduction.
+- Oracle labels remained diverse at every anchor.  Candidate process latency
+  was `403.6/432.3/514.2 ms` mean/p95/max including native legal features and
+  the forbidden terminal label, but excluding Python particle construction.
+- Decision: N77 passes its frozen third-block offline gate.  This authorizes a
+  compatible official-engine prototype, not a submission: the comparator
+  ranks only the seven macro branches and does not contain N39's continuation.
+
+## E109 — cost-sensitive compatible router distillation
+
+- Added `rl/distill_macro_router.py` and froze a depth-0..3 full-feedback
+  regret tree using only the older 20-game S08/S05 horizon-48 report.  Complete
+  EpisodeIds stayed within five-fold CV folds; all 119 legal features were
+  eligible, and the frozen model plus provenance are tracked in
+  `rl/frozen_macro_router_e109.json` and its freeze report.
+- The resulting executable selector is intentionally tiny.  Step 360 uses own
+  money plus public MILK/WOOL inventory to choose cow lean versus strawberry
+  hold-land; step 600 uses public WOOL inventory to choose workforce
+  maintenance versus strawberry hold-land.  The learned step-648 split failed
+  its external slice, so the prototype falls back to the frozen constant
+  workforce-maintenance branch there.
+- Without refitting on S06r/S07, the tree reduced aggregate branch regret
+  `40.7%` versus its constant-plan CV baselines (`$1,929.98 → $1,144.75`).
+  It improved step 360 to `60/85%/$1,940.73` and step 600 to
+  `60/77.5%/$685.99`, but regressed step 648 to `47.5/75%/$807.53` versus the
+  constant's `60/90%/$640.28`.  The full preregistered no-slice-regression gate
+  therefore fails.
+- Decision: reject the learned late split and retain the model only as an
+  auditable distillation experiment.  Any post-hoc hybrid needs another fresh
+  block before promotion.
+
+## E110 — official N39 continuation control / macro router rejected
+
+- Added an inference-legal Python port of the three selected reactive task
+  graphs and a generator that wraps exact N39 for isolated 48-turn windows.
+  The wrapper still calls N39 every turn to preserve its internal state, uses
+  only own-private plus public observation fields, returns to N39 after exactly
+  48 turns and exposes fallback/selection telemetry.  Focused tests cover
+  thresholds, action shape, window boundaries and generated entry points.
+- The first official paired seed was a decisive stop gate.  Against byte-exact
+  N39 on seed `20260822`, both seats produced identical directional results:
+  cow lean at step 360 scored `52,330 vs 150,641` (margin `-98,311`),
+  strawberry hold-land at 600 scored `111,387 vs 130,766` (`-19,379`), and
+  workforce maintenance at 648 scored `113,216 vs 124,025` (`-10,809`).  Each
+  window executed all 48 macro turns with zero fallbacks.  Maximum measured
+  action latency was below 219 ms.
+- Root action inspection explains the incompatibility.  The macro executor
+  reduced N39's daily hires, sold fertilizer and larger wheat reserves, bought
+  route-specific stock and replaced N39's coupled field scheduler.  Being best
+  among seven self-play macro continuations is not evidence of being better
+  than the much stronger base continuation.
+- Decision: stop before the broad arena and reject N77/N78 as an executable
+  policy graft.  No Kaggle submission was spent.  Future counterfactual search
+  must include `KEEP_BASE` as an explicit action and evaluate bounded residual
+  interventions; branch recall alone can no longer clear the official gate.

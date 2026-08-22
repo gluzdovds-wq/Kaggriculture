@@ -1025,3 +1025,35 @@ terminal-money-regret regression at steps 360/600/648, a strict aggregate
 regret gain, non-collapsed terminal-oracle labels and native max below 600 ms.
 Only after that transfer may it enter an official both-seat paired arena versus
 N39; no submission is authorized by offline regret alone.
+
+## Execution checkpoint: branch transfer passes, policy transfer fails
+
+- The frozen horizon-48 router passed on a third, disjoint 20-game S06r/S07
+  block.  Relative to the registered horizon-24 selector it reduced aggregate
+  terminal regret 39.9%, improved regret at all three roots, retained diverse
+  oracle labels and stayed below the 600 ms native limit.
+- A cost-sensitive shallow tree compressed the branch choices into own money
+  and shared MILK/WOOL inventory thresholds.  Its external aggregate regret
+  beat constant-plan baselines, but the step-648 slice regressed, so the
+  learned late branch was rejected before integration.
+- The compatible executor exposed the missing control.  In official both-seat
+  games, isolated 48-turn substitutions at 360, 600 and 648 all lost badly to
+  unchanged N39 (`-98,311`, `-19,379`, and `-10,809` margin respectively on
+  the first fixed paired seed).  No runtime fallback occurred.
+- The search was answering the narrower question “which of seven coarse
+  reactive continuations is least bad?”  It never asked whether N39 should be
+  replaced at all.  This is the same failure mode that makes a chess search
+  unsound when the legal move generator omits the current best move.
+
+### N78 — base-preserving residual search
+
+Add `KEEP_BASE` as the mandatory reference branch at every root.  Candidate
+actions must be bounded residuals over N39's returned action—one market-order
+change or one idle-actor task—not a replacement task graph.  Re-run the exact
+official game from both seats and shared seeds; stop a residual family as soon
+as it loses to base on the first paired seed.  Train or distill a gate only on
+residuals that first beat base, keep complete EpisodeIds grouped, and require a
+fresh-policy transfer plus broad official paired improvement before submission.
+
+The 48-turn macro router remains useful as an adversarial rollout family and
+proposal generator.  It is no longer eligible to control the live agent.
