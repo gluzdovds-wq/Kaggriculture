@@ -1142,3 +1142,5 @@ proposal generator.  It is no longer eligible to control the live agent.
   S11 in eight more.  Eight matched V36/C95/V16/v25 games were exact N39
   identities with zero advanced quantity.  The final artifact was submitted as
   S12 (`55691344`, SHA prefix `08db65d8`), leaving the final slot in reserve.
+  It passed validation; the initial `600.0` is backed only by validation episode
+  `96807058`, with no public games yet, and must not be read as an LB estimate.

@@ -2262,5 +2262,7 @@ arena timing instrumentation preserves both one- and two-argument agents.
 - Decision: local promotion passed.  Submitted the 319,826-byte artifact as
   S12, ref `55691344`, SHA-256
   `08db65d845b32160a7f5227ee39e9c7dcefce72cd580505abf8a24fad4bc50be`.
-  Initial status is PENDING.  Keep the final daily submission slot in reserve
-  while S11 and S12 accumulate public games.
+  S12 passed validation and initially displays `600.0`; episode `96807058` is
+  validation-only and there are zero public games, so this is not yet an LB
+  result.  S11 continued rising to `1670.0`.  Keep the final daily submission
+  slot in reserve while both candidates accumulate public evidence.
