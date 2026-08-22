@@ -1779,3 +1779,28 @@ arena timing instrumentation preserves both one- and two-argument agents.
   N69 and narrow it to history-conditioned shed/seed particles at day-boundary
   search nodes, with sampled future RNG.  A full-state oracle remains only an
   upper bound.  No live candidate or submission was produced.
+
+## E100 — grouped legal snapshot priors for hidden shed/seeds / partial pass
+
+- Added a grouped-by-episode evaluator for `17` hidden shed/seed counts.  The
+  label is still other-seat private replay state, but all `116` distance
+  features come only from the target seat's legal current observation.  Names,
+  replay IDs, source seed and opponent private values are explicitly forbidden;
+  both viewpoints of a held-out episode are excluded from its neighbours.
+- On `40` top-20 replays (`80` seat cases per checkpoint), checkpoint median
+  crushed the blank prior: item L1 fell from `8.49/64.89/82.64` to
+  `2.11/25.79/36.44` at steps `72/360/648`.  Public kNN's best point choices
+  were k=5 at step 72 (`1.76`, +16.6%) and k=10 at 360 (`24.45`, +5.2%) and 648
+  (`35.76`, +1.9%).  Gross-value error for k=10 improved from `$827` to `$760`
+  at 360 and from `$1,327` to `$1,024` at 648.
+- A fair 128-draw marginal particle baseline showed that ten public-nearest
+  particles improved best-particle item L1 over ten random checkpoint particles
+  at every checkpoint: `0.44 vs 1.34`, `13.93 vs 16.44`, and `21.68 vs 26.52`.
+  Gross coverage improved at 72 (`$14.7 vs $37.8`) and 648 (`$402 vs $451`) but
+  regressed at 360 (`$283 vs $249`).  Same-episode neighbour violations were
+  `0` and hidden carried inventory remained zero throughout.
+- Decision: retain checkpoint median and public kNN-10 as reproducible particle
+  baselines, but do not call snapshot kNN a sufficient posterior or implement
+  PUCT yet.  Its modest/mixed transfer, especially the step-360 value regression,
+  requires inference-visible observation-history features before the macro-plan
+  recall gate.  No submission was produced.

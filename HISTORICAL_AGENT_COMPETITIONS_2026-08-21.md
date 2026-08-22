@@ -752,3 +752,33 @@ against a forbidden full-state oracle on disjoint top-20 and live replays.  Pass
 only if history conditioning improves oracle top-3 plan recall and official-
 engine both-seat outcome over the marginal prior, without names, IDs, private
 opponent observations or seed access and within the 600 ms internal budget.
+
+## Execution checkpoint: legal snapshot particle prior
+
+- Complete-episode holdout on the top-20 replay set confirms that a checkpoint
+  marginal is far better than a blank private state.  Conditioning ten donor
+  particles on 116 current legal observation features improves best-particle
+  item L1 over ten random checkpoint particles at steps 72/360/648 by roughly
+  `67%`, `15%` and `18%` respectively.
+- Point reconstruction gains are much smaller after the strong marginal median:
+  +16.6% early, +5.2% midgame and +1.9% late.  Ten-neighbour gross coverage is
+  better early/late but worse at step 360.  Current public state is therefore a
+  useful proposal distribution, not a stable posterior.
+- The remaining legal information source is temporal: visible opponent plant,
+  harvest, animal, land, hand and money changes plus shared market deltas.  It
+  must be computed from the target seat's observation stream, never replay
+  actions or the other seat's private payload.
+
+### N71 — observation-history particle posterior
+
+Accumulate inference-visible deltas from step zero: opponent plant/harvest and
+animal placement/collection events, land and hand trajectories, money-change
+statistics, and shared market inventory/price changes.  Combine these with the
+current snapshot only after proving every feature can be updated from the live
+target observation stream without opponent actions, name, replay ID or seed.
+
+Under the same complete-episode folds, compare history kNN or a small regularized
+multi-output model with checkpoint median and snapshot kNN-10.  Require lower
+item and gross-value error at both steps 360 and 648, better ten-particle oracle
+coverage on each checkpoint (not only aggregate), and then improved macro-plan
+top-3 recall before any in-agent rollout integration.
