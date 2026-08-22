@@ -1222,3 +1222,42 @@ arena timing instrumentation preserves both one- and two-argument agents.
 - Decision: do not submit copies or react to the initial rating.  Preserve the
   remaining slots for validated repairs, monitor public episodes separately,
   and compare ratings only after sufficient game accumulation.
+
+## E077 — public-context BAKERY full-feedback gate / N53 final reject
+
+- Extended `arena.py` with public-only selector checkpoints containing both
+  farm signatures, shops and shared market state; own private inventory is
+  excluded and covered by a unit test.  The complete suite now passes 70 tests.
+- Ran N39 over twelve fresh seeds, four public families and both seats (96
+  matches).  This produced 24 BAKERY matches across V36, Soil and C95.  Replayed
+  the same 72 relevant family/seed/seat matches with N53; every non-BAKERY
+  match reproduced N39 exactly.
+- On the 24 BAKERY matches N53 produced zero outcome improvements, four outcome
+  regressions and `-328.4` average margin delta.  Soil seed `20266073` regressed
+  one seat from `+1016` to `-119`; Soil seed `20266083` regressed both seats
+  from `+927/+1703` to `-1008/-256` after the override (deltas `-1935/-1959`).  V36 seed
+  `20266073` added another narrow win-to-loss regression.
+- Shadow comparison shows the first actual divergence is step 216 for the
+  V36/Soil opening and step 240 for X544.  Waiting for two or three shop reveals
+  still gives no positive fresh outcome class: later shop sequences correlate
+  with seed but do not predict the future stochastic market/task trajectory.
+- Decision: N53 is conclusively rejected, not merely held.  Do not fit a tree
+  to its historical 8/8 result.  Reuse the public-context and shadow machinery
+  only for a candidate pair that demonstrates multiple fresh outcome gains and
+  zero regressions before model fitting.
+
+## E078 — first S09/S10 public episodes and cross-replay check
+
+- Downloaded the first four public episodes for both new submissions.  N39 and
+  exact V36 each won their recorded `4/4`; all eight submitted-policy baselines
+  reproduced the recorded final banks exactly.
+- Counterfactual cross-evaluation also won every episode: V36 won all four N39
+  tapes, while N39 won all four V36 tapes.  Average margins were N39 `+108749.5`
+  versus V36 `+101866.0` on S09's opponents, and N39 `+75454.5` versus V36
+  `+37796.25` on S10's opponents.  These early opponents are therefore too weak
+  to distinguish policy quality by outcomes.
+- Ratings after the first few games were N39 `970.3` and V36 `1092.0`, still
+  far below convergence and unsuitable for promotion/rejection decisions.
+- Decision: retain both active submissions and all three remaining daily
+  slots.  Wait for stronger opponents or an actual loss before building a
+  best-response residual from live data.
