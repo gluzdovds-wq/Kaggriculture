@@ -1121,3 +1121,8 @@ proposal generator.  It is no longer eligible to control the live agent.
   `+$6` from both seats.  This is the first N78 candidate to pass both a
   compatible residual gate and a known-family no-regression gate; it was sent
   as S11 (`55690607`) for live evaluation.
+- S11 passed Kaggle validation and initially displays `600.0`.  This is not yet
+  an LB result: the episode endpoint lists only validation episode `96784245`
+  and no public matchmaking episodes.  Treat the candidate as live but
+  unevaluated until public games appear; do not spend another slot merely in
+  reaction to the provisional seed rating.

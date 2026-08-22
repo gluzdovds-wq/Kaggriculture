@@ -2226,5 +2226,9 @@ arena timing instrumentation preserves both one- and two-argument agents.
   N39 mirror seed `20260840`.  Maximum measured latency was below `329 ms`.
 - Decision: local promotion passed.  Submitted the 318,076-byte artifact as
   S11, ref `55690607`, SHA-256 `b55eab39d745ca60a3ace65dc449040737a396ddf334691e8a1379dd59063c0e`.
-  Initial status is PENDING; two daily submissions remain, including the
-  reserve.  The complete suite passes `166/166`.
+  Kaggle accepted and validated the submission.  Its initial displayed score
+  is `600.0`, but the episode API currently contains exactly one episode and it
+  is `EPISODE_TYPE_VALIDATION`; there are zero public matchmaking episodes.
+  Therefore `600.0` is only the pre-match seed rating, not evidence of a live
+  regression.  Two daily submissions remain, including the reserve.  The
+  complete suite passes `166/166`.
