@@ -26,6 +26,8 @@ class ShadowPolicyAuditTests(unittest.TestCase):
         base_source=BASE,
         candidate_source=CANDIDATE,
         execute_operations=(),
+        execute_start=0,
+        execute_stop=720,
         drop_only_items=(),
         drop_max_total=None,
     ):
@@ -41,6 +43,8 @@ class ShadowPolicyAuditTests(unittest.TestCase):
             candidate,
             label="test",
             execute_operations=tuple(execute_operations),
+            execute_start=execute_start,
+            execute_stop=execute_stop,
             drop_only_items=tuple(drop_only_items),
             drop_max_total=drop_max_total,
         )
@@ -149,6 +153,41 @@ def agent(obs, configuration=None):
             namespace["agent"].telemetry["executed_by_operation"], {"WATER": 1}
         )
 
+    def test_executes_only_inside_half_open_step_window(self):
+        namespace = {"__name__": "generated"}
+        exec(
+            compile(
+                self.render(
+                    execute_operations=("WATER",),
+                    execute_start=2,
+                    execute_stop=3,
+                ),
+                "generated.py",
+                "exec",
+            ),
+            namespace,
+        )
+        observation = {
+            "day": 0,
+            "player": 0,
+            "farms": [
+                {
+                    "farmer": [0, 0],
+                    "hands": [],
+                    "tiles": [[{"kind": "PLANT", "watered_today": False}]],
+                },
+                {"farmer": [0, 0], "hands": [], "tiles": [[None]]},
+            ],
+            "private": {"inventories": [{}]},
+        }
+        before = namespace["agent"]({**observation, "hour": 1})
+        inside = namespace["agent"]({**observation, "hour": 2})
+        after = namespace["agent"]({**observation, "hour": 3})
+        self.assertEqual(before["farmer"], ["PASS"])
+        self.assertEqual(inside["farmer"], ["WATER"])
+        self.assertEqual(after["farmer"], ["PASS"])
+        self.assertEqual(namespace["agent"].telemetry["executed"], 1)
+
     def test_drop_context_gate_rejects_mixed_or_large_inventory(self):
         candidate_source = '''def agent(obs, configuration=None):
     return {"farmer": ["DROP"], "hands": [], "market": []}
@@ -203,6 +242,14 @@ def agent(obs, configuration=None):
                 )
             with self.assertRaises(ValueError):
                 render_audit(policy, policy, label="test", drop_max_total=-1)
+            with self.assertRaises(ValueError):
+                render_audit(
+                    policy,
+                    policy,
+                    label="test",
+                    execute_start=10,
+                    execute_stop=10,
+                )
 
 
 if __name__ == "__main__":

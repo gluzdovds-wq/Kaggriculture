@@ -1086,3 +1086,20 @@ proposal generator.  It is no longer eligible to control the live agent.
   same-tile harvest debt hypothesis is rejected; future work should mine the
   real downstream N39 action sequence and only build residuals around action
   pairs observed to create usable capacity.
+
+## Execution checkpoint: shadow-donor compatible-point mining
+
+- Exact scored V16/v25, V36, Moon and Soil were run continuously in shadow from
+  the start of an unchanged N39 game.  They produced real locally valid work
+  for N39 PASS actors, with V16/V36/Soil independently agreeing on four early
+  HARVEST points.  Outcome-neutral runs remained exact ties, so candidate RNG
+  and state were isolated correctly.
+- A new half-open execution window isolated each observed point.  The combined
+  V36 HARVEST residual lost `$217` from either seat; individual steps 330 and
+  431 lost `$84` and `$201`, while steps 233 and 503 were neutral.  A V36 DROP
+  and v25 WATER were also active but neutral.
+- This is direct evidence against adopting a donor action merely because it is
+  valid, non-redundant and shared by multiple strong routes.  N39's task tape
+  has coupled future consequences.  The next residual class should operate on
+  bounded market-order quantities and track the later order that it advances,
+  delays or cancels.

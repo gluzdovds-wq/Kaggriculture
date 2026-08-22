@@ -39,6 +39,8 @@ _SPA_LAST = {0: -1, 1: -1}
 _SPA_SERVICE = {"WATER", "FEED", "CARE", "FERTILIZE"}
 _SPA_VALUE = {"HARVEST", "COLLECT_FERTILIZER", "DROP", "PLACE"}
 _SPA_EXECUTE = set(__EXECUTE_OPERATIONS__)
+_SPA_EXECUTE_START = __EXECUTE_START__
+_SPA_EXECUTE_STOP = __EXECUTE_STOP__
 _SPA_DROP_ONLY_ITEMS = set(__DROP_ONLY_ITEMS__)
 _SPA_DROP_MAX_TOTAL = __DROP_MAX_TOTAL__
 _SPA_TELEMETRY = {}
@@ -49,6 +51,8 @@ def _spa_reset():
     _SPA_TELEMETRY.update({
         "label": __LABEL__,
         "execute_operations": sorted(_SPA_EXECUTE),
+        "execute_start": _SPA_EXECUTE_START,
+        "execute_stop": _SPA_EXECUTE_STOP,
         "turns": 0,
         "joint_equal": 0,
         "field_equal": 0,
@@ -277,8 +281,10 @@ def _spa_record(base_action, candidate_action, step, obs):
                 _SPA_TELEMETRY["immediate_samples"].append(context)
 
 
-def _spa_apply_immediate(base_action, candidate_action, obs):
+def _spa_apply_immediate(base_action, candidate_action, obs, step):
     if not _SPA_EXECUTE:
+        return base_action
+    if not _SPA_EXECUTE_START <= step < _SPA_EXECUTE_STOP:
         return base_action
     result = _spa_copy.deepcopy(base_action)
     result_field = _spa_field(result)
@@ -343,7 +349,7 @@ def agent(obs, configuration=None):
             "candidate", _SPA_CANDIDATE, obs, configuration, seat
         )
         _spa_record(base_action, candidate_action, step, obs)
-        return _spa_apply_immediate(base_action, candidate_action, obs)
+        return _spa_apply_immediate(base_action, candidate_action, obs, step)
     except Exception:
         _SPA_TELEMETRY["candidate_errors"] += 1
     return base_action
@@ -366,6 +372,8 @@ def render_audit(
     *,
     label: str,
     execute_operations: tuple[str, ...] = (),
+    execute_start: int = 0,
+    execute_stop: int = 720,
     drop_only_items: tuple[str, ...] = (),
     drop_max_total: int | None = None,
 ) -> str:
@@ -382,6 +390,8 @@ def render_audit(
     unknown = sorted(set(normalized_operations) - allowed)
     if unknown:
         raise ValueError(f"unsupported immediate operation(s): {', '.join(unknown)}")
+    if not 0 <= execute_start < execute_stop <= 720:
+        raise ValueError("execute window must satisfy 0 <= start < stop <= 720")
     normalized_drop_items = tuple(
         sorted({str(item).strip().upper() for item in drop_only_items if str(item).strip()})
     )
@@ -391,6 +401,8 @@ def render_audit(
         TEMPLATE.replace("__BASE_PAYLOAD__", repr(payload(base)))
         .replace("__CANDIDATE_PAYLOAD__", repr(payload(candidate)))
         .replace("__EXECUTE_OPERATIONS__", repr(normalized_operations))
+        .replace("__EXECUTE_START__", repr(int(execute_start)))
+        .replace("__EXECUTE_STOP__", repr(int(execute_stop)))
         .replace("__DROP_ONLY_ITEMS__", repr(normalized_drop_items))
         .replace("__DROP_MAX_TOTAL__", repr(drop_max_total))
         .replace("__LABEL__", repr(label.strip()))
@@ -405,6 +417,8 @@ def main() -> None:
     parser.add_argument("output", type=Path)
     parser.add_argument("--label", required=True)
     parser.add_argument("--execute-operation", action="append", default=[])
+    parser.add_argument("--execute-start", type=int, default=0)
+    parser.add_argument("--execute-stop", type=int, default=720)
     parser.add_argument("--drop-only-item", action="append", default=[])
     parser.add_argument("--drop-max-total", type=int)
     args = parser.parse_args()
@@ -414,6 +428,8 @@ def main() -> None:
             args.candidate,
             label=args.label,
             execute_operations=tuple(args.execute_operation),
+            execute_start=args.execute_start,
+            execute_stop=args.execute_stop,
             drop_only_items=tuple(args.drop_only_item),
             drop_max_total=args.drop_max_total,
         )

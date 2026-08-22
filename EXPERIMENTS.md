@@ -2172,3 +2172,30 @@ arena timing instrumentation preserves both one- and two-argument agents.
   The next residual should first mine exact future action pairs from traces and
   propose a debt substitution that actually fires, instead of assuming which
   later task was freed.
+
+## E113 — N78 shadow-donor immediate-action mining / rejected
+
+- Continuously shadow-ran five independently strong routes from step zero over
+  an unchanged N39 game: exact scored V16 and v25, V36, Moon and Soil.  Both
+  seats on fresh seed `20260831` remained exact N39 ties, which verifies RNG
+  isolation and outcome-neutral audit behavior.  Across the two seats, the
+  donors exposed `26/8/18/0/10` locally valid, non-redundant actions for an
+  actor that N39 left on PASS, respectively.  Most repeated opportunities were
+  V16/V36/Soil agreement on HARVEST at steps 233/234, 330, 431 and 503.
+- Added a tested half-open execution window to
+  `tools/make_shadow_policy_audit.py`, allowing an observed compatible point to
+  be executed and evaluated without accepting the donor's other actions.  The
+  four-action V36 HARVEST package fired four times and lost `$217` from either
+  seat versus byte-exact N39 on the same seed.
+- Single-action decomposition identified the causal failures.  HARVEST at step
+  330 lost `$84` from either seat and step 431 lost `$201`; steps 233 and 503
+  executed but were exactly neutral.  The remaining independently observed
+  V36 DROP at 311 and v25 WATER at 431 also executed once per seat and were
+  exactly neutral.  No candidate error occurred and maximum observed latency
+  stayed below `331 ms`.
+- Decision: reject direct donor field-action adoption for N78.  The shadow bank
+  and compatible-point executor work as intended, but local validity and donor
+  consensus do not imply incremental value on N39's state.  Stop before a broad
+  panel and spend no Kaggle submission.  The next base-preserving search should
+  mine bounded market-order edits, where the intervention has an immediate
+  economic quantity and can be paired with an explicit future-order debt.
