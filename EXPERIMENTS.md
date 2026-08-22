@@ -2653,3 +2653,93 @@ arena timing instrumentation preserves both one- and two-argument agents.
   refresh).  This early rating is not a policy rejection signal: it is based
   on only nine inactive-gate games, while S09's mature exact-N39 submission is
   still the team's strongest displayed score at `2570.8`.
+
+## E138 — N87 fifth independent active-live wave / confirmed
+
+- Downloaded nineteen S11/S12 games completed after the E135 cutoff: four S11
+  and fifteen S12.  All nineteen matched the public 3-COW/2-SHEEP gate.  S11
+  won all four; S12 won nine and lost six, providing a difficult independent
+  block that was not used to choose N87.
+- Exact replay reproduction showed N87 and N86 both adding `+$64` over S11 on
+  the four S11 tapes.  On the fifteen S12 tapes N87 added `+$108` over N86:
+  three `+$36` episodes and twelve neutral episodes, minimum `$0`.  N86 had an
+  inherited `-$19` episode versus S12, while N87 was at least `+$9` versus S12
+  in every game; no outcome changed and all debts were repaid.
+- Across the now-complete 107-game active-live corpus N87 adds `+$281` over
+  N86 (mean `+$2.626`, minimum `$0`) with no outcome regression.  This fifth
+  independent wave confirms the frozen F240 rule before any post-reset upload.
+
+## E139 — N88 F240 cap boundary / rejected
+
+- Preregistered exact N86+F240 variants with caps `6/8/9/11/12`, froze their
+  hashes, and compared them with N87 cap10 on the untouched fifteen-game S12
+  block.  Cap6 lost `$73` and was negative in all fifteen games (minimum
+  `-$16`); cap8 lost `$39`, also negative 15/15 (minimum `-$8`); cap9 lost `$9`
+  in three games (minimum `-$3`).
+- Caps 11 and 12 were exact N87 identities in all fifteen games: the extra
+  capacity was never executable.  Decision: reject N88.  Cap10 is the minimum
+  safe working boundary in this cohort; reducing it loses value and increasing
+  it adds no inventory.
+
+## E140 — N89 late one-unit timing discovery / S574 and F534 survive
+
+- Aggregated repeated V36-shadow sale availability on the fifteen new S12
+  trajectories and preregistered five previously untested one-unit debts:
+  WHEAT490, FERTILIZER534, WHEAT543, STRAWBERRY574 and WOOL633.  Each timing
+  was available in eleven of fifteen traces; all artifacts were hashed before
+  counterfactual labels were read.
+- Versus N87, W490 and W543 were exact identities and were rejected as neutral.
+  WO633 lost `$76` total with five negatives and minimum `-$44`.  F534 added
+  `+$2` once with minimum `$0`; S574 added `+$25` in two games (`+$24/+$1`)
+  with minimum `$0`.  Every candidate repaid its debt; only F534 and S574 were
+  frozen for disjoint transfer.
+
+## E141 — N89 frozen S11 transfer / S574 only
+
+- On the four untouched new S11 tapes F534 was exactly neutral versus N87 and
+  failed the preregistered positive-transfer gate.  S574 added `+$1/+$2` in
+  two games and was neutral in two: `+$3` total, mean `+$0.75`, minimum `$0`,
+  with exact repayment and no outcome change.
+- Decision: freeze N89 as exact N87 plus STRAWBERRY step 574/cap 1.  The
+  authoritative 320,000-byte artifact has SHA-256
+  `24b63a391ae9013db6cb4519f6b5cbb026b848f89e990df06546c5e25a23d1a6`.
+  No combination or quantity refit was allowed after transfer.
+
+## E142 — N89 older 88-game live holdout / pass
+
+- Evaluated frozen N89 on all 88 older active S11/S12 trajectories, disjoint
+  from N89 discovery and transfer.  On fifty S11 games S574 added `+$171` over
+  N87 (mean `+$3.42`, minimum `$0`, thirteen positive); on thirty-eight S12
+  games it added `+$106` (mean `+$2.789`, minimum `$0`, nine positive).
+- The old holdout therefore adds `+$277` over N87 with 22 positive and 66
+  neutral episodes.  Combined with the new nineteen-game discovery/transfer,
+  N89 adds `+$305` over N87 on 107 active-live games: 26 positive, 81 neutral,
+  zero negative.  All market debts were exact, no outcome regressed and the
+  maximum measured live action latency was `344.1 ms`.
+
+## E143 — N89 fresh paired and broad controls / ready after reset
+
+- On four unseen seeds from both seats (`20260894..20260897`), N89 versus N87
+  had paired margin sums `+$2/+$4/$0/$0`, average `+$0.75` per game and no
+  negative seed sum.  Individual asymmetric outcomes were kept as paired
+  evidence rather than interpreted as independent wins.
+- Against V36, C95 and exact scored V16/v25 on seed `20260898`, N89 reproduced
+  both N39 banks exactly in all eight games.  The family gate was accepted zero
+  times, rejected eighty times and advanced no market quantity.  Maximum broad
+  action latency was `253.2 ms`; all `173` tests pass.
+- Decision: N89 supersedes N87 as the strongest prepared first post-reset
+  submission.  It is exact N39 outside the public family and has strictly
+  non-negative live-replay evidence inside it.  Kaggle still reports zero
+  remaining submissions for the current quota window.
+
+## E144 — S13 first 25 public games and six active controls
+
+- S13 reached 25 completed public games, `22W/3L`, and a displayed rating of
+  `1304.2`.  Six of the newest games matched the 3-COW/2-SHEEP gate; one of
+  those, episode `96975730`, was a recorded loss.  This is the first direct
+  active-family evidence from S13 itself.
+- Exact replay evaluation gave both N87 and N89 `+$16` total over submitted
+  N86 on the six active games, minimum `$0`, with no outcome change.  N89 was
+  exactly neutral versus N87 on this block because S574 had no executable
+  effect.  Across all 113 active-live trajectories N89 now adds `+$305` over
+  N87 and `+$602` over N86, minimum `$0`, with no outcome regression.
