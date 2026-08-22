@@ -2324,3 +2324,58 @@ arena timing instrumentation preserves both one- and two-argument agents.
   unsubmitted to preserve the final daily slot while S12 is still seeding.
   Artifact: 319,826 bytes, SHA-256
   `ac76780b6b1918207cb6dd00ff317a799a66033c68889bda42d080d9e92ced11`.
+
+## E118 — N81 second live cohort / confirmed
+
+- S11 grew to twenty public games and `2182.0`: nineteen wins and one loss.
+  Five of the eight newest opponents matched the `3 COW / 2 SHEEP` gate; the
+  loss was also an active-family game.  S12 grew to eight public wins and
+  `1294.7`, with two new active-family episodes.
+- Exact S11 replay reproduction on the five new active tapes measured N81
+  margin deltas of `+$5/+$5/+$7/+$5/+$5`.  On the recorded loss, N81 improved
+  margin from `-$409` to `-$402` without changing the outcome.  N80 produced
+  `+$4/+$4/+$6/+$4/+$4`, so the step-216 debt again contributed exactly `$1`
+  per episode.  S12's step-240 debt again contributed `$0` throughout.
+- Exact S12 reproduction on its two active tapes gave N81 `$0/+$2`; S11 and
+  S12 were identical.  Across all ten independent active live trajectories,
+  N81 therefore had deltas `0/+5/+30/+5/+5/+7/+5/+5/0/+2`: mean `+$6.4`,
+  minimum `$0`, and no outcome regression.  This confirms N81 rather than
+  relying on its first three active examples.
+
+## E119 — N82 second live timing screen / two safe points
+
+- Aggregated V36-shadow availability over all ten active live trajectories and
+  isolated seven still-untested repeated sale debts on the five newest S11
+  tapes.  Mean deltas versus S11 were: FERTILIZER241 `$0`, FERTILIZER315 `$0`,
+  FERTILIZER316 `$0`, FERTILIZER625 `+$1.6`, WHEAT228 `-$102.4`, WHEAT302
+  `+$0.4`, and WHEAT624 `+$71.2`.
+- Per-episode decomposition rejected WHEAT624 despite its positive mean because
+  one trajectory lost `$371`; WHEAT228 lost on every episode.  FERTILIZER625
+  was `0/+4/0/+4/0`, and WHEAT302 was `0/0/+2/0/0`, so both advanced to the
+  remaining five active tapes.  There F625 was neutral on all five, while W302
+  was non-negative and added `$4` total.
+- Across all ten active tapes, F625 added `$8` and W302 added `$6`, each with
+  minimum `$0`.  Both quantities were fully repaid.  They are individually
+  small but satisfy the strict live non-regression gate and are eligible only
+  as bounded additions to N81.
+
+## E120 — N83 five-rule live-safe market debt / ready, reserve held
+
+- Added WHEAT step 302/cap 2 and FERTILIZER step 625/cap 1 to N81, then tested
+  each addition alone and together on the five newest active S11 tapes.  N81's
+  mean delta was `+$5.4`; the W302 addition gave `+$5.8`, F625 gave `+$7.0`,
+  and combined N83 gave `+$7.4`.  N83's per-episode deltas were
+  `+$5/+$9/+$9/+$9/+$5`, all non-negative.
+- Transfer to the older three active S11 tapes yielded `+$4/+$5/+$30`; transfer
+  to two active S12 tapes yielded `$0/+$2`.  Across all ten active live tapes,
+  final N83 therefore achieved `+$7.8` mean with minimum `$0` and no outcome
+  regression, versus N81's `+$6.4`.
+- In a direct four-seed/both-seat fresh match (`20260874..20260877`), N83 beat
+  N81 by `+$4.0` average margin, with positive summed pair margin on every
+  seed.  A final V36/C95/scored-V16/v25 broad panel on seed `20260878` rejected
+  all five rules and reproduced both N39 banks exactly in all eight games;
+  maximum action latency was `225.3 ms`.
+- Decision: N83 supersedes N81 as the first artifact for the next quota cycle,
+  but remains unsubmitted because the only remaining daily slot is the reserve.
+  Artifact: 319,877 bytes, SHA-256
+  `397c57c026329864aa37089f848355a49042a45d07519ed1d3ed2ef6070b8fe1`.

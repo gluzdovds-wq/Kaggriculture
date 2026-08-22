@@ -1167,3 +1167,18 @@ proposal generator.  It is no longer eligible to control the live agent.
   exactly `$1` in every game on a matched eight-game fresh block.  All eight
   broad controls remained exact.  N81 (SHA prefix `ac76780b`) supersedes N80
   for the next quota cycle without consuming the reserve.
+
+## Execution checkpoint: expanded active-live cohort
+
+- Five new S11 and two S12 active-family episodes expanded the exact live set
+  from three to ten, including S11's first recorded loss.  N81 remained
+  non-negative on every tape and improved the loss margin by `$7`; its ten-tape
+  mean was `+$6.4`.  The FERTILIZER step-240 debt remained exactly neutral,
+  strengthening its rejection as a useful timing despite clean mirrors.
+- A second availability screen rejected high-variance WHEAT step 624 after one
+  `-$371` episode and found two small non-negative points: WHEAT step 302 and
+  FERTILIZER step 625.  Combined with N81 they form N83, whose ten active-live
+  deltas are `+4/+5/+30/+5/+9/+9/+9/+5/0/+2` (mean `+$7.8`, no regression).
+- N83 also beat N81 by `+$4` mean over eight fresh matched games and preserved
+  exact N39 behavior in eight broad controls.  N83 (SHA prefix `397c57c0`) now
+  supersedes N81 for the next quota reset; the reserve remains untouched.
