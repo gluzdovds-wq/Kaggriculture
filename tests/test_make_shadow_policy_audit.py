@@ -26,6 +26,8 @@ class ShadowPolicyAuditTests(unittest.TestCase):
         base_source=BASE,
         candidate_source=CANDIDATE,
         execute_operations=(),
+        drop_only_items=(),
+        drop_max_total=None,
     ):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
@@ -39,6 +41,8 @@ class ShadowPolicyAuditTests(unittest.TestCase):
             candidate,
             label="test",
             execute_operations=tuple(execute_operations),
+            drop_only_items=tuple(drop_only_items),
+            drop_max_total=drop_max_total,
         )
 
     def test_returns_base_and_records_shadow_divergence(self):
@@ -144,6 +148,42 @@ def agent(obs, configuration=None):
             namespace["agent"].telemetry["executed_by_operation"], {"WATER": 1}
         )
 
+    def test_drop_context_gate_rejects_mixed_or_large_inventory(self):
+        candidate_source = '''def agent(obs, configuration=None):
+    return {"farmer": ["DROP"], "hands": [], "market": []}
+'''
+
+        def run(inventory):
+            namespace = {"__name__": "generated"}
+            source = self.render(
+                candidate_source=candidate_source,
+                execute_operations=("DROP",),
+                drop_only_items=("FERTILIZER",),
+                drop_max_total=1,
+            )
+            exec(compile(source, "generated.py", "exec"), namespace)
+            action = namespace["agent"](
+                {
+                    "day": 0,
+                    "hour": 2,
+                    "player": 0,
+                    "farms": [
+                        {"farmer": [0, 0], "hands": [], "tiles": [[None]]},
+                        {"farmer": [0, 0], "hands": [], "tiles": [[None]]},
+                    ],
+                    "private": {"inventories": [inventory]},
+                }
+            )
+            return action, namespace["agent"].telemetry
+
+        accepted, accepted_telemetry = run({"FERTILIZER": 1})
+        self.assertEqual(accepted["farmer"], ["DROP"])
+        self.assertEqual(accepted_telemetry["executed"], 1)
+        rejected, rejected_telemetry = run({"FERTILIZER": 3, "STRAWBERRY": 2})
+        self.assertEqual(rejected["farmer"], ["PASS"])
+        self.assertEqual(rejected_telemetry["executed"], 0)
+        self.assertEqual(rejected_telemetry["filtered_by_context"], 1)
+
     def test_rejects_missing_policy_or_label(self):
         missing = Path("missing.py")
         with self.assertRaises(ValueError):
@@ -160,6 +200,8 @@ def agent(obs, configuration=None):
                     label="test",
                     execute_operations=("TELEPORT",),
                 )
+            with self.assertRaises(ValueError):
+                render_audit(policy, policy, label="test", drop_max_total=-1)
 
 
 if __name__ == "__main__":

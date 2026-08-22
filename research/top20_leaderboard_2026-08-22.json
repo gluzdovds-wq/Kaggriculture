@@ -1,0 +1,31 @@
+{
+  "competition": "kaggriculture",
+  "captured_at": "2026-08-22T03:40:00Z",
+  "source": "public leaderboard live_tv links",
+  "entries": [
+    {"rank": 1, "name": "Ryo Hasegawa", "score": 3131.9, "submission_id": 55614463},
+    {"rank": 2, "name": "Subramanya N", "score": 3043.9, "submission_id": 55616096},
+    {"rank": 3, "name": "Arman Tuganbaev", "score": 3034.4, "submission_id": 55617399},
+    {"rank": 4, "name": "tetsuya", "score": 3013.1, "submission_id": 55574890},
+    {"rank": 5, "name": "Excluding", "score": 3005.7, "submission_id": 55663155},
+    {"rank": 6, "name": "Izzoudine Mohamed KANTA", "score": 2959.8, "submission_id": 55628147},
+    {"rank": 7, "name": "MiMi", "score": 2937.2, "submission_id": 55667236},
+    {"rank": 8, "name": "peikopon", "score": 2911.4, "submission_id": 55635759},
+    {"rank": 9, "name": "Kobe BRYANT", "score": 2902.0, "submission_id": 55668682},
+    {"rank": 10, "name": "カワシギ", "score": 2875.8, "submission_id": 55540317},
+    {"rank": 11, "name": "Xiaowenhao404", "score": 2873.3, "submission_id": 55610626},
+    {"rank": 12, "name": "SaiKushal185", "score": 2851.6, "submission_id": 55652385},
+    {"rank": 13, "name": "lucaskna", "score": 2821.5, "submission_id": 55630618},
+    {"rank": 14, "name": "Seb (allegedly)", "score": 2814.6, "submission_id": 55579756},
+    {"rank": 15, "name": "ReCurSiON", "score": 2813.7, "submission_id": 55491717},
+    {"rank": 16, "name": "Kaan Dınız", "score": 2789.3, "submission_id": 55671906},
+    {"rank": 17, "name": "Efe Can Celiksoy", "score": 2785.6, "submission_id": 55489809},
+    {"rank": 18, "name": "Kostiantyn Isaienkov", "score": 2770.0, "submission_id": 55598303},
+    {"rank": 19, "name": "StackKnight", "score": 2764.9, "submission_id": 55651391},
+    {"rank": 20, "name": "Thomas Tschinkel", "score": 2763.4, "submission_id": 55672675}
+  ],
+  "comparators": [
+    {"rank": 134, "name": "Dmitrii Gluzdov", "replay_name": "Auto Fermers", "score": 2507.9, "submission_id": 55679129, "policy": "S09 N39"},
+    {"rank": null, "name": "Dmitrii Gluzdov", "replay_name": "Auto Fermers", "score": 2157.1, "submission_id": 55679350, "policy": "S10 exact V36"}
+  ]
+}

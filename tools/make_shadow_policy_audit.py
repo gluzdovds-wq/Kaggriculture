@@ -39,6 +39,8 @@ _SPA_LAST = {0: -1, 1: -1}
 _SPA_SERVICE = {"WATER", "FEED", "CARE", "FERTILIZE"}
 _SPA_VALUE = {"HARVEST", "COLLECT_FERTILIZER", "DROP", "PLACE"}
 _SPA_EXECUTE = set(__EXECUTE_OPERATIONS__)
+_SPA_DROP_ONLY_ITEMS = set(__DROP_ONLY_ITEMS__)
+_SPA_DROP_MAX_TOTAL = __DROP_MAX_TOTAL__
 _SPA_TELEMETRY = {}
 
 
@@ -67,6 +69,7 @@ def _spa_reset():
         "immediate_samples": [],
         "executed": 0,
         "executed_by_operation": {},
+        "filtered_by_context": 0,
     })
 
 
@@ -288,6 +291,19 @@ def _spa_apply_immediate(base_action, candidate_action, obs):
         valid, context = _spa_immediate_context(obs, actor_index, candidate_raw)
         if not valid:
             continue
+        if candidate_op == "DROP":
+            inventory = context.get("inventory") or {}
+            positive_items = {
+                str(item)
+                for item, quantity in inventory.items()
+                if int(quantity or 0) > 0
+            }
+            total = sum(max(0, int(quantity or 0)) for quantity in inventory.values())
+            allowed_items = not _SPA_DROP_ONLY_ITEMS or positive_items <= _SPA_DROP_ONLY_ITEMS
+            allowed_total = _SPA_DROP_MAX_TOTAL is None or total <= _SPA_DROP_MAX_TOTAL
+            if not (allowed_items and allowed_total):
+                _SPA_TELEMETRY["filtered_by_context"] += 1
+                continue
         target_position = context.get("position")
         same_tile_operations = [
             _spa_operation(result_field[index])
@@ -345,6 +361,8 @@ def render_audit(
     *,
     label: str,
     execute_operations: tuple[str, ...] = (),
+    drop_only_items: tuple[str, ...] = (),
+    drop_max_total: int | None = None,
 ) -> str:
     if not label.strip():
         raise ValueError("label must be non-empty")
@@ -359,10 +377,17 @@ def render_audit(
     unknown = sorted(set(normalized_operations) - allowed)
     if unknown:
         raise ValueError(f"unsupported immediate operation(s): {', '.join(unknown)}")
+    normalized_drop_items = tuple(
+        sorted({str(item).strip().upper() for item in drop_only_items if str(item).strip()})
+    )
+    if drop_max_total is not None and drop_max_total < 0:
+        raise ValueError("drop_max_total must be non-negative")
     return (
         TEMPLATE.replace("__BASE_PAYLOAD__", repr(payload(base)))
         .replace("__CANDIDATE_PAYLOAD__", repr(payload(candidate)))
         .replace("__EXECUTE_OPERATIONS__", repr(normalized_operations))
+        .replace("__DROP_ONLY_ITEMS__", repr(normalized_drop_items))
+        .replace("__DROP_MAX_TOTAL__", repr(drop_max_total))
         .replace("__LABEL__", repr(label.strip()))
         .replace("__LABEL_TEXT__", label.strip())
     )
@@ -375,6 +400,8 @@ def main() -> None:
     parser.add_argument("output", type=Path)
     parser.add_argument("--label", required=True)
     parser.add_argument("--execute-operation", action="append", default=[])
+    parser.add_argument("--drop-only-item", action="append", default=[])
+    parser.add_argument("--drop-max-total", type=int)
     args = parser.parse_args()
     try:
         source = render_audit(
@@ -382,6 +409,8 @@ def main() -> None:
             args.candidate,
             label=args.label,
             execute_operations=tuple(args.execute_operation),
+            drop_only_items=tuple(args.drop_only_item),
+            drop_max_total=args.drop_max_total,
         )
     except ValueError as error:
         parser.error(str(error))

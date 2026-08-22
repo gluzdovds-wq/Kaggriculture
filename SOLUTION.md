@@ -114,6 +114,21 @@ The fifth chronological live holdout reinforced the order: exact V36 won
 reproduction. V36 supplied five unique wins while N39 supplied the sole win on
 V36's loss, so N39 followed by V36 remains preferable to duplicate copies.
 
+## Current top-replay evidence
+
+The 2026-08-22 audit sampled two public games from every top-20 submission.
+Seventy percent of those policies never bought the fourth quadrant in the
+sample, and the same-replay winner-minus-loser difference in fourth-land use
+was only `+0.04`.  N39 already follows the dominant three-quadrant pattern.
+
+On the ten exact top-five public seeds/seats against extracted opponent tapes,
+N39 won `8/10` versus `6/10` for the recorded donors and raised average
+competitive margin by `+11209.4`, even though its own bank was 4127 lower on
+average.  A literal top-1 action tape then lost all `12/12` fresh-seed games
+against N39.  Replays therefore supply structural features, residual opponent
+families and exact counterfactual test cases—not portable move sequences or a
+reason to optimize isolated coin totals.  See `TOP20_REPLAY_META_2026-08-22.md`.
+
 ## Original baseline strategy
 
 ## Strategy

@@ -1492,3 +1492,64 @@ arena timing instrumentation preserves both one- and two-argument agents.
   planner/model audits.  Random action-level exploration remains unjustified;
   only counterfactual-tested, opportunity-cost-aware interventions should be
   eligible for live control.  The complete suite passes `92/92`.
+
+## E088 — N59 single-fertilizer DROP shadow intervention
+
+- Extended the N58 shadow-audit generator with item and total-quantity gates
+  for DROP interventions.  The candidate may execute a structured-policy DROP
+  only when N39 leaves that actor idle, the action is locally legal, the actor
+  carries FERTILIZER only and the total dropped quantity is one.
+- On eight train seeds against N39 mirror, N59 scored `0.8125` with average
+  margin `+1.2`.  On the next eight untouched seeds it improved paired outcome
+  from `0.50` to `0.75` with two wins and no regression; average margin rose by
+  `+1.5`.
+- On the ten exact top-five replay seeds/seats N59 preserved N39's `8/10`
+  outcomes and changed average margin from `+12971.6` to `+12972.5`.  The
+  intervention is intentionally tiny and does not reproduce a whole donor
+  route.
+- On the matched 48-game current-public panel, N59 preserved every N39
+  outcome.  It changed only the 12 Moon games, adding exactly `+2` margin in
+  each, and was identical against Soil, V39 and Barnyard.  The intervention is
+  safe in this sample but does not flip an outcome or address a top residual.
+- Decision: keep N59 as a narrow audited primitive, but reject it as the next
+  live submission.  A deterministic two-coin diagnostic gain does not justify
+  evicting either member of the active N39/V36 pair.
+
+## E089 — top-20 public replay meta audit
+
+- Collected two public player-games for every current top-20 submission plus
+  two each for S09/N39 and S10/exact-V36: 44 requested targets, 35 unique
+  replay files, zero missing.  Added reproducible collection, parsing and
+  exact-seed opponent-tape tooling with focused tests for action alignment and
+  donor reproduction.
+- Seventy percent of top-20 policies did not buy the fourth quadrant in either
+  sampled game.  Top-20 equal-weight means were 3.3 quadrants, 283 hires, 8.2
+  cows, 6.9 sheep, 0.18 geese and 962 WATER actions.  The top-five means were
+  3.1 quadrants, 296 hires, 8.0 cows, 7.7 sheep and 1052 WATER actions.
+- In 25 decisive top20-vs-top20 games, same-replay winners averaged only +0.04
+  quadrants but +0.84 cow purchases, +2.60 tomato seed buys and +86.8 WATER
+  actions.  Policy-level score associations were strongest for tomato use,
+  WATER and hires, while fourth-land use was effectively zero.
+- Against exact opponent tapes on the ten original top-five seeds/seats, N39
+  scored `8/10` versus the donors' `6/10`, improved competitive margin by
+  `+11209.4` on average and nevertheless earned 4127 fewer coins.  This
+  demonstrates why unrelated final-bank totals cannot rank policies.
+- Decision: reject the fourth-field hypothesis and keep N39 as the base.  Mine
+  bounded, state-compatible task opportunities rather than action-count or
+  asset-count targets; prioritize the two Arman cases where N39 regressed.
+
+## E090 — literal top-1 tape and current-public transfer controls
+
+- Extracted the exact top-1 action tape from attached episode `96487653` and
+  played it against N39 on six fresh seeds from both seats.  The tape lost all
+  `12/12` games with average margin `-15541.7`, despite often producing high
+  raw coin totals.  Replay actions are seed/shop/weed/state-specific and are
+  not a transferable policy.
+- Pulled current versions of Moon Counts Melons, Soil Remembers Rain, V39
+  History Gate and Strong Barnyard Economist.  Across six fresh seeds and both
+  seats, N39 scored `11/12`, `8/12`, `7/12` and `12/12` respectively, or
+  `38/48` overall.
+- Decision: use replays and notebooks as opponent panels and donors of bounded
+  predicates/tasks, not wholesale replacements.  Do not submit a top-1 clone;
+  preserve the live N39/V36 pair while the new submissions are still rapidly
+  rating.
