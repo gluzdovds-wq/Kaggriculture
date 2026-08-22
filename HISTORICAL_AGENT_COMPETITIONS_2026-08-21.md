@@ -965,3 +965,26 @@ oracle.  Require higher oracle-best top-3 recall, lower regret at
 360/600/648, a non-collapsed winning-plan distribution, max action below 600 ms
 including feature construction, then an untouched official both-seat gain over
 N39.  Only that complete chain authorizes a submission.
+
+## Execution checkpoint: enriched lattice and frozen shortlist
+
+- E106 expanded the native vocabulary from nine to eighteen reactive task
+  graphs, then froze seven plans using only the earlier live-focus block.  The
+  richer oracle label distribution no longer collapsed to maintenance and
+  liquidation: crop hold/expansion, workforce maintenance and a cow-lean route
+  all won at least one horizon-24 branch.  This supports shadow policies as
+  proposal generators, without treating their future action tapes as legal
+  search continuations.
+- On the second untouched 20-game S08/S05 block, history and snapshot particles
+  both retained the oracle winner in top-3 for every step-360/600/648 case.
+  History top-1 was `100/95/95%` with mean regret `$0/$1.53/$2.98`; it did not
+  strictly beat snapshot, so the registered belief-superiority gate remains
+  failed.  The seven-plan native computation stayed below 354 ms in the
+  measured engine-only cases, leaving room for a legal value head but not yet
+  proving the all-in 600 ms online budget.
+- N76 therefore advances from proposal generation to value validation.  The
+  next frozen test is not another heuristic weight adjustment: reproduce all
+  119 N75 inference-visible features inside the C++ simulator, verify them
+  against Python at replay roots, run a confidence-gated pairwise tournament
+  over counterfactual leaves and judge its selected plan against a longer-
+  horizon forbidden full-state oracle.

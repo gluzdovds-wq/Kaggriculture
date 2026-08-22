@@ -1980,3 +1980,42 @@ arena timing instrumentation preserves both one- and two-argument agents.
   richer shadow-policy macro vocabulary and require lower full-state-oracle
   plan regret, top-3 recall, under-600-ms latency and then official both-seat
   outcome over N39.  Full suite passes `141/141`; no submission was spent.
+
+## E106 — enriched reactive plan lattice / frozen shortlist transfer
+
+- Expanded the native macro planner from nine generic routes to eighteen
+  reactive task graphs.  The new lattice separates hold-land versus expansion
+  crop routes, lean versus scale-up animal routes, workforce maintenance and
+  liquidation.  Each graph exposes its target crop/animal mix, initial stock,
+  sale limit, wheat reserve, care and fertilizer-collection behavior; future
+  replay actions remain forbidden.  The original 23-game live-focus block was
+  used only to select and freeze a seven-plan shortlist in
+  `fast_sim/frozen_plan_shortlist_e106.json` before evaluating the second
+  untouched S08/S05 block.
+- The full 18-plan, horizon-24 oracle labels stopped collapsing to the old
+  maintenance/liquidation pair.  At step 360, strawberry hold-land won `32/46`
+  cases, strawberry expansion `6`, carrot hold-land `5` and workforce
+  maintenance `3`.  At step 648, maintenance won `15`, workforce maintenance
+  `13`, strawberry hold-land `7`, carrot hold-land `5`, liquidation `2`, cow
+  lean `2` and strawberry expansion `2`.  This is the first native search in
+  which an animal route is oracle-best.  The 18-plan horizon-24 engine mean,
+  p95 and max were `496.6/524.6/567.8 ms`, excluding Python feature
+  construction; the registered all-in online latency gate is therefore not yet
+  proven.
+- The frozen shortlist contains maintenance, liquidation, workforce
+  maintenance, carrot hold-land, strawberry hold-land, strawberry expansion
+  and cow lean.  On 20 untouched S08/S05 games (`40` controlled-seat cases at
+  each of steps `360/600/648`), its horizon-24 oracle winners remained diverse.
+  History particles achieved top-3 recall `100%` at all three checkpoints,
+  top-1 `100/95/95%`, and mean oracle regret `$0/$1.53/$2.98`.  Snapshot
+  particles tied those figures; marginal regret was `$0/$3.48/$6.66` and the
+  blank prior reached `$0/$2.61/$9.23`.  The shortlist engine measured
+  `237.9/270.5/353.1 ms` mean/p95/max, again excluding Python feature work.
+- Decision: retain the frozen seven-plan proposal and mark N76 partial pass.
+  Proposal diversity and independent transfer are now adequate, but the
+  pre-registered history-over-snapshot claim did not pass and the current
+  horizon-24 hand score is not the frozen N75 counterfactual ranker.  Port all
+  119 legal features into the native leaf, prove Python/C++ parity, rank every
+  scenario with the N75 confidence gate, and compare that tournament with a
+  longer-horizon full-state oracle before any official game or submission.
+  No submission was spent.
