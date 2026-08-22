@@ -298,7 +298,7 @@ trajectories before training.  A serious RL line starts only after at least
 50k transitions/s locally; otherwise spend compute on replay counterfactuals,
 macro bandits and search rather than pretending hundreds of games are PPO.
 
-### N52 — factorized macro action heads
+### N56 — factorized macro action heads
 
 Do not classify the complete joint action or even one flat task+market macro.
 Generate legal task-graph candidates in rules and predict separate task-family,
@@ -321,7 +321,7 @@ head-to-head confidence and a local BT/OpenSkill-style table.  Training loss,
 imitation accuracy and a single live rating are diagnostics, never promotion
 criteria.
 
-## Execution checkpoint: N51–N52 pilot
+## Execution checkpoint: N51/N56 pilot
 
 - Eight `pass/pass` games in the official Python environment, run with four
   worker processes, completed 5,760 environment transitions in 12.489 seconds:
@@ -333,8 +333,28 @@ criteria.
   from scored S05, V16 and v25.  A flat task+market label has 258 values; top-8
   and top-32 cover only 40.3% and 69.4%.  Flat macro classification is rejected.
   Factorization is materially better: top-16 task families cover 83.7%, while
-  top-8 market operations cover 96.5%.  N52 should therefore use separate
+  top-8 market operations cover 96.5%.  N56 should therefore use separate
   heads plus rule-based recombination, not a fixed shortlist of joint labels.
+
+## Execution checkpoint: N56 learned shortlist
+
+- Reused the already trained, disjoint-season N24 linear residuals rather than
+  fitting a second model to the same labels.  A new evaluator reconstructs the
+  task and market rankings independently, removes the non-executable
+  `__OTHER__` class, forms top-k Cartesian candidates and optionally filters
+  pairs not observed in the training season.
+- On 1,388 non-noop S05 holdout turns, task top-8 plus market top-5 contains the
+  exact donor pair `80.1%` of the time with `21.57` seen-pair candidates on
+  average.  The tighter top-5/top-3 shortlist covers `66.7%` with `10.46`
+  candidates.  Corresponding top-8/top-5 coverage is only `60.5%` for V16 and
+  `30.2%` for v25.
+- Every holdout pair was present in the corresponding training season, so the
+  failure is ranking error rather than unseen joint vocabulary.  Filtering to
+  seen pairs reduces candidate count but cannot improve recall.
+- Decision: N56 passes as a candidate generator and replay-analysis tool, not
+  as an autonomous policy selector.  Do not splice its top-1 choice into the
+  live agent.  Prioritize N54 exact ETA/cashflow/deadline features and require
+  official-engine league gains before any learned head controls behavior.
 
 ## Execution checkpoint: N16–N22
 

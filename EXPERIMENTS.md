@@ -1384,3 +1384,23 @@ arena timing instrumentation preserves both one- and two-argument agents.
   factorized macro candidate ranker with exact forward ETA/cashflow features.
   Continue selecting candidates by the existing historical/recent opponent
   league, not imitation loss or one live rating.
+
+## E084 — learned factorized macro shortlist / analysis-only pass
+
+- Added `rl/evaluate_factorized_macro_shortlist.py` with three focused unit
+  tests.  It reconstructs the existing disjoint-season N24 task and market
+  residuals, excludes `__OTHER__` from executable candidates, measures exact
+  pair recall for several top-k products and filters combinations through the
+  train-season pair vocabulary.
+- On S05's 1,388 non-noop holdout turns, task top-3 × market top-3 covers
+  `52.95%` of exact macro pairs with `6.51` candidates on average; top-5 ×
+  top-3 covers `66.71%` with `10.46`; top-8 × market top-5 reaches `80.12%`
+  with `21.57`.
+- Transfer is much weaker.  The widest tested shortlist covers `60.53%` for
+  V16 and `30.23%` for v25.  All raw holdout pairs occur in their respective
+  train seasons, so pair filtering reduces shortlist size but leaves recall
+  unchanged; the limiting factor is model ranking, not unseen vocabulary.
+- The complete suite now passes `76/76`.  Decision: accept N56 only as an
+  analysis/candidate-generation primitive.  Reject top-1 or epsilon-driven
+  live control from the current linear heads.  N54 forward ETA, feasibility,
+  cashflow and deadline features are the next promotion gate.
