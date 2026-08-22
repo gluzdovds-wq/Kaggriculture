@@ -660,3 +660,30 @@ the leaderboard only as a noisy measurement of the current live meta.
   jointly optimize a third role/task allocation whose state contract explicitly
   supports both downstream planners, rather than voting over their immediate
   actions.
+
+### N68 — hierarchical simultaneous-move PUCT with an incremental value model
+
+A direct Stockfish port is the wrong game model: Kaggriculture has simultaneous
+actions, hidden opponent inventory, future random events, a 719-action horizon
+and a combinatorial joint worker/market action.  Retain Stockfish's useful
+engineering ideas — iterative deepening, move ordering, a transposition table,
+strict time management and a small incrementally updated evaluator — but replace
+alternating alpha-beta with belief-sampled simultaneous-move PUCT or bounded
+beam search.
+
+Search only at day boundaries, shop unlocks, land/hire decisions and terminal
+liquidation points.  The existing rule planner proposes top-K legal task graphs
+and market plans; a deterministic executor handles movement, watering, feeding
+and storage between search nodes.  Opponent branches come from legal public-state
+policy-family hypotheses, never leaderboard identity.  Chance nodes sample
+future shop/random outcomes consistent with the observation.  A small
+NNUE-style or MLP value residual scores win probability and bank margin on top
+of exact ETA, cashflow, service-deadline and liquidation features.
+
+Feasibility gate: the parity-tested native simulator replayed 1,000 competitive
+719-transition seasons in 2.511 seconds on this PC (`398` seasons/s, roughly
+`286k` raw transitions/s) without policy inference.  Build snapshot/restore and
+observation-to-belief initialization, then compare handcrafted beam search,
+PUCT with a handcrafted value and PUCT with a learned residual.  Use 6/12/24-turn
+rollouts, hard-stop at 600 ms inside the one-second action limit, and promote
+only on untouched both-seat official-engine games with no deadline failures.
