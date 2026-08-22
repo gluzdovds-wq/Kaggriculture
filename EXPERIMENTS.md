@@ -2199,3 +2199,32 @@ arena timing instrumentation preserves both one- and two-argument agents.
   panel and spend no Kaggle submission.  The next base-preserving search should
   mine bounded market-order edits, where the intervention has an immediate
   economic quantity and can be paired with an explicit future-order debt.
+
+## E114 — N78 gated WHEAT sale debt / local promotion and S11
+
+- Extended the shadow audit with market-order deltas, actual shed availability,
+  bounded donor SELL execution and an exact quantity debt that is subtracted
+  from later base sales of the same product.  Proposed donor orders that the
+  N39 shed cannot fund are now distinguished from executable residuals.  This
+  rejected the apparent four-donor consensus to sell five FERTILIZER at step 48:
+  it was invalid on N39's real state.
+- V36 shadow traces on two fresh seeds identified executable WHEAT differences.
+  Isolated both-seat tests on seed `20260833` showed why timing cannot be judged
+  by validity alone: moving two WHEAT from the next sale to step 1 lost `$6,137`
+  from either seat; advancing one unit at step 119 gained `$2`; advancing eight
+  at step 120 and repaying all eight later gained `$6` from either seat.
+- The frozen step-120/cap-8 residual transferred to four new seeds
+  (`20260834..20260837`) from both seats: seven wins in eight games, mean margin
+  `+$3.8`, and a positive summed pair margin on every seed.  All interventions
+  advanced and later repaid the same WHEAT quantity.
+- An ungated matched broad panel against V36, C95 and exact scored V16/v25 kept
+  all 16 outcomes but regressed competitive margin by `$2.75` on average.  A
+  public opponent-family gate fixed the regression: at step 112 N39-family
+  farms had `3 COW / 2 SHEEP`, while every tested alternative had `1 COW / 4
+  SHEEP`.  Requiring the N39 signature made eight broad games byte-for-byte
+  identical to the N39 controls, then retained `+$6` from either seat on fresh
+  N39 mirror seed `20260840`.  Maximum measured latency was below `329 ms`.
+- Decision: local promotion passed.  Submitted the 318,076-byte artifact as
+  S11, ref `55690607`, SHA-256 `b55eab39d745ca60a3ace65dc449040737a396ddf334691e8a1379dd59063c0e`.
+  Initial status is PENDING; two daily submissions remain, including the
+  reserve.  The complete suite passes `166/166`.

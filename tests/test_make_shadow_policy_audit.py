@@ -3,7 +3,7 @@ import random
 import unittest
 from pathlib import Path
 
-from tools.make_shadow_policy_audit import render_audit
+from tools.make_shadow_policy_audit import parse_animal_counts, render_audit
 
 
 BASE = '''import random
@@ -28,6 +28,9 @@ class ShadowPolicyAuditTests(unittest.TestCase):
         execute_operations=(),
         execute_start=0,
         execute_stop=720,
+        execute_sell_items=(),
+        sell_cap=0,
+        opponent_animal_counts=None,
         drop_only_items=(),
         drop_max_total=None,
     ):
@@ -45,6 +48,9 @@ class ShadowPolicyAuditTests(unittest.TestCase):
             execute_operations=tuple(execute_operations),
             execute_start=execute_start,
             execute_stop=execute_stop,
+            execute_sell_items=tuple(execute_sell_items),
+            sell_cap=sell_cap,
+            opponent_animal_counts=opponent_animal_counts,
             drop_only_items=tuple(drop_only_items),
             drop_max_total=drop_max_total,
         )
@@ -188,6 +194,129 @@ def agent(obs, configuration=None):
         self.assertEqual(after["farmer"], ["PASS"])
         self.assertEqual(namespace["agent"].telemetry["executed"], 1)
 
+    def test_records_market_sell_quantity_deltas(self):
+        base_source = '''def agent(obs, configuration=None):
+    return {"farmer": ["PASS"], "hands": [], "market": [["SELL", "WOOL", 2]]}
+'''
+        candidate_source = '''def agent(obs, configuration=None):
+    return {"farmer": ["PASS"], "hands": [], "market": [["SELL", "WOOL", 5], ["SELL", "MILK", 4]]}
+'''
+        namespace = {"__name__": "generated"}
+        exec(
+            compile(
+                self.render(base_source, candidate_source), "generated.py", "exec"
+            ),
+            namespace,
+        )
+        namespace["agent"](
+            {
+                "day": 0,
+                "hour": 7,
+                "player": 0,
+                "private": {"shed": {"MILK": 10, "WOOL": 4}},
+            }
+        )
+        telemetry = namespace["agent"].telemetry
+        self.assertEqual(
+            telemetry["candidate_sell_excess"], {"MILK": 4, "WOOL": 3}
+        )
+        self.assertEqual(
+            telemetry["market_divergence_samples"][0]["sell_delta"],
+            {"MILK": 4, "WOOL": 3},
+        )
+        self.assertEqual(
+            telemetry["candidate_sell_executable"], {"MILK": 4, "WOOL": 2}
+        )
+        self.assertEqual(
+            telemetry["market_divergence_samples"][0]["executable_sell_delta"],
+            {"MILK": 4, "WOOL": 2},
+        )
+
+    def test_advances_donor_sell_and_repays_next_base_sell(self):
+        base_source = '''def agent(obs, configuration=None):
+    market = [["SELL", "FERTILIZER", 5]] if obs["hour"] == 1 else []
+    return {"farmer": ["PASS"], "hands": [], "market": market}
+'''
+        candidate_source = '''def agent(obs, configuration=None):
+    market = [["SELL", "FERTILIZER", 3]] if obs["hour"] == 0 else []
+    return {"farmer": ["PASS"], "hands": [], "market": market}
+'''
+        namespace = {"__name__": "generated"}
+        exec(
+            compile(
+                self.render(
+                    base_source,
+                    candidate_source,
+                    execute_start=0,
+                    execute_stop=1,
+                    execute_sell_items=("FERTILIZER",),
+                    sell_cap=3,
+                ),
+                "generated.py",
+                "exec",
+            ),
+            namespace,
+        )
+        observation = {
+            "day": 0,
+            "player": 0,
+            "private": {"shed": {"FERTILIZER": 5}},
+        }
+        advanced = namespace["agent"]({**observation, "hour": 0})
+        repaid = namespace["agent"]({**observation, "hour": 1})
+        self.assertEqual(advanced["market"], [["SELL", "FERTILIZER", 3]])
+        self.assertEqual(repaid["market"], [["SELL", "FERTILIZER", 2]])
+        self.assertEqual(
+            namespace["agent"].telemetry["market_advanced"], {"FERTILIZER": 3}
+        )
+        self.assertEqual(
+            namespace["agent"].telemetry["market_repaid"], {"FERTILIZER": 3}
+        )
+
+    def test_market_advance_requires_opponent_animal_signature(self):
+        base_source = '''def agent(obs, configuration=None):
+    return {"farmer": ["PASS"], "hands": [], "market": []}
+'''
+        candidate_source = '''def agent(obs, configuration=None):
+    return {"farmer": ["PASS"], "hands": [], "market": [["SELL", "WHEAT", 2]]}
+'''
+        namespace = {"__name__": "generated"}
+        exec(
+            compile(
+                self.render(
+                    base_source,
+                    candidate_source,
+                    execute_start=0,
+                    execute_stop=1,
+                    execute_sell_items=("WHEAT",),
+                    sell_cap=2,
+                    opponent_animal_counts={"COW": 3, "SHEEP": 2},
+                ),
+                "generated.py",
+                "exec",
+            ),
+            namespace,
+        )
+        observation = {
+            "day": 0,
+            "hour": 0,
+            "player": 0,
+            "private": {"shed": {"WHEAT": 2}},
+            "farms": [
+                {"tiles": [[None]]},
+                {"tiles": [[{"animal": "COW"}, {"animal": "SHEEP"}]]},
+            ],
+        }
+        action = namespace["agent"](observation)
+        self.assertEqual(action["market"], [])
+        self.assertEqual(namespace["agent"].telemetry["market_family_rejected"], 1)
+
+    def test_parses_opponent_animal_counts(self):
+        self.assertEqual(
+            parse_animal_counts(["cow=3", "SHEEP=2"]),
+            {"COW": 3, "SHEEP": 2},
+        )
+
     def test_drop_context_gate_rejects_mixed_or_large_inventory(self):
         candidate_source = '''def agent(obs, configuration=None):
     return {"farmer": ["DROP"], "hands": [], "market": []}
@@ -249,6 +378,14 @@ def agent(obs, configuration=None):
                     label="test",
                     execute_start=10,
                     execute_stop=10,
+                )
+            with self.assertRaises(ValueError):
+                render_audit(
+                    policy,
+                    policy,
+                    label="test",
+                    execute_sell_items=("FERTILIZER",),
+                    sell_cap=0,
                 )
 
 

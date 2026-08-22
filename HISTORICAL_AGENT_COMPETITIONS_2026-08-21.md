@@ -1103,3 +1103,21 @@ proposal generator.  It is no longer eligible to control the live agent.
   has coupled future consequences.  The next residual class should operate on
   bounded market-order quantities and track the later order that it advances,
   delays or cancels.
+
+## Execution checkpoint: first promoted KEEP_BASE market residual
+
+- Availability-aware donor mining separated proposed sales from orders the N39
+  shed could actually fund.  The first real causal family advanced an
+  executable WHEAT quantity and repaid exactly that quantity from later N39
+  sales; no field task or other market order changed.
+- A two-unit step-1 advance catastrophically lost `$6,137`, demonstrating that
+  quantity conservation alone does not preserve the coupled cashflow route.
+  In contrast, one unit at step 119 gained `$2` and eight units at step 120
+  gained `$6` from either seat.  The latter retained positive summed pair
+  margin over four fresh transfer seeds.
+- The raw residual lost `$2.75` average matched margin across V36/C95/V16/v25.
+  A public `3 COW / 2 SHEEP` opponent signature isolated the N39-family benefit:
+  eight broad games became exact base identities while a fresh N39 mirror kept
+  `+$6` from both seats.  This is the first N78 candidate to pass both a
+  compatible residual gate and a known-family no-regression gate; it was sent
+  as S11 (`55690607`) for live evaluation.
