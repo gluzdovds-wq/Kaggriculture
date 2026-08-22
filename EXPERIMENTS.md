@@ -1754,3 +1754,28 @@ arena timing instrumentation preserves both one- and two-argument agents.
   hidden opponent private inventory and unknown future RNG seed.  Build and
   validate observation-to-belief initialization before implementing PUCT or
   spending a submission slot.  No candidate was submitted.
+
+## E099 — top-20 hidden-state observability audit / particles required
+
+- Added a leakage-explicit auditor and four synthetic tests.  It reads the
+  opponent private payload from the other replay seat only as an offline audit
+  label, verifies every duplicated public farm/market/town view, and never
+  presents that label as a legal policy feature.  Evaluated `40` top-20 replays,
+  both target seats and checkpoints `72/360/648`: `240` seat-checkpoint cases,
+  with `0/120` shared-view mismatches.
+- At step 72 the hidden opponent state was non-empty in `96.25%` of cases, with
+  mean `8.49` units and gross marked value `$500`.  At step 360 it was non-empty
+  in `100%`, averaging `64.89` units and `$3,980`; at step 648 it averaged
+  `82.64` units and `$4,007`, with a `$19,858` maximum.  Opponent shed alone
+  averaged `54.96` and `72.05` units at the two later checkpoints; hidden seeds
+  averaged `9.93` and `10.59`.
+- All three checkpoints are day boundaries, and hidden carried inventory was
+  exactly zero in all `240/240` target-seat cases.  This is the main positive
+  result: day-boundary search can omit opponent per-hand inventory and model
+  only shed/seeds plus the unknown future random stream.  The source seed was
+  present in offline replay metadata in `100%` of cases and in the legal target
+  observation in `0%`.
+- Decision: reject an empty or single neutral full-state initialization.  Keep
+  N69 and narrow it to history-conditioned shed/seed particles at day-boundary
+  search nodes, with sampled future RNG.  A full-state oracle remains only an
+  upper bound.  No live candidate or submission was produced.

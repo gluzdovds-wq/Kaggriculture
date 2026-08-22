@@ -722,3 +722,33 @@ neutral prior on held-out traces.  Pass only if the legal ensemble retains the
 oracle's winning plan in top-3 often enough to improve official-engine both-seat
 outcomes, stays under the 600 ms internal budget and never consumes replay ID,
 opponent name, opponent private state or source seed at inference.
+
+## Execution checkpoint: hidden-state magnitude
+
+- On 40 top-20 replays, both viewpoints and steps 72/360/648, all duplicated
+  public views matched.  Nevertheless the hidden opponent payload grew from a
+  mean `8.49` units (`$500` gross mark) at step 72 to `64.89` (`$3,980`) at 360
+  and `82.64` (`$4,007`) at 648; the late maximum was `$19,858`.  A blank or
+  single exact neutral opponent private state is therefore not defensible.
+- The useful structural simplification is that all selected checkpoints are
+  day boundaries: carried inventories were empty in every one of `240/240`
+  seat-checkpoint cases.  Belief search at these points only needs opponent
+  shed/seeds and future randomness in addition to the fully public farms,
+  market and town.
+- Replay source seed visibility was `100%` offline and `0%` in legal target
+  observations.  Seed-conditioned oracle rollouts must remain evaluation-only;
+  deployment must sample future random outcomes from the public prior.
+
+### N70 — day-boundary shed/seed particle search
+
+Restrict the first search prototype to steps divisible by 24.  Initialize each
+particle with the exact public farms/market/town and own private state, draw only
+opponent shed/seeds from a history-conditioned legal posterior, and sample a
+future random stream without trying to recover the replay seed.  Generate the
+same top-K task graphs in every particle and select by lower-quantile win value.
+
+Compare blank-private, checkpoint-marginal and history-conditioned particles
+against a forbidden full-state oracle on disjoint top-20 and live replays.  Pass
+only if history conditioning improves oracle top-3 plan recall and official-
+engine both-seat outcome over the marginal prior, without names, IDs, private
+opponent observations or seed access and within the 600 ms internal budget.
