@@ -1144,3 +1144,21 @@ proposal generator.  It is no longer eligible to control the live agent.
   S12 (`55691344`, SHA prefix `08db65d8`), leaving the final slot in reserve.
   It passed validation; the initial `600.0` is backed only by validation episode
   `96807058`, with no public games yet, and must not be read as an LB estimate.
+
+## Execution checkpoint: live-activated debt search
+
+- S11's first twelve public games were all wins.  Three opponents matched the
+  `3 COW / 2 SHEEP` step-120 gate, and their stored actions show the extra
+  `SELL WHEAT 8` actually executing.  Exact action-tape replay reproduced all
+  three recorded matches; versus N39, S11 gained `0/+3/+6` margin.  This is the
+  first direct live counterfactual evidence that a KEEP_BASE residual helps.
+- The same replay test falsified the apparent strength of S12's step-240
+  FERTILIZER debt: it advanced and repaid ten units in every active episode but
+  added `$0` beyond S11.  Mirror cashflow gains are therefore insufficient;
+  residual timing must be screened on real shared-market trajectories too.
+- Eight live-derived later timings were isolated.  Only FERTILIZER step 340,
+  cap 7, was non-negative on every active replay (`$0/+$4/+$29`).  It then won
+  all eight fresh both-seat games against exact S11 by exactly `$171`, while
+  nine non-target live replays and eight broad donor games remained exact base
+  identities.  N80 (SHA prefix `ddbfc6f2`) is ready but held for the next quota
+  reset; the final daily slot remains reserved.

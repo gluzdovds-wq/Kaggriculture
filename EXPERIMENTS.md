@@ -2266,3 +2266,39 @@ arena timing instrumentation preserves both one- and two-argument agents.
   validation-only and there are zero public games, so this is not yet an LB
   result.  S11 continued rising to `1670.0`.  Keep the final daily submission
   slot in reserve while both candidates accumulate public evidence.
+
+## E116 — N80 live-tape FERTILIZER@340 debt / ready, reserve held
+
+- S11 reached twelve public games, won all twelve, and rose to `2021.6` during
+  this checkpoint.  Three of the six newest opponents had exactly `3 COW / 2
+  SHEEP` at step 120.  Their replay actions confirm actual residual execution:
+  S11 appended a second `SELL WHEAT 8` to the base step-120 market action and
+  still won all three matches.  The other nine public games rejected the gate.
+- An exact replay-tape league first reproduced the recorded S11 banks for all
+  three active episodes.  Replacing S11 with exact N39 changed margins by
+  `0/-3/-6`, so the live WHEAT residual transferred with `+$3` mean margin and
+  no outcome change.  S12 advanced and repaid both WHEAT 8 and FERTILIZER 10,
+  but its step-240 FERTILIZER rule added exactly `$0` beyond S11 on all three
+  live trajectories.  The local `+$20` did not transfer to these market states.
+- Screened eight later donor sale debts on the same exact live trajectories.
+  Mean margin deltas versus S11 were WHEAT215 `+$0.33`, FERTILIZER216 `+$0.67`,
+  FERTILIZER275 `+$6`, WHEAT277 `-$775`, WHEAT307 `-$262`, FERTILIZER340
+  `+$11`, FERTILIZER505 `-$147.67`, and WHEAT672 `$0`.  FERTILIZER275 was
+  rejected despite positive mean because one episode regressed `$6`.
+- FERTILIZER at step 340/cap 7 was the only non-negative live point
+  (`$0/+$4/+$29`).  Combined with the existing WHEAT debt and the same latched
+  step-120 family gate, it beat byte-exact S11 on four fresh seeds from both
+  seats (`20260864..20260867`): eight wins, exactly `+$171` margin in every
+  game, with both debts fully repaid.
+- The final N80 artifact reproduced all twelve public S11 episodes exactly as
+  its baseline.  Nine non-target episodes were exact S11 identities; the three
+  active episodes retained `$0/+$4/+$29`, for `+$2.75` mean over all twelve and
+  no regression.  A matched V36/C95/scored-V16/v25 broad panel was also exact
+  N39 in all eight games.  Maximum measured action latency was `310.5 ms` on
+  live tapes and `208.2 ms` broad.
+- Decision: local promotion passed, but do not submit from the last reserve
+  slot.  Artifact: 319,791 bytes, SHA-256
+  `ddbfc6f2eab6add83e89d68248275912bf5ea2180c237f9f96cd2b86834a7a70`.
+  S12 has only four public games so far; it won all four, none matched the gate,
+  and its still-seeding score is `958.8`.  Hold N80 for the next reset or until
+  S12 has a stable score while preserving one slot.
