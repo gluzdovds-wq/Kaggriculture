@@ -1906,3 +1906,40 @@ arena timing instrumentation preserves both one- and two-argument agents.
   a deterministic current-money or exact short-to-terminal fallback after a
   training-CV-selected cutoff, then evaluate on newly downloaded unseen games.
   Full suite passes `131/131`; no submission was spent.
+
+## E104 — frozen phase-consistent leaf value / partial transfer, rank gate failed
+
+- Added `rl/phase_leaf_value.py`, five tests and the tracked frozen model
+  `rl/frozen_phase_value_e104.json`.  Four season phases (`24–192`, `216–480`,
+  `504–576`, `600–648`) independently select a ridge residual, legal fallback
+  and shrinkage using only five-fold complete-EpisodeId CV on the 40 top-20
+  games.  A candidate is ineligible if it worsens current-money MAE or paired
+  winner accuracy at a registered anchor in its phase.  The separate rank head
+  optimizes paired winner accuracy.  The model and training provenance were
+  pushed as commit `7e5854b` before any new EpisodeId was requested.
+- The frozen training gate passed.  Versus the strongest simple baseline,
+  24-turn OOF MAE improved `1,182.23 → 1,121.82` (+5.1%); at steps
+  `360/600/648` it improved `1,114.58 → 1,070.56`, `1,125.72 → 1,112.48`
+  and `1,627.20 → 1,533.86` without a current-money winner regression.  Final
+  OOF MAE improved `2,971.75 → 2,672.49` (+10.1%); anchor MAE also improved at
+  all three points and rank accuracy was `60.6%` versus the best simple
+  baseline's `56.0%` overall.
+- Only after the freeze, downloaded 17 new S09/S10 public episodes spanning 17
+  distinct opponent matchups.  The block contains `918` seat-checkpoint rows,
+  zero training/old-replay overlap and no refit.  24-turn MAE transferred well
+  overall (`1,325.58 → 1,249.97`, +5.7%) and at steps 360/648, but failed at
+  step 600 (`693.29 → 785.77`).  Overall paired winner also slipped `81.5% →
+  80.0%`; at step 360 the candidate scored `76.5%` versus the strongest legal
+  baseline's `88.2%`.
+- Phase separation repaired N73's terminal failure for final value.  Fresh
+  final MAE/winner at step 600 improved `3,535.82 / 76.5% → 2,912.61 / 82.4%`
+  and at step 648 `3,321.82 / 82.4% → 2,921.34 / 88.2%`.  Yet step-360 final
+  winner accuracy regressed `64.7% → 58.8%`, despite a small MAE gain, and the
+  dedicated rank head made the same error.
+- Decision: retain the frozen model as evidence that phase-specific residuals
+  fix terminal calibration, but reject N74 for macro-plan integration,
+  official games or submission.  MAE and outcome ranking are distinct gates;
+  a lower absolute error cannot excuse more reversed winners.  Test N75 as an
+  antisymmetric pairwise/ordinal value with a train-CV confidence gate back to
+  current money, freeze it, and use a second untouched policy block.  Full
+  suite passes `136/136`; no submission was spent.

@@ -890,3 +890,42 @@ steps 360/600/648, with no regression in paired winner accuracy.  Only after
 that fresh transfer may the value score a richer shadow-policy macro set; then
 require lower oracle plan regret, under-600-ms inference and official-engine
 both-seat gains over N39 before submission.
+
+## Execution checkpoint: frozen phase value and fresh transfer
+
+- The four-phase ridge/blend model was selected only by complete-EpisodeId CV,
+  serialized with its 40-game provenance and committed as `7e5854b`.  Seventeen
+  previously unseen S09/S10 episodes, one distinct opponent matchup each, were
+  downloaded only after that commit; all 918 transfer rows had zero overlap
+  with training and earlier replay archives.
+- Phase conditioning solved the concrete terminal problem.  On fresh steps
+  600 and 648, final-margin MAE improved by 17.6% and 12.1%, while paired winner
+  accuracy improved from 76.5% to 82.4% and from 82.4% to 88.2%.  This supports
+  the Stockfish-like design: leaf evaluation should change with remaining
+  horizon, and a late value must not extrapolate a season-wide asset model.
+- The full gate still failed.  At step 360 both the final regression and its
+  separately trained rank head reversed more winners (`58.8%` versus current
+  money's `64.7%`), even though final MAE improved slightly.  The 24-turn head
+  also worsened step-600 MAE and lost winner accuracy overall.  Calibration
+  error and decision ranking are not interchangeable objectives.
+- N74 is therefore evidence, not a deployable planner score.  Preserve its
+  phase residuals and terminal head, but do not use them to choose a macro plan
+  until an ordinal model passes every winner slice on a second frozen transfer.
+
+### N75 — confidence-gated antisymmetric leaf ranking
+
+Train the value order directly from paired legal observations.  For each
+episode/checkpoint use the difference of the two controlled-seat legal feature
+vectors and the final winner label; a linear difference model is equivalent to
+a scalar legal value applied independently at inference and enforces that
+swapping the pair reverses the score.  Never expose either deployed evaluation
+to the other seat's private payload.
+
+Combine the ordinal score with current money through a confidence gate selected
+only by complete-EpisodeId training CV: override current-money ordering only in
+pre-registered close-margin regions where the pairwise head has demonstrated a
+strict gain.  Preserve N74's terminal residual for magnitude, but use the new
+head for ordering.  Freeze coefficients and thresholds before acquiring a
+second unseen policy block.  Require no paired-winner regression overall or at
+360/600/648, retained terminal MAE gains, then lower counterfactual macro-plan
+regret and official both-seat improvement within 600 ms before submission.
