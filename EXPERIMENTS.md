@@ -2608,3 +2608,48 @@ arena timing instrumentation preserves both one- and two-argument agents.
   `632566aa1b3b7d4a29675fdff7aea13e18b413dc85dd35f3d83ca8edb5e5784a`.
   Kaggle reported zero submissions remaining today; S13 was pending at the
   logging cutoff.
+
+## E136 — N87 F240 rescue on frozen N86 / ready after reset
+
+- Isolated the only inherited negative N86-versus-S12 margin episode
+  (`96907318`).  N39 was `-$46` versus S12, N81 `-$24`, and N83/N84/N86
+  `-$22`, so the loss predates N86 and N86 already repairs half of it.  Exact
+  S12-versus-S11 ablation showed that the step-240 FERTILIZER/cap-10 rule adds
+  `+$40` in that episode and `+$4` in one other new S12 game, with eighteen
+  neutral games.
+- Preregistered and froze N87 as exact N86 plus that single step-240 rule.
+  Its 319,971-byte artifact has SHA-256
+  `f287bfc401f46405efb4f012e03a7d2ba659d26ad386b5db010932ed212f9c37`.
+  On the twenty-game S12 discovery cohort it added `+$44` over N86 (mean
+  `+$2.20`, minimum `$0`); on the disjoint twenty-one-game S11 transfer it
+  added `+$32` (mean `+$1.52`, minimum `$0`).
+- The frozen candidate then passed the untouched older 47-game holdout.  It
+  added `+$97` over N86 (mean `+$2.06`, minimum `$0`, four positive and 43
+  neutral episodes).  Across all 88 active live trajectories N87 adds `+$173`
+  over N86 (mean `+$1.966`, minimum `$0`, seven positive and 81 neutral), with
+  no outcome regression.  Every one of the 88 trajectories repaid its exact
+  market debt: 941 WHEAT and 2,165 FERTILIZER units advanced and repaid.
+- On four unseen paired seeds (`20260889..20260892`) N87 averaged `+$20`
+  margin versus N86.  Three seeds were `+$20/+$20`; the fourth was
+  `+1339/-1299`, again `+$40` as a paired sum.  A final both-seat panel against
+  V36, C95 and exact scored V16/v25 on seed `20260893` rejected the gate 72/72
+  observations and reproduced both N39 banks exactly in all eight games.
+  Maximum broad-panel action latency was `255.9 ms`; all `173` tests pass.
+- Decision: N87 is the strongest locally validated candidate for the first
+  post-reset slot.  Do not clone S09 merely for another rating sample: N87 is
+  exact S09/N39 outside the public 3-COW/2-SHEEP family and has a strictly
+  non-negative replay improvement inside it.  Kaggle still reported zero
+  submissions remaining, with the daily allowance resetting in about seven
+  hours.
+
+## E137 — S13 first nine public games / gate inactive
+
+- Downloaded every completed public S13 replay through episode `96952873`.
+  S13 is `7W/2L` over nine games; losses are episodes `96945986` and
+  `96950572`.  None of the nine opponents matched the public 3-COW/2-SHEEP
+  gate, so all nine games used exact N39 behavior and provide no live evidence
+  for or against N86's added debt timings.
+- The displayed rating was still moving rapidly (`953.2` at the latest browser
+  refresh).  This early rating is not a policy rejection signal: it is based
+  on only nine inactive-gate games, while S09's mature exact-N39 submission is
+  still the team's strongest displayed score at `2570.8`.
