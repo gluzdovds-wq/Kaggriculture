@@ -2127,3 +2127,25 @@ arena timing instrumentation preserves both one- and two-argument agents.
   policy graft.  No Kaggle submission was spent.  Future counterfactual search
   must include `KEEP_BASE` as an explicit action and evaluate bounded residual
   interventions; branch recall alone can no longer clear the official gate.
+
+## E111 — N78 KEEP_BASE idle-WATER residual / outcome neutral
+
+- Added `tools/make_keep_base_residual.py`.  Its first residual preserves the
+  complete N39 action and changes at most one actor that N39 already leaves on
+  `PASS`: if that actor is standing on an unwatered plant, replace only that
+  idle action with `WATER`.  Movement, task ownership, inventories and every
+  market order remain byte-for-byte under N39.  The generator and boundary /
+  preservation behavior have focused tests.
+- Against byte-exact N39 on four fresh seeds (`20260826..20260829`) from both
+  seats, the residual executed 64 locally legal WATER actions across eight
+  matches with zero fallbacks.  Candidate banks and margins were exactly
+  identical to an independently rerun N39-vs-N39 baseline on every seed and
+  seat; paired outcome stayed `0.500`.
+- The intervention is genuinely active but redundant.  N39's later fixed
+  schedule waters the same plants, so moving those actions into earlier idle
+  slots neither changes survival/yield nor frees a later scheduled action.
+- Decision: retain N78's KEEP_BASE generator as the correct safety shape, but
+  reject idle WATER as a promotion candidate.  No broad opponent panel or
+  Kaggle submission is justified by exact outcome neutrality.  The next
+  residual must change an actual bottleneck while explicitly modelling the
+  later action it repays or frees.

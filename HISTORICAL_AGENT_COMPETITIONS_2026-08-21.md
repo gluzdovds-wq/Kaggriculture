@@ -1057,3 +1057,18 @@ fresh-policy transfer plus broad official paired improvement before submission.
 
 The 48-turn macro router remains useful as an adversarial rollout family and
 proposal generator.  It is no longer eligible to control the live agent.
+
+## Execution checkpoint: first KEEP_BASE residual
+
+- The first N78 action is intentionally close to dominance: replace at most
+  one N39 `PASS` with `WATER` only when that actor already stands on an
+  unwatered plant.  It never changes movement, market orders or a non-idle
+  action.
+- Across four fresh official seeds and both seats it fired 64 times with zero
+  errors, yet every final bank and margin exactly matched an independent
+  N39-mirror baseline.  The fixed continuation later spends its originally
+  scheduled WATER anyway, so the early service does not release useful work.
+- This validates the executor shape and rejects the specific residual.  A
+  useful follow-up must carry a repayment/debt model: when work is advanced,
+  the later redundant tape action must be identified and safely reassigned,
+  otherwise apparent tactical improvements remain economically neutral.
