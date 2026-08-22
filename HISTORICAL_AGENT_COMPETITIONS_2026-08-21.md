@@ -782,3 +782,32 @@ multi-output model with checkpoint median and snapshot kNN-10.  Require lower
 item and gross-value error at both steps 360 and 648, better ten-particle oracle
 coverage on each checkpoint (not only aggregate), and then improved macro-plan
 top-3 recall before any in-agent rollout integration.
+
+## Execution checkpoint: observation-history transfer
+
+- A 324–326-feature combined snapshot/history representation was built without
+  replay actions or other-seat private inputs.  On the original grouped top-20
+  panel it improved seven of eight registered late metrics; only step-648
+  best-particle gross coverage regressed, so the internal gate correctly failed.
+- Without changing k, features or donor pool, transfer from the 40 top-20 games
+  to 23 non-overlapping live-focus games passed every step-360/648 point and
+  particle item/gross comparison.  Late point item error improved 20.9%; the
+  weakest passing edge was late particle gross error at only 0.17%.
+- This is sufficient to retain history-kNN10 as the legal belief proposal, not
+  to claim a stronger agent.  The next evaluation must ask whether its ten
+  particles preserve the full-state oracle's best macro plan, then whether that
+  plan wins paired official-engine games.
+
+### N72 — particle-to-oracle macro-plan recall
+
+At day-boundary checkpoints generate a fixed, legal top-K set of reactive task
+graphs (crop/animal service, land/hire, market timing and terminal liquidation),
+not raw action tapes.  Evaluate each plan for 6/12/24 turns under the forbidden
+full state, checkpoint-marginal particles, snapshot-kNN10 and history-kNN10.
+The full state supplies labels only; inference sees the history particles.
+
+Pass only if history particles retain the oracle-best plan in top-3 more often
+than both baselines at steps 360 and 648 on a disjoint replay block, improve
+robust regret, stay below 600 ms, and the selected reactive plan then improves
+official-engine both-seat outcome over N39.  No identity, replay ID, source seed,
+opponent private observation or future action tape is permitted.

@@ -1804,3 +1804,30 @@ arena timing instrumentation preserves both one- and two-argument agents.
   PUCT yet.  Its modest/mixed transfer, especially the step-360 value regression,
   requires inference-visible observation-history features before the macro-plan
   recall gate.  No submission was produced.
+
+## E101 — legal observation-history particles / disjoint transfer pass
+
+- Added cumulative and recent-72 history features computed solely from the
+  target seat's observation stream: visible opponent plant/harvest, animal,
+  fertilizer, land, hand and money changes plus shared market inventory/price
+  deltas.  Tests prove invariance to replay actions, metadata/source seed and
+  arbitrary changes in the other seat's private payload.  Complete EpisodeId
+  grouping and the E100 snapshot-kNN10 baseline remain unchanged.
+- On the 40-game top-20 grouped set, history improved point item/gross error at
+  every checkpoint and best-particle item coverage at every checkpoint.  At
+  step 360 it fixed the earlier value problem: particle gross error fell
+  `$283 → $214` (+24.4%).  At step 648, however, particle gross error rose
+  `$402 → $433` (-7.7%), so the internal pre-registered late gate failed despite
+  better point (`35.76 → 34.08`) and particle item (`21.68 → 19.65`) errors.
+- The fixed history-kNN10 was then transferred without refitting from all 40
+  top-20 training replays to 23 disjoint live-focus replays (four overlapping
+  EpisodeIds removed).  It improved all four registered metrics at both late
+  checkpoints.  At 360: point item `19.79 → 18.42` (+6.9%), point gross
+  `$834 → $774` (+7.1%), particle item `4.43 → 4.37`, particle gross
+  `$101 → $82` (+19.0%).  At 648: `31.23 → 24.70` (+20.9%), `$1,031 → $954`
+  (+7.5%), `10.00 → 8.83` (+11.7%), and `$125.00 → $124.78` (+0.17%).
+- Decision: N71 passes the disjoint belief-transfer gate and history-kNN10 is
+  now the best legal shed/seed particle proposal.  The tiny late gross edge and
+  mixed internal CV forbid direct rollout integration or submission.  Next
+  require full-state-oracle macro-plan top-3 recall and official-engine outcome;
+  hidden-state reconstruction accuracy alone is not a strength metric.

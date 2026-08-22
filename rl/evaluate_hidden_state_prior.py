@@ -159,9 +159,14 @@ def prediction_metrics(
     }
 
 
-def feature_matrix(examples: list[dict], names: tuple[str, ...]) -> np.ndarray:
+def feature_matrix(
+    examples: list[dict], names: tuple[str, ...], feature_key: str = "features"
+) -> np.ndarray:
     return np.asarray(
-        [[example["features"].get(name, 0.0) for name in names] for example in examples],
+        [
+            [example[feature_key].get(name, 0.0) for name in names]
+            for example in examples
+        ],
         dtype=float,
     )
 
@@ -215,10 +220,14 @@ def random_particle_coverage(
 
 
 def evaluate_checkpoint(
-    examples: list[dict], neighbors: tuple[int, ...], particle_draws: int = 128
+    examples: list[dict],
+    neighbors: tuple[int, ...],
+    particle_draws: int = 128,
+    feature_key: str = "features",
+    method_prefix: str = "public",
 ) -> dict:
     feature_names = tuple(
-        sorted({name for example in examples for name in example["features"]})
+        sorted({name for example in examples for name in example[feature_key]})
     )
     method_rows = defaultdict(list)
     particle_rows = defaultdict(list)
@@ -227,7 +236,7 @@ def evaluate_checkpoint(
     for fold_index, episode_id in enumerate(episodes):
         train = [example for example in examples if example["episode_id"] != episode_id]
         test = [example for example in examples if example["episode_id"] == episode_id]
-        train_features = feature_matrix(train, feature_names)
+        train_features = feature_matrix(train, feature_names, feature_key)
         train_targets = np.stack([example["target"] for example in train])
         marginal = np.median(train_targets, axis=0)
         for test_index, example in enumerate(test):
@@ -239,7 +248,7 @@ def evaluate_checkpoint(
             method_rows["checkpoint_median"].append(
                 prediction_metrics(marginal, target, prices)
             )
-            test_features = feature_matrix([example], feature_names)[0]
+            test_features = feature_matrix([example], feature_names, feature_key)[0]
             order = np.argsort(
                 standardized_distances(train_features, test_features),
                 kind="stable",
@@ -265,7 +274,7 @@ def evaluate_checkpoint(
                 )
                 particles = train_targets[selected_indices]
                 prediction = np.median(particles, axis=0)
-                name = f"public_knn_{count}"
+                name = f"{method_prefix}_knn_{count}"
                 method_rows[name].append(
                     prediction_metrics(prediction, target, prices)
                 )
@@ -311,6 +320,110 @@ def evaluate_checkpoint(
         ),
         "methods": methods,
         "particle_coverage": particle_coverage,
+    }
+
+
+def evaluate_fixed_split(
+    train: list[dict],
+    test: list[dict],
+    neighbors: tuple[int, ...],
+    particle_draws: int = 128,
+    feature_key: str = "features",
+    method_prefix: str = "public",
+) -> dict:
+    if not train or not test:
+        raise ValueError("fixed split requires non-empty train and test sets")
+    feature_names = tuple(
+        sorted(
+            {
+                name
+                for example in [*train, *test]
+                for name in example[feature_key]
+            }
+        )
+    )
+    train_features = feature_matrix(train, feature_names, feature_key)
+    train_targets = np.stack([example["target"] for example in train])
+    marginal = np.median(train_targets, axis=0)
+    method_rows = defaultdict(list)
+    particle_rows = defaultdict(list)
+    same_episode_neighbors = 0
+    for test_index, example in enumerate(test):
+        target = example["target"]
+        prices = example["prices"]
+        method_rows["blank"].append(
+            prediction_metrics(np.zeros_like(target), target, prices)
+        )
+        method_rows["checkpoint_median"].append(
+            prediction_metrics(marginal, target, prices)
+        )
+        test_features = feature_matrix([example], feature_names, feature_key)[0]
+        order = np.argsort(
+            standardized_distances(train_features, test_features), kind="stable"
+        )
+        for count in neighbors:
+            particle_rows[f"checkpoint_random_{count}"].append(
+                random_particle_coverage(
+                    train_targets,
+                    target,
+                    prices,
+                    count,
+                    particle_draws,
+                    np.random.default_rng(20260822 + test_index * 1009 + count),
+                )
+            )
+            selected_indices = order[: min(count, len(order))]
+            selected = [train[index] for index in selected_indices]
+            same_episode_neighbors += sum(
+                row["episode_id"] == example["episode_id"] for row in selected
+            )
+            particles = train_targets[selected_indices]
+            prediction = np.median(particles, axis=0)
+            name = f"{method_prefix}_knn_{count}"
+            method_rows[name].append(prediction_metrics(prediction, target, prices))
+            candidate_metrics = [
+                prediction_metrics(particle, target, prices) for particle in particles
+            ]
+            particle_rows[name].append(
+                {
+                    "best_particle_item_l1": min(
+                        row["item_l1"] for row in candidate_metrics
+                    ),
+                    "best_particle_gross_value_abs_error": min(
+                        row["gross_value_abs_error"] for row in candidate_metrics
+                    ),
+                }
+            )
+    methods = {name: aggregate(rows) for name, rows in sorted(method_rows.items())}
+    marginal_error = methods["checkpoint_median"]["item_l1"]
+    for metrics in methods.values():
+        metrics["item_l1_improvement_vs_median"] = (
+            (marginal_error - metrics["item_l1"]) / marginal_error
+            if marginal_error
+            else 0.0
+        )
+    return {
+        "train_episode_count": len({row["episode_id"] for row in train}),
+        "test_episode_count": len({row["episode_id"] for row in test}),
+        "train_seat_cases": len(train),
+        "test_seat_cases": len(test),
+        "legal_feature_count": len(feature_names),
+        "marginal_particle_draws": particle_draws,
+        "same_episode_neighbor_violations": same_episode_neighbors,
+        "hidden_carried_nonzero_cases": sum(
+            example["hidden_carried_units"] > 0 for example in test
+        ),
+        "methods": methods,
+        "particle_coverage": {
+            name: {
+                field: fmean(row[field] for row in rows)
+                for field in (
+                    "best_particle_item_l1",
+                    "best_particle_gross_value_abs_error",
+                )
+            }
+            for name, rows in sorted(particle_rows.items())
+        },
     }
 
 

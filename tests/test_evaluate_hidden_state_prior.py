@@ -6,6 +6,7 @@ from rl.evaluate_hidden_state_prior import (
     SHED_ITEMS,
     SEED_ITEMS,
     evaluate_checkpoint,
+    evaluate_fixed_split,
     gross_value,
     hidden_target,
     prediction_metrics,
@@ -78,6 +79,36 @@ class HiddenStatePriorTests(unittest.TestCase):
         self.assertEqual(report["hidden_carried_nonzero_cases"], 0)
         self.assertIn("public_knn_2", report["methods"])
         self.assertIn("checkpoint_random_2", report["particle_coverage"])
+
+    def test_fixed_split_reports_episode_leakage(self):
+        size = len(SHED_ITEMS) + len(SEED_ITEMS)
+        train = []
+        for episode_id, signal in ((1, 0.0), (2, 10.0)):
+            target = np.zeros(size)
+            target[0] = signal
+            train.append(
+                {
+                    "episode_id": episode_id,
+                    "features": {"signal": signal},
+                    "target": target,
+                    "hidden_carried_units": 0,
+                    "prices": {"WHEAT": 25},
+                }
+            )
+        target = np.zeros(size)
+        target[0] = 9
+        test = [
+            {
+                "episode_id": 3,
+                "features": {"signal": 9.0},
+                "target": target,
+                "hidden_carried_units": 0,
+                "prices": {"WHEAT": 25},
+            }
+        ]
+        report = evaluate_fixed_split(train, test, (1,), particle_draws=2)
+        self.assertEqual(report["same_episode_neighbor_violations"], 0)
+        self.assertEqual(report["test_episode_count"], 1)
 
 
 if __name__ == "__main__":
