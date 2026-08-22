@@ -1324,3 +1324,37 @@ arena timing instrumentation preserves both one- and two-argument agents.
   future common opening must be synthesized and jointly optimized from step
   zero with branch compatibility as a hard constraint, not copied from either
   incumbent.
+
+## E082 — first live losses and residual third-policy gate
+
+- S09/N39 reached a live trajectory near `2291` before its first archived
+  loss, episode `96407577` against weichy7 (`-3291`).  Exact donor replay
+  showed that active V36 already covers it at `+8071`; Soil and C95 also win,
+  while S05, N29, N31, X544 and Moon lose.  This is direct live evidence that
+  the two deployed policies remain complementary rather than redundant.
+- S10/V36 accumulated fifteen wins, one draw and two losses over eighteen
+  archived episodes.  N39 flips the earlier Efnutrrionpy loss but still loses
+  the new Kevin Park episode (`-6534` versus V36's `-25986`).  C95 and X544
+  are the only tested donors to flip Kevin Park, at `+27338` and `+9609`.
+- On all eighteen exact S10 tapes, V36 scores `15.5/18`, N39 `16/18`, C95
+  `12/18` and X544 `15/18`.  Relative to V36, C95 has one improvement and five
+  regressions; X544 has three improvements and three regressions.  The
+  V36+N39 outcome oracle is `17/18`; adding either C95 or X544 raises the
+  retrospective oracle to `18/18`, but neither donor is safe as a replacement.
+- A shadow-compatible V36-to-C95 switch still flips Kevin Park at steps `1`,
+  `12` and `24` (`+12239`, `+27330`, `+27330`), but step `72` is too late.
+  X544 switches at all four checkpoints lose.  The apparent C95 adaptation
+  window therefore exists mechanically, but it has no valid opponent label:
+  Kevin Park and seven other S10 opponents have an identical complete public
+  opponent-farm trace through step 72, including cases where C95 regresses.
+- The old N34 file was also re-audited after an ambiguous filename suggested a
+  V36 animal variant.  It is an N31-based COW-to-SHEEP overlay.  Against the
+  fifteen original S10 tapes it preserves every N31 outcome and activates only
+  twice, improving margins by `+2263` and `+9163`; it does not explain V36's
+  loss or justify a slot.
+- Decision: retain N39 and V36 and keep all three remaining UTC-day slots.
+  Record C95 as a real residual third-policy class, but reject an early
+  opponent classifier because the relevant opponents are observationally
+  aliased throughout the usable switch window.  Seek repeated public
+  market-context evidence or a jointly optimized common policy before
+  promoting a third submission.
