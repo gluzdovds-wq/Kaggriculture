@@ -1,0 +1,166 @@
+import tempfile
+import random
+import unittest
+from pathlib import Path
+
+from tools.make_shadow_policy_audit import render_audit
+
+
+BASE = '''import random
+def agent(obs, configuration=None):
+    random.random()
+    return {"farmer": ["PASS"], "hands": [["PASS"]], "market": []}
+'''
+
+CANDIDATE = '''import random
+def agent(obs, configuration=None):
+    random.random()
+    action = ["WATER"] if obs["hour"] == 2 else ["PASS"]
+    return {"farmer": action, "hands": [["PASS"]], "market": []}
+'''
+
+
+class ShadowPolicyAuditTests(unittest.TestCase):
+    def render(
+        self,
+        base_source=BASE,
+        candidate_source=CANDIDATE,
+        execute_operations=(),
+    ):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        base = root / "base.py"
+        candidate = root / "candidate.py"
+        base.write_text(base_source, encoding="utf-8")
+        candidate.write_text(candidate_source, encoding="utf-8")
+        return render_audit(
+            base,
+            candidate,
+            label="test",
+            execute_operations=tuple(execute_operations),
+        )
+
+    def test_returns_base_and_records_shadow_divergence(self):
+        namespace = {"__name__": "generated"}
+        exec(compile(self.render(), "generated.py", "exec"), namespace)
+        agent = namespace["agent"]
+        for hour in range(4):
+            action = agent(
+                {
+                    "day": 0,
+                    "hour": hour,
+                    "player": 0,
+                    "farms": [
+                        {
+                            "farmer": [0, 0],
+                            "hands": [[0, 0]],
+                            "tiles": [[{"kind": "PLANT", "watered_today": False}]],
+                        },
+                        {"farmer": [0, 0], "hands": [], "tiles": [[None]]},
+                    ],
+                    "private": {"inventories": [{}, {}]},
+                }
+            )
+            self.assertEqual(action["farmer"], ["PASS"])
+        telemetry = agent.telemetry
+        self.assertEqual(telemetry["turns"], 4)
+        self.assertEqual(telemetry["joint_equal"], 3)
+        self.assertEqual(telemetry["first_joint_divergence"], 2)
+        self.assertEqual(telemetry["candidate_nonpass_for_base_pass"], 1)
+        self.assertEqual(telemetry["candidate_service_for_base_pass"], 1)
+        self.assertEqual(telemetry["candidate_immediate_valid_for_base_pass"], 1)
+        self.assertEqual(
+            telemetry["candidate_immediate_nonredundant_for_base_pass"], 1
+        )
+        self.assertEqual(telemetry["immediate_samples"][0]["step"], 2)
+        self.assertTrue(telemetry["immediate_samples"][0]["valid"])
+        self.assertEqual(telemetry["longest_joint_equal_streak"], 2)
+
+    def test_uses_seat_stable_day_hour_clock(self):
+        namespace = {"__name__": "generated"}
+        exec(compile(self.render(), "generated.py", "exec"), namespace)
+        agent = namespace["agent"]
+        agent({"step": 0, "day": 1, "hour": 2, "player": 1})
+        self.assertEqual(agent.telemetry["first_joint_divergence"], 26)
+
+    def test_candidate_rng_does_not_perturb_base_sequence(self):
+        base_source = '''import random
+def agent(obs, configuration=None):
+    direction = "NORTH" if random.random() < 0.5 else "SOUTH"
+    return {"farmer": [direction], "hands": [], "market": []}
+'''
+        candidate_source = '''import random
+def agent(obs, configuration=None):
+    for _ in range(7):
+        random.random()
+    return {"farmer": ["PASS"], "hands": [], "market": []}
+'''
+        namespace = {"__name__": "generated"}
+        exec(
+            compile(
+                self.render(base_source, candidate_source), "generated.py", "exec"
+            ),
+            namespace,
+        )
+        expected_rng = random.Random(12345)
+        expected = [
+            "NORTH" if expected_rng.random() < 0.5 else "SOUTH" for _ in range(6)
+        ]
+        random.seed(12345)
+        observed = [
+            namespace["agent"]({"day": 0, "hour": hour, "player": 0})["farmer"][0]
+            for hour in range(6)
+        ]
+        self.assertEqual(observed, expected)
+
+    def test_executes_only_allowlisted_valid_action_for_passing_actor(self):
+        namespace = {"__name__": "generated"}
+        exec(
+            compile(
+                self.render(execute_operations=("water",)), "generated.py", "exec"
+            ),
+            namespace,
+        )
+        observation = {
+            "day": 0,
+            "hour": 2,
+            "player": 0,
+            "farms": [
+                {
+                    "farmer": [0, 0],
+                    "hands": [[0, 0]],
+                    "tiles": [[{"kind": "PLANT", "watered_today": False}]],
+                },
+                {"farmer": [0, 0], "hands": [], "tiles": [[None]]},
+            ],
+            "private": {"inventories": [{}, {}]},
+        }
+        action = namespace["agent"](observation)
+        self.assertEqual(action["farmer"], ["WATER"])
+        self.assertEqual(action["hands"], [["PASS"]])
+        self.assertEqual(namespace["agent"].telemetry["executed"], 1)
+        self.assertEqual(
+            namespace["agent"].telemetry["executed_by_operation"], {"WATER": 1}
+        )
+
+    def test_rejects_missing_policy_or_label(self):
+        missing = Path("missing.py")
+        with self.assertRaises(ValueError):
+            render_audit(missing, missing, label="test")
+        with tempfile.TemporaryDirectory() as directory:
+            policy = Path(directory) / "policy.py"
+            policy.write_text(BASE, encoding="utf-8")
+            with self.assertRaises(ValueError):
+                render_audit(policy, policy, label="")
+            with self.assertRaises(ValueError):
+                render_audit(
+                    policy,
+                    policy,
+                    label="test",
+                    execute_operations=("TELEPORT",),
+                )
+
+
+if __name__ == "__main__":
+    unittest.main()

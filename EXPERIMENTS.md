@@ -1462,3 +1462,33 @@ arena timing instrumentation preserves both one- and two-argument agents.
   a submission candidate because it changes no outcomes and has no robust
   worst-family gain. The full suite passes `87/87`. Preserve the N39/V36 live
   pair and submission reserve.
+
+## E087 — N58 structured-policy shadow audit and bounded service overlay
+
+- Screened the complete public structured economic policy as a possible
+  reactive task-graph donor against N39, V36, C95, exact V16 and exact v25 on
+  three fresh seeds and both seats.  It lost all six games in each of the first
+  four families; against v25 its paired outcome rate was only `0.333`.  Average
+  margins ranged from `-2,654.67` to `-35,699.33`, so the whole policy is not a
+  viable current-meta base.
+- Added `tools/make_shadow_policy_audit.py`, which runs a second policy from
+  step zero with isolated RNG and copied observations, records compatible-state
+  and base-PASS opportunities, and normally returns the unchanged base action.
+  Optional interventions are restricted to an explicit operation allowlist,
+  locally legal actions and actors that the base leaves idle; redundant
+  same-tile operations are rejected.
+- The outcome-neutral wrapper exactly reproduced N39 across 12 matched games
+  (two seeds, both seats, N39/V36/C95): zero bank, margin or outcome mismatch
+  and zero candidate errors.  The two policies nevertheless disagreed on the
+  joint field+market action from step zero and matched on only roughly 3% of
+  turns, confirming that a late whole-policy switch would be state-incompatible.
+- A WATER/FEED-only service overlay was then tested in 16 matched games.  Ten
+  broad-screen games contained no eligible intervention.  A targeted seed
+  produced exactly one locally valid WATER in each of six games, but all six
+  banks, margins and outcomes remained exactly unchanged.  Candidate p99 was
+  below 39 ms in every run; there were no shadow-policy errors.
+- Decision: reject N58 as a submission candidate.  Keep the shadow runner and
+  legality gate as research infrastructure for candidate extraction and future
+  planner/model audits.  Random action-level exploration remains unjustified;
+  only counterfactual-tested, opportunity-cost-aware interventions should be
+  eligible for live control.  The complete suite passes `92/92`.

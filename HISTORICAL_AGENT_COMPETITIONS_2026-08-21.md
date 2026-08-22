@@ -615,3 +615,13 @@ the leaderboard only as a noisy measurement of the current live meta.
   and a `-113.75` family-margin delta against V16. This is safe reactive
   machinery but not a promotion: exact one-factor forecasting still does not
   replace full task-graph opportunity cost or policy diversity.
+- N58 shadow-ran the strongest available public structured economic policy
+  continuously beside N39.  The full donor was decisively weak on a current
+  five-family screen and diverged from N39 at step zero, so strategy recognition
+  cannot make a later whole-policy splice safe.  The new isolated-RNG shadow
+  wrapper nevertheless reproduced N39 exactly in every outcome-neutral test.
+  Allowing only locally legal WATER/FEED actions for base-idle actors produced
+  six real WATER interventions on a targeted seed, but changed no bank, margin
+  or result.  This cleanly separates safe exploration plumbing from useful
+  exploration: the former now exists, while the latter still requires a learned
+  or searched counterfactual value estimate over the complete task graph.
