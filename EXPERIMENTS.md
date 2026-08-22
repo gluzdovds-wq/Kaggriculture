@@ -2464,3 +2464,118 @@ arena timing instrumentation preserves both one- and two-argument agents.
   current-day final slot remains reserved.  The authoritative tested artifact
   is 319,892 bytes, SHA-256
   `3d27f81d3e74e98f2f1fef60d92efb0aef1cdd2f5a04f1daffbb8b6687d9477a`.
+
+## E127 — N84 third independent active-live wave / confirmed
+
+- S11 reached a `2365.8` rating and `33W/7L` over forty public games; S12
+  reached `2061.7` and `25W/6L` over thirty-one.  Downloaded the 25 public
+  games completed after the E121 cutoff.  All thirteen new S11 opponents and
+  ten of twelve new S12 opponents matched the public `3 COW / 2 SHEEP` gate.
+- Exact submitted-policy controls reproduced the recorded banks in all 23
+  active trajectories on their original seed and seat.  On the thirteen S11
+  tapes, N83 added `$190` margin and N84 added `$249`; F410 therefore added
+  `$59` over N83 (mean `+$4.54`, minimum `$0`).  On the ten active S12 tapes,
+  N83 added `$165` and N84 added `$195`; F410 added another `$30` (mean `+$3`,
+  minimum `$0`).
+- F410 executed and was repaid in every new active trajectory.  It changed the
+  margin positively in six games and was neutral in seventeen, with no outcome
+  regression.  The two new non-target S12 games rejected the gate and were
+  exact submitted-baseline identities, including one recorded loss.
+- Across all 47 active public trajectories now archived, N84 adds `$146` over
+  N83 (mean `+$3.11`, minimum `$0`).  Relative to the actually submitted
+  S11/S12 policies, N84 gains `$980` total margin (mean `+$20.85`, minimum
+  `$0`) without an outcome regression.  N84 remains the first post-reset
+  submission; the final current-day slot remains reserved.
+
+## E128 — N85 F410 cap escalation / rejected
+
+- Preregistered four byte-identical N84 variants except for raising the step-410
+  FERTILIZER cap from three to `4/5/6/7`, then screened them on the thirteen new
+  active S11 tapes.  The cap-four variant sometimes advanced and repaid one
+  additional unit, but reproduced both N84 banks exactly in all thirteen games.
+- Cap five lost `$1,149` total margin versus N84 (mean `-$88.38`, minimum
+  `-$421`, four negative episodes).  Cap six lost `$2,955` (mean `-$227.31`,
+  minimum `-$851`, five negatives), and cap seven lost `$3,320` (mean
+  `-$255.38`, minimum `-$847`, five negatives).  All quantities were repaid and
+  no outcome flipped; the damage is the shared-market timing consequence.
+- Decision: no candidate has both positive mean and non-negative per-episode
+  transfer, so do not inspect the frozen S12 labels and do not submit N85.
+  N84's cap three is the current safe causal boundary, not a capacity target to
+  maximize.
+
+## E129 — N86 fresh-route single-unit screen / two survivors
+
+- Preregistered eight previously untested one-unit V36-shadow sale timings
+  repeated in the new S11 block and screened each alone on top of N84.  Every
+  candidate repaid its exact market debt and stayed below `308 ms` maximum
+  measured action latency.
+- FERTILIZER step 298 was non-negative in all thirteen games and added
+  `+$0/+$0/+$2/+$2/.../+$1`, or `$5` total (`+$0.385` mean).  WHEAT step 631
+  was also non-negative and added `$1` in six games, `$6` total (`+$0.462`
+  mean).  Both were frozen for untouched S12 transfer.
+- STRAWBERRY step 594 added an attractive `$247` total but had three negative
+  episodes down to `-$9`, so it was rejected.  WHEAT step 479 averaged
+  `-$36.23` with minimum `-$421`; WOOL step 360 averaged `-$3.85` with minimum
+  `-$42`; WHEAT step 535 had a `-$1` episode; WHEAT steps 542/597 were exact
+  N84 identities and were not advanced.
+- The F298+W631 combination was generated and hashed before transfer results
+  were observed (SHA-256
+  `632566aa1b3b7d4a29675fdff7aea13e18b413dc85dd35f3d83ca8edb5e5784a`).
+  Evaluate the two components individually on the ten active S12 tapes; only if
+  both transfer may the frozen combination proceed.
+
+## E130 — N86 frozen S12 component transfer / both pass
+
+- Transferred the two frozen E129 survivors individually to the ten untouched
+  active S12 tapes.  F298 produced incremental N84 deltas
+  `+$2/$0/+$2/$0/$0/$0/$0/$0/+$2/$0`: `$6` total, `+$0.6` mean, minimum `$0`.
+  W631 produced `$0/+$1/$0/$0/$0/+$1/$0/$0/$0/$0`: `$2` total, `+$0.2`
+  mean, minimum `$0`.
+- Both components repaid every advanced unit and caused no outcome regression.
+  Maximum measured latency was `216.8 ms` for F298 and `523.4 ms` for W631,
+  below the preregistered `600 ms` gate.  Because both components transferred
+  positively without a negative episode, the already-hashed F298+W631
+  combination was eligible for evaluation.
+
+## E131 — N86 frozen combination on fresh 23 / pass
+
+- Evaluated the preregistered combination on all thirteen S11 discovery tapes
+  and ten S12 transfer tapes.  Relative to N84 it added `$11` on S11 and `$8`
+  on S12: `$19` total, `+$0.826` mean, minimum `$0`, maximum `+$2`.
+- The combined result exactly equals the sum of the two individual components,
+  with complete repayment and no outcome regression.  Maximum action latency
+  was `237.6 ms`.  The combination therefore passed to the older 24-game live
+  holdout without any refit.
+
+## E132 — N86 older 24 active-live holdout / pass
+
+- On the 24 older active S11/S12 trajectories, the frozen combination gained
+  `$548` over the recorded submissions versus N84's `$536`.  Its incremental
+  N84 deltas were positive in four games and zero in twenty: `$12` total,
+  `+$0.5` mean, minimum `$0`, maximum `+$5`.
+- Across the complete 47-game active-live corpus, N86 consequently adds `$31`
+  over N84 (`+$0.660` mean, minimum `$0`) and `$1,011` over the actually
+  submitted S11/S12 policies (`+$21.51` mean).  Every debt was repaid and no
+  outcome regressed.
+
+## E133 — N86 fresh paired mirror / neutral
+
+- Compared N86 directly with N84 on four unseen seeds from both seats
+  (`20260884..20260887`).  Paired margins were `+423/-423`, `+72/-72`,
+  `+282/-282` and `$0/$0`, yielding exactly zero mean margin and zero summed
+  pair margin on every seed.
+- This supplies no new positive mirror evidence for F298/W631, but it also
+  shows no regression.  Promotion rests on the non-negative 47-game shared
+  market replay panel; broad rejection must remain exact.
+
+## E134 — N86 eight-rule live-safe market debt / ready, reserve held
+
+- A final both-seat panel against V36, C95 and exact scored V16/v25 on seed
+  `20260888` reproduced both N39 banks exactly in all eight games.  The public
+  family gate was rejected eight times per game, accepted zero times, and no
+  market quantity advanced.  Maximum N86 action latency was `222.8 ms`.
+- Decision: N86 supersedes N84 as the strongest prepared first post-reset
+  submission.  N84 remains a useful one-component ablation for the second
+  post-reset slot; the current-day final slot remains reserved.  Authoritative
+  N86 artifact: 319,951 bytes, SHA-256
+  `632566aa1b3b7d4a29675fdff7aea13e18b413dc85dd35f3d83ca8edb5e5784a`.

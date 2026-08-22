@@ -1217,3 +1217,41 @@ proposal generator.  It is no longer eligible to control the live agent.
   remained exact N39 identities, and all advanced quantities were repaid.
 - N84 (319,892 bytes, SHA prefix `3d27f81d`) is now the first candidate after
   quota reset.  It has not consumed the final current-day reserve slot.
+
+## Execution checkpoint: N84 live confirmation and causal cap boundary
+
+- A later disjoint wave added thirteen active S11 and ten active S12 public
+  trajectories.  Exact submitted-policy controls reproduced every recorded
+  bank.  F410 added another `$59` over N83 on S11 and `$30` on S12, with
+  minimum `$0`, complete repayment and no outcome regression.  Two non-target
+  S12 games were exact baseline identities.
+- The accumulated active-live panel is now 47 games.  N84 adds `$146` over N83
+  and `$980` over the actually submitted S11/S12 policies, while remaining
+  non-negative on every trajectory.  This third transfer wave materially
+  strengthens N84 beyond its original sparse six-game validation.
+- Increasing F410's cap exposed a sharp causal boundary.  Cap four was
+  bank-neutral, but caps five, six and seven lost `$1,149/$2,955/$3,320` total
+  margin on the same thirteen tapes despite exact debt repayment.  Conserving
+  quantity is necessary but still does not conserve the shared price path.
+- A new one-unit screen found two small non-negative timings, FERTILIZER step
+  298 (`+$5` total) and WHEAT step 631 (`+$6`).  High-mean STRAWBERRY step 594
+  was rejected after three negative episodes.  F298/W631 are frozen for an
+  untouched S12 transfer before they can modify the prepared artifact.
+
+## Execution checkpoint: N86 two-unit transferred residual
+
+- F298 and W631 both transferred without refit to the ten active S12 tapes,
+  adding `$6` and `$2` over N84 with minimum `$0`.  Their combination was
+  hashed before the transfer was inspected and then reproduced the additive
+  gain exactly on the combined fresh 23-game panel (`+$19`, minimum `$0`).
+- The frozen combination next added `$12` over N84 on the older 24 active
+  trajectories.  Across all 47 active live games, N86 therefore adds `$31`
+  over N84 and `$1,011` over the submitted S11/S12 baselines, with full debt
+  repayment and zero outcome regressions.
+- Four new both-seat mirror seeds were exactly neutral versus N84.  This is not
+  positive self-play evidence, but it is consistent with a residual whose
+  benefit arises from an asymmetric shared market.  Eight V36/C95/scored-V16/
+  v25 broad controls were exact N39 identities with the gate always rejected.
+- N86 (319,951 bytes, SHA prefix `632566aa`) supersedes N84 as the strongest
+  prepared post-reset submission.  N84 remains a clean single-residual ablation
+  for a second slot, while the final current-day slot remains reserved.
