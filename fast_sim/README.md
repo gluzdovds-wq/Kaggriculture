@@ -44,6 +44,17 @@ inference, so it is an upper bound rather than a submission latency claim.
   competitive cases, the worst optimistic 600 ms capacities were about 33,489
   six-turn, 17,613 twelve-turn and 6,990 twenty-four-turn branches.
 
+For N72, compile `fast_sim/macro_plan_eval.cpp` against the same patched
+`sim.hpp`.  `rl/evaluate_macro_plan_recall.py` exports downloaded replay roots,
+selects disjoint marginal/snapshot/history particles and ranks nine reactive
+task graphs.  Recorded actions stop at the checkpoint; both future seats use
+reactive task graphs and shared synthetic RNG seeds.  On the 27 live-focus
+traces, the validator reproduced `27/27 × 719 = 19,413` money/market transitions.
+The full 23-game disjoint both-seat evaluation rejected history particles:
+snapshot beat history on late 24-turn top-1 agreement and regret, while top-3
+recall was saturated.  This executable is an offline value/proposal diagnostic,
+not a promoted online planner.
+
 This is a partial pass, not a blanket proof. New action families and every
 future engine version still require fresh official traces.  The branch counts
 exclude legal belief-state construction, policy proposals and value inference;

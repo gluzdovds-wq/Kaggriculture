@@ -811,3 +811,43 @@ than both baselines at steps 360 and 648 on a disjoint replay block, improve
 robust regret, stay below 600 ms, and the selected reactive plan then improves
 official-engine both-seat outcome over N39.  No identity, replay ID, source seed,
 opponent private observation or future action tape is permitted.
+
+## Execution checkpoint: reactive macro-plan recall
+
+- Nine legal task graphs were evaluated from exact day-boundary roots on both
+  seats of 23 disjoint live games.  Every future branch was reactive on both
+  sides; the replay action stream stopped at the root.  Ten marginal,
+  snapshot-kNN10 and history-kNN10 particles plus blank-private and full-state
+  oracle controls shared two synthetic future RNG seeds and maintenance versus
+  liquidation opponent responses.
+- The fast simulator reproduced all 719 money/market transitions of all 27
+  available live traces.  Nevertheless the registered history advantage did
+  not appear.  At horizon 24, step 360 was completely insensitive to hidden
+  private state: every method, including blank, selected the oracle plan in
+  top-1 and top-3 on all 46 seat cases.  At step 648, snapshot beat history in
+  top-1 (`95.7%` versus `93.5%`) and mean regret (`1.18` versus `3.21`); both had
+  `100%` top-3 recall.
+- This rejects the claim that better shed/seed reconstruction improves the
+  current macro decision.  It does not show that hidden state is universally
+  irrelevant.  The tested plan/value system is itself narrow: maintenance and
+  liquidation dominated, no animal route won a 24-turn oracle label, and one
+  full case marginally exceeded the 600 ms budget.  Do not integrate N71 into
+  PUCT or submit it on these results.
+
+### N73 — inference-visible leaf-value calibration
+
+Treat N72's failure as a value/proposal problem.  Build grouped day-boundary
+examples whose inputs contain only the controlled seat's private state plus
+public farms, market and town, and whose offline target is future relative
+wealth over 24 turns and at game end.  Compare the current hand-marked farm
+value with a small regularized tree/linear residual; names, EpisodeId, source
+seed and opponent private inventory remain forbidden inputs.
+
+Use shadow-run N39, V36 and strong public donors only to propose and de-duplicate
+reactive task graphs, never as future action tapes.  Score the richer candidate
+set with the learned leaf value under the exact simulator.  Pass only if grouped
+and top20-to-live value error improves, oracle plan labels are no longer almost
+entirely maintenance/liquidation, the public/own selector reduces oracle regret,
+and the selected planner improves official-engine both-seat outcomes over N39
+within the 600 ms budget.  Hidden particles remain dormant unless this stronger
+value/proposal system demonstrates measurable sensitivity to them.

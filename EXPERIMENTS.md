@@ -1831,3 +1831,41 @@ arena timing instrumentation preserves both one- and two-argument agents.
   mixed internal CV forbid direct rollout integration or submission.  Next
   require full-state-oracle macro-plan top-3 recall and official-engine outcome;
   hidden-state reconstruction accuracy alone is not a strength metric.
+
+## E102 — reactive particle-to-oracle macro-plan recall / reject
+
+- Added `fast_sim/macro_plan_eval.cpp` and
+  `rl/evaluate_macro_plan_recall.py`.  Nine fixed reactive task graphs cover
+  maintenance, liquidation, four crop cycles and three animal routes.  Replay
+  actions are used only to reconstruct the day-boundary root; after that both
+  seats are reactive.  The candidate reads only its own farm/private state and
+  shared market, while the opponent alternates maintenance/liquidation response
+  graphs using its particle-private state.  Full state is an offline label;
+  future randomness uses two shared synthetic seeds rather than the replay seed.
+- The fixed E101 top20-to-live transfer was preserved: `40` training games and
+  `23` disjoint live games after removing four overlapping EpisodeIds.  Both
+  seats, steps `360/648`, horizons `6/12/24`, ten marginal/snapshot/history
+  particles, a blank-private sanity particle and the forbidden oracle produced
+  `92` seat-checkpoint cases.  All methods use the same lower-quartile objective
+  over hidden particles, synthetic RNG and two reactive opponent responses.
+  `27/27` exported live traces reproduced official money and market inventory
+  at every one of `719` transitions (`19,413` exact transitions total).
+- The registered history gate failed.  At step 360 / horizon 24 even blank,
+  marginal, snapshot and history all had `100%` top-3 recall, `100%` top-1
+  agreement and zero oracle regret.  At step 648 / horizon 24, blank was
+  `97.8%/91.3%` top-3/top-1 with mean regret `19.46`; marginal was
+  `100%/93.5%/6.38`; snapshot was `100%/95.7%/1.18`; history regressed to
+  `100%/93.5%/3.21`.  History had one small six-turn late advantage, but did not
+  beat snapshot at the registered 24-turn decision horizon.
+- Oracle-best plans also exposed a proposal/value bottleneck.  At horizon 24,
+  step 360 selected maintenance in `39/46`, strawberry in `6/46` and carrot in
+  `1/46`; step 648 selected maintenance in `28/46`, liquidation in `15/46`,
+  strawberry in `2/46` and melon in `1/46`.  No animal route was oracle-best.
+  The full 3,456-branch case took mean `533 ms`, p95 `577 ms` and max `609 ms`
+  including process startup but excluding Python feature construction, so the
+  strict all-cases 600 ms gate also failed.
+- Decision: reject N72 for online integration and do not run official paired
+  outcomes or spend a submission.  N71 remains a valid legal particle proposal,
+  but current plan choice does not benefit from its extra history information.
+  Move to N73: calibrate an inference-visible learned leaf value and enrich the
+  policy-derived task vocabulary before revisiting belief search.
