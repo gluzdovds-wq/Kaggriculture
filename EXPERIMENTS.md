@@ -1207,3 +1207,18 @@ arena timing instrumentation preserves both one- and two-argument agents.
   their outcome union rises from `60/61` to `62/63`.
 - Decision: no last-minute policy change.  Submit N39 first and exact V36
   second after the UTC quota reset, then preserve at least one repair slot.
+
+## E076 — post-reset N39/V36 portfolio deployment
+
+- At `2026-08-22 00:01 UTC`, submitted N39 SHA-256 `6073f67f...` as S09.
+  Kaggle ref `55679129` completed validation episode `96366918` successfully.
+- After N39 reached `COMPLETE`, submitted exact V36 SHA-256 `47ebf290...` as
+  S10 at `00:07 UTC`.  Kaggle ref `55679350` completed validation episode
+  `96369219` successfully.
+- The intended complementary policies are now the latest two valid
+  submissions, ordered N39 then V36.  Both display the initial `600.0` rating
+  before public matchmaking supplies meaningful evidence.  Three of five
+  UTC-day slots remain unused.
+- Decision: do not submit copies or react to the initial rating.  Preserve the
+  remaining slots for validated repairs, monitor public episodes separately,
+  and compare ratings only after sufficient game accumulation.
