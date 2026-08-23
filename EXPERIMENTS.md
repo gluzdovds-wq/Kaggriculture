@@ -2743,3 +2743,28 @@ arena timing instrumentation preserves both one- and two-argument agents.
   exactly neutral versus N87 on this block because S574 had no executable
   effect.  Across all 113 active-live trajectories N89 now adds `+$305` over
   N87 and `+$602` over N86, minimum `$0`, with no outcome regression.
+
+## E145 — post-reset two-policy batch / S14 exploit plus S15 exploration
+
+- At 2026-08-23 08:30 local time Kaggle reported a fresh quota window with
+  five remaining submissions.  The exact scored open-code V16-RC5 (`2913.3`)
+  and v25 (`3009.0`) artifacts were reconsidered but not uploaded: E036 showed
+  S05 beating them `14/16` and `16/16`, and E085 independently showed both
+  losing all eight fresh current-meta games to N39.
+- Final preflight compiled exact S09/N39 and N89, selected `agent` through the
+  official `get_last_callable` loader for both files, and passed `4/4` focused
+  loader/shape tests.  The expected hashes and sizes were reverified before
+  each upload.
+- Submitted exact S09/N39 as S14, ref `55703242`, 312,188 bytes, SHA-256
+  `6073f67f394f7f6161dd60c8406106b130e7ca702974a4accbe1e8e163b8fa1d`.
+  This is the exploit/calibration member; its mature earlier copy S09 displayed
+  `2570.8` but E039 proves that duplicate ratings can vary widely.
+- Submitted N89 as S15, ref `55703248`, 320,000 bytes, SHA-256
+  `24b63a391ae9013db6cb4519f6b5cbb026b848f89e990df06546c5e25a23d1a6`.
+  This is the current-meta exploration member: exact N39 outside the latched
+  public family and `+$305` over N87 / `+$602` over N86 on 113 active live
+  trajectories, minimum `$0`, with no outcome regression.
+- Kaggle accepted both uploads as `PENDING`; three submissions remain in the
+  quota window.  Stop here.  Because only the latest two valid submissions
+  remain active, wait several hours for both candidates to accumulate public
+  games and replay evidence before considering another two-policy batch.

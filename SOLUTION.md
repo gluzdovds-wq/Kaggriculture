@@ -93,6 +93,33 @@ loading and full games. N39 is held for the first post-reset autonomous slot;
 exact V36 is the second current-meta policy, and N31 is retained as the daily
 validation/repair reserve.
 
+## Active batch and prepared queue (2026-08-23)
+
+The active pair is now S14 exact N39/S09 (`55703242`) plus S15 N89
+(`55703248`).  S14 is the mature-policy calibration; S15 is the strongest
+current-meta compatible residual.  Do not upload a third candidate until this
+pair has accumulated several hours of ratings and downloadable replays.
+
+Prepared but currently held artifacts, in descending deployment priority:
+
+1. N87 F240/cap10 (`artifacts/n87-f240/main.py`, SHA prefix `f287bfc4`) is the
+   clean S15 ablation and fallback if S574 behaves unexpectedly live.
+2. N84 F410/cap3 (`artifacts/n84-repro/main.py`, `3d27f81d`) is the conservative
+   six-rule ablation, validated on 47 active public trajectories.
+3. N83 combined (`artifacts/n83-live-combined/main.py`, `397c57c0`) is the
+   five-rule predecessor with 24-game and independent live-transfer evidence.
+4. N81 F216+F340 (`artifacts/n81-live-f216-f340/main.py`, `ac76780b`) and N80
+   F340 (`artifacts/n80-live-f340c7/main.py`, `ddbfc6f2`) are lower-order
+   causal ablations; use them only for component identification, not as the
+   next strength candidate.
+5. Exact V36/S10 and the older independent N31 route remain diversity controls,
+   but their current live/local evidence is weaker than N39/N89.  Re-preflight
+   them before any future upload.
+
+Exact scored V16-RC5 (`2913.3`) and v25 (`3009.0`) are frozen research donors,
+not current queue candidates: their historical notebook rating did not transfer
+to the current local opponent league.
+
 ## Evaluation-aware submission policy
 
 - Kaggriculture allows five submissions per UTC day, but only the latest two

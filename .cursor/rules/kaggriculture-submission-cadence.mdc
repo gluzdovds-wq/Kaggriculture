@@ -1,0 +1,17 @@
+---
+description: Kaggriculture leaderboard submission cadence and quota discipline
+alwaysApply: true
+---
+
+# Kaggriculture Submission Cadence
+
+- Treat Kaggle ratings as delayed, noisy live-meta evidence. Never judge a new bot from its initial seeding score.
+- Submit candidates in batches of exactly two distinct policies: one strongest exploit candidate and one genuinely informative exploration candidate.
+- Only the latest two valid submissions remain the active/final pair. A third immediate upload evicts the older bot before its rating matures, so never start the next batch early.
+- After a two-bot batch, do not submit a third or fourth bot immediately. Wait at least several hours and inspect completed public games, opponents, gate activation, and rating stability first.
+- Start another two-bot batch only after the previous pair has accumulated meaningful evidence or after the quota window has rolled over. Prefer roughly 24 hours for a confident comparison.
+- Keep one quota slot available for validation/repair. This is an emergency bound, not a reason to withhold the planned second bot in a batch.
+- Two submissions per quota window are autonomous. Use two additional slots only after the preceding pair is stable or 24 hours old; never burn 3-4 slots in one burst.
+- Before every upload, run `kaggle competitions submission-limits -c kaggriculture` and inspect current submissions. Record artifact path, byte size, SHA-256, description, timestamp, and returned reference.
+- Do not submit an exact duplicate merely because its earlier rating was high unless duplicate-rating calibration is the explicit experiment. Prefer an improved compatible policy or a strategically diverse route.
+- After uploading a pair, download and classify their replays before choosing the next candidates.
