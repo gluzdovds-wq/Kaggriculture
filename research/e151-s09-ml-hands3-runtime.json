@@ -1,0 +1,71 @@
+{
+  "schema": "kaggriculture-distilled-wheat-gate-v1",
+  "checkpoint_step": 112,
+  "decision_threshold": 0.5,
+  "feature_names": [
+    "x_focus_hands"
+  ],
+  "children_left": [
+    1,
+    -2,
+    -2
+  ],
+  "children_right": [
+    2,
+    -2,
+    -2
+  ],
+  "feature_indices": [
+    0,
+    -2,
+    -2
+  ],
+  "thresholds": [
+    3.0,
+    -2.0,
+    -2.0
+  ],
+  "positive_probabilities": [
+    0.5,
+    1.0,
+    0.0
+  ],
+  "feature_bounds": {},
+  "action": "ADVANCE1 only when the opponent has <= 3 public hired hands at step112; execute a quantity-conserving WHEAT sale capped at 1 on step119",
+  "fallback": "KEEP_BASE",
+  "provenance": {
+    "kind": "experimental_meta_exploit",
+    "rule": "x_focus_hands <= 3",
+    "threshold_stability": "3 in all 17 leave-opponent-policy-out folds",
+    "paired_discovery": {
+      "rows": 80,
+      "unique_episodes": 58,
+      "opponent_groups": 17,
+      "selected_rows_oof": 50,
+      "benefited_selected_oof": 13,
+      "neutral_selected_oof": 37,
+      "harmed_selected_oof": 0,
+      "total_margin_uplift_oof": 13.0,
+      "mean_margin_uplift_per_game_oof": 0.1625,
+      "opponent_group_bootstrap_ci95_mean": [
+        0.0273972602739726,
+        0.375
+      ]
+    },
+    "validation_split": "for every held opponent policy/name, fit the one-feature threshold on the remaining policies after purging every overlapping episode, then predict the held group",
+    "clean_counterfactual_report": "artifacts/e151-direct-advance1-vs-s09-top10-80-clean.json",
+    "clean_counterfactual_report_sha256": "e1d26c0b8393b3b4d430aaefe666ff21beebd0bc794e632d3bd970c53d513974",
+    "value_study": "artifacts/e151-direct-value-gate-study.json",
+    "value_study_sha256": "97070788b8ae3de19906cc7f695345cc2dd3a7ea4049da77f3a3c4f247d78121",
+    "frozen_always_treatment_sha256": "99f0944cb31011bb5e29290740404dff0ddec465777a663e03fdca76dc3cd8ba",
+    "negative_controls": {
+      "automatic_axis_selector_total_uplift_oof": -40.0,
+      "automatic_axis_selector_harmed_oof": 8,
+      "nested_value_tree_total_uplift_oof": -42.0,
+      "full_value_model_selection": "KEEP_BASE"
+    },
+    "score_contract": "leaf scores are deterministic gate decisions, not calibrated probabilities",
+    "warning": "The fixed public rule passed discovery LOGO, but choosing among rules failed nested OOF. Keep this experimental and require the untouched S22/S23 transfer gate before promotion.",
+    "hard20_status": "untouched by training and rule selection"
+  }
+}

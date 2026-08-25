@@ -256,6 +256,100 @@ def evaluate(
     }
 
 
+def summarize_against_reference(
+    rows: list[dict], reference: dict[tuple[int, int, str], dict]
+) -> dict:
+    for row in rows:
+        original = reference[
+            (row["episode_id"], row["target_seat"], row["target_name"])
+        ]
+        row["bank_delta_vs_reference"] = (
+            row["candidate_bank"] - original["candidate_bank"]
+        )
+        row["margin_delta_vs_reference"] = row["margin"] - original["margin"]
+        row["outcome_delta_vs_reference"] = row["outcome"] - original["outcome"]
+    return {
+        "games": len(rows),
+        "outcome_rate": average(row["outcome"] for row in rows),
+        "average_bank": average(row["candidate_bank"] for row in rows),
+        "average_margin": average(row["margin"] for row in rows),
+        "average_bank_delta_vs_reference": average(
+            row["bank_delta_vs_reference"] for row in rows
+        ),
+        "average_margin_delta_vs_reference": average(
+            row["margin_delta_vs_reference"] for row in rows
+        ),
+        "outcome_improvements": sum(
+            row["outcome_delta_vs_reference"] > 0 for row in rows
+        ),
+        "outcome_regressions": sum(
+            row["outcome_delta_vs_reference"] < 0 for row in rows
+        ),
+        "changed_games": sum(
+            row["margin_delta_vs_reference"] != 0 for row in rows
+        ),
+        "worst_margin_delta_vs_reference": min(
+            (row["margin_delta_vs_reference"] for row in rows), default=0.0
+        ),
+        "max_action_ms": max((row["max_action_ms"] for row in rows), default=0.0),
+    }
+
+
+def evaluate_against_reference(
+    cases: list[DonorCase],
+    candidates: dict[str, str],
+    jobs: int,
+    reference_report: dict,
+    reference_candidate: str,
+) -> dict:
+    payload = reference_report.get("candidates", {}).get(reference_candidate)
+    if not payload:
+        raise ValueError(
+            f"reference candidate {reference_candidate!r} is absent from report"
+        )
+    reference = {
+        (
+            int(row["episode_id"]),
+            int(row["target_seat"]),
+            str(row["target_name"]),
+        ): row
+        for row in payload.get("matches", [])
+    }
+    expected = {
+        (case.episode_id, case.target_seat, case.target_name) for case in cases
+    }
+    missing = sorted(expected - set(reference))
+    if missing:
+        raise ValueError(f"reference report is missing {len(missing)} requested cases")
+    tasks = [
+        (name, path, case)
+        for name, path in candidates.items()
+        for case in cases
+    ]
+    if jobs <= 1:
+        matches = [run_one(task) for task in tasks]
+    else:
+        with concurrent.futures.ProcessPoolExecutor(max_workers=jobs) as pool:
+            matches = list(pool.map(run_one, tasks))
+    matches.sort(
+        key=lambda row: (row["candidate"], row["target_rank"], row["episode_id"])
+    )
+    groups = {}
+    for name in candidates:
+        rows = [row for row in matches if row["candidate"] == name]
+        groups[name] = {
+            "summary": summarize_against_reference(rows, reference),
+            "matches": rows,
+        }
+    return {
+        "schema": "top-replay-reference-counterfactual-v1",
+        "warning": "opponent is an exact action tape; use only for bounded residuals",
+        "reference_candidate": reference_candidate,
+        "cases": [asdict(case) for case in cases],
+        "candidates": groups,
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", type=Path, required=True)
@@ -265,6 +359,8 @@ def main() -> None:
     parser.add_argument("--opponent-name", action="append", default=[])
     parser.add_argument("--episode-id", action="append", type=int, default=[])
     parser.add_argument("--candidate", action="append", default=[])
+    parser.add_argument("--reference-report", type=Path)
+    parser.add_argument("--reference-candidate", default="S09")
     parser.add_argument("--jobs", type=int, default=1)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
@@ -290,7 +386,22 @@ def main() -> None:
             tuple(args.target_name),
             tuple(args.episode_id),
         )
-    report = evaluate(cases, candidates, max(1, args.jobs))
+    if args.reference_report:
+        reference_report = json.loads(
+            args.reference_report.read_text(encoding="utf-8")
+        )
+        try:
+            report = evaluate_against_reference(
+                cases,
+                candidates,
+                max(1, args.jobs),
+                reference_report,
+                args.reference_candidate,
+            )
+        except ValueError as error:
+            parser.error(str(error))
+    else:
+        report = evaluate(cases, candidates, max(1, args.jobs))
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
     print(

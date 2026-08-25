@@ -1,6 +1,6 @@
 # Kaggriculture live meta playbook
 
-Last updated: 2026-08-25 18:30 Asia/Novosibirsk.
+Last updated: 2026-08-25 23:25 Asia/Novosibirsk.
 
 This is the persistent evidence log for deciding which standalone policies are
 robust enough for the live ladder.  It is intentionally separated from raw
@@ -124,6 +124,37 @@ online test; its benefit is not yet statistically established.
 The 2026-08-25 live batch is S22 Adaptive Shop Guard (`55769293`) and S23 Shop
 Guard Fertilizer Exposure (`55769295`).  Both were accepted as `PENDING` at
 18:37 local time.  Do not replace either for several hours.
+
+## 2026-08-25 late outcome-gated ML update
+
+S22/S23 later matured to `1902.4/1621.4`, materially below S20/S21
+(`2301.8/2273.7`) and the S09/S11 anchors (`2570.8/2435.3`).  Twenty fresh
+recorded losses from S22/S23 were grouped into six route families and reserved
+as a two-stage transfer cohort.
+
+The strongest safe new candidate keeps exact S09/N39 as its complete farm and
+market backbone.  Its ML component is deliberately narrow: a distilled value
+gate observes the opponent's public number of hired hands at step 112.  When
+that value is at most three and execution remains legal, it advances exactly
+one S09 WHEAT sale to step 119, then subtracts the same quantity from the next
+guaranteed S09 sale.  All errors and unsupported states fall back to S09.
+
+Why this gate is eligible:
+
+- leave-opponent-policy-out discovery: 50/80 selected, `+13` margin, 13
+  improved and zero harmed; threshold three in all 17 folds;
+- untouched S22/S23 transfer: ten interventions over 20 losses, `+4` margin,
+  four improved, sixteen neutral, zero harmed and unchanged outcomes;
+- fresh three-seed, both-seat, six-family arena: 18 interventions over 36
+  games, `+6` margin, six improved, thirty neutral, zero harmed and unchanged
+  outcomes;
+- every advanced unit was repaid and terminal debt was zero.
+
+Broader ML models were not promoted.  The q3 imitation gate lost 30 coins on
+paired labels, always-advance lost 26, and the nested value selector lost 42
+with eight harmed games.  This negative-control evidence is part of the
+promotion decision: only the high-precision residual survives, not the full
+tree or an imitation-policy switch.
 
 ## Update protocol
 

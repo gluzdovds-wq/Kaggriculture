@@ -8,6 +8,7 @@ from tools.evaluate_top_replay_counterfactuals import (
     requested_target_matches,
     run_one,
     summarize,
+    summarize_against_reference,
 )
 
 
@@ -55,6 +56,34 @@ class EvaluateTopReplayCounterfactualsTests(unittest.TestCase):
         self.assertEqual(result["outcome_improvements"], 1)
         self.assertEqual(result["outcome_regressions"], 1)
         self.assertEqual(result["average_bank_delta_vs_donor"], -2.5)
+
+    def test_reference_summary_uses_target_identity(self):
+        reference = {
+            (1, 0, "Alpha"): {
+                "candidate_bank": 100,
+                "margin": 10,
+                "outcome": 1.0,
+            },
+            (1, 0, "Beta"): {
+                "candidate_bank": 80,
+                "margin": -5,
+                "outcome": 0.0,
+            },
+        }
+        rows = [
+            {
+                "episode_id": 1,
+                "target_seat": 0,
+                "target_name": "Beta",
+                "candidate_bank": 85,
+                "margin": 2,
+                "outcome": 1.0,
+                "max_action_ms": 5,
+            }
+        ]
+        result = summarize_against_reference(rows, reference)
+        self.assertEqual(result["average_bank_delta_vs_reference"], 5)
+        self.assertEqual(result["outcome_improvements"], 1)
 
     @patch("tools.evaluate_top_replay_counterfactuals.play")
     def test_run_one_keeps_public_selector_context(self, mocked_play):

@@ -2917,3 +2917,47 @@ arena timing instrumentation preserves both one- and two-argument agents.
   as proposal infrastructure.  Do not execute learned actions or submit.  The
   next gate needs full-feedback counterfactual outcome labels with KEEP_BASE as
   an explicit continuation; see `ML_REPLAY_2026-08-25.md`.
+
+## E151 — S09 outcome-gated ML WHEAT timing residual / promotion pass
+
+- S22/S23 matured to displayed ratings `1902.4/1621.4`, versus `2301.8/2273.7`
+  for S20/S21, `2435.3` for S11 and the historical S09 outlier `2570.8`.
+  Their newest downloaded games contained 20 recorded losses in six route
+  families, so the weak live result is supported by episode outcomes rather
+  than explained only by rating variance.  Exact S09 remained the backbone;
+  S11 changed 14 of 80 top-ten counterfactuals but lost 23 coins total with no
+  outcome gain.
+- Built a direct, fail-closed residual that executes only S09.  At step 112 a
+  distilled public-state tree can approve advancing at most one `SELL WHEAT`
+  order to step 119.  The exact advanced quantity becomes per-seat debt and is
+  removed from the next guaranteed S09 WHEAT sale.  Same-turn `PICKUP`, market
+  capacity, malformed observations, reset and terminal debt are guarded; the
+  policy never reads opponent-private storage.
+- The imitation q3 tree was rejected despite strong policy-held prediction
+  metrics: on 80 paired outcome counterfactuals it selected 52 games and lost
+  30 margin coins.  Always-advance lost 26.  The nested value-tree selector
+  lost 42 with eight harmed rows and correctly selected `KEEP_BASE`; this is a
+  negative control against promoting an attractive in-sample tree.
+- A preregistered family of one-public-feature, high-precision value rules did
+  transfer.  `opponent hands <= 3` used the same threshold in all 17
+  leave-opponent-policy-out folds and selected 50/80 rows for `+13` total
+  margin: 13 improved, 37 neutral, zero harmed.  Cluster bootstrap 95% CI for
+  mean policy uplift was `[0.0274, 0.375]`.  Price/inventory alternatives had
+  `+14` discovery uplift but lost five coins on the first untouched six-game
+  family screen and were rejected.
+- The chosen hands gate passed the two-stage S22/S23 holdout.  On six family
+  representatives it advanced twice for `+1` versus S09, minimum delta zero;
+  on the remaining fourteen untouched losses it advanced eight times for
+  `+3`, three improved and eleven neutral.  Across all 20: ten advances, ten
+  exact repayments, terminal debt zero, `+4` margin, four improved, sixteen
+  neutral, zero harmed and zero outcome regressions.
+- Fresh seeds `20269000..20269002`, both seats and S09/S11/V48/V43/C95/Moon,
+  added 36 independent games.  Eighteen advances produced `+6` total margin
+  over exact S09: six improved, thirty neutral, zero harmed, with identical
+  outcomes.  A one-process official path-loader smoke completed both seats;
+  p95 action latency was about `6.15 ms` and cold maximum `96.96 ms`.
+- Final artifact: 329,847-byte `main.py`, SHA-256
+  `4a44faecc6a5b9a78a2102fa6b38b4c7431e73a431067aae8e3a0a8ae6777627`.
+  Runtime tree is `research/e151-s09-ml-hands3-runtime.json`; full suite is
+  `201 passed`.  This turn uses the user's explicit one-slot exception to the
+  normal two-submission cadence; only this frozen candidate is eligible.
