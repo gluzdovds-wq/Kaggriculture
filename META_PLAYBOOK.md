@@ -156,6 +156,12 @@ with eight harmed games.  This negative-control evidence is part of the
 promotion decision: only the high-precision residual survives, not the full
 tree or an imitation-policy switch.
 
+The frozen residual was submitted as S24, ref `55774630`, at 23:24 local time
+under the user's explicit one-slot exception.  Kaggle accepted it as `PENDING`
+and reported zero submissions remaining today.  Do not replace it; allow the
+agent to validate and accumulate games before interpreting its displayed
+rating.
+
 ## Update protocol
 
 After each two-bot batch has accumulated several hours of games:

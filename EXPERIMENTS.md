@@ -2961,3 +2961,7 @@ arena timing instrumentation preserves both one- and two-argument agents.
   Runtime tree is `research/e151-s09-ml-hands3-runtime.json`; full suite is
   `201 passed`.  This turn uses the user's explicit one-slot exception to the
   normal two-submission cadence; only this frozen candidate is eligible.
+- Submitted the frozen candidate as S24, ref `55774630`, at 23:24 local time.
+  Kaggle accepted the upload as `PENDING` and reported zero submissions
+  remaining today.  No second artifact was uploaded under this explicit
+  one-slot exception.
