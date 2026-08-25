@@ -160,7 +160,9 @@ The frozen residual was submitted as S24, ref `55774630`, at 23:24 local time
 under the user's explicit one-slot exception.  Kaggle accepted it as `PENDING`
 and reported zero submissions remaining today.  Do not replace it; allow the
 agent to validate and accumulate games before interpreting its displayed
-rating.
+rating.  Validation episode `99375407` then completed successfully and the
+submission reached `COMPLETE`; its first `600.0` display is validation-only,
+not a strength estimate.
 
 ## Update protocol
 

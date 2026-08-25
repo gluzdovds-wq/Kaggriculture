@@ -2964,4 +2964,6 @@ arena timing instrumentation preserves both one- and two-argument agents.
 - Submitted the frozen candidate as S24, ref `55774630`, at 23:24 local time.
   Kaggle accepted the upload as `PENDING` and reported zero submissions
   remaining today.  No second artifact was uploaded under this explicit
-  one-slot exception.
+  one-slot exception.  Validation episode `99375407` completed successfully;
+  S24 reached `COMPLETE` with the initial validation-only display `600.0`
+  before any ladder episodes were scheduled.
