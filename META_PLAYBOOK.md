@@ -136,3 +136,19 @@ After each two-bot batch has accumulated several hours of games:
 4. Recompute common-structure claims after each top-ten snapshot.
 5. Treat any single displayed rating as provisional.  Prefer replicated
    matched outcomes and confidence intervals for final-agent selection.
+
+## Replay-ML evidence (2026-08-25)
+
+The first current-meta replay ML corpus covers 74 unique public episodes and
+12 complete policies.  A broad early route classifier failed complete-policy
+transfer (`0.500` balanced accuracy), so opponent adaptation must not be based
+on that head.  Narrow 24-turn event gates for land and animal buying were much
+more transferable and beat day-only schedules, while fertilizer and premium
+sale prediction was largely calendar-driven.
+
+Use factorized binary event gates plus a conditional type head; do not use a
+flat joint action label or independent OVR heads for mutually incompatible
+top-level actions.  OVR is retained only inside the conditional
+`COW/SHEEP/MIX` head, where it won the policy-held comparison.  All current
+heads are imitation signals, not outcome policies.  Promotion requires a new
+counterfactual dataset with KEEP_BASE and bounded residual continuations.

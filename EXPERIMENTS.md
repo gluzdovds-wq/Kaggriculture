@@ -2892,3 +2892,28 @@ arena timing instrumentation preserves both one- and two-argument agents.
   accepted both as `PENDING` and reported one further daily submission.  Stop
   after this two-policy batch; do not spend the remaining slot.  Wait several
   hours for ratings, match counts and downloadable replay cohorts.
+
+## E150 — current public-replay GBDT / factorized imitation pilot
+
+- Downloaded eight requested public games for each current top-ten submission
+  plus S20/S21: 74 unique episodes, 2.31 GB and 96 target-player seasons from
+  12 complete submission policies.  Built 288 day-3/6/9 checkpoint rows and
+  2,784 day-start event rows using only public farms, shared market state and
+  visible shops.  Opponent-private shed, seeds and inventories are excluded.
+- Route clustering found only a two-policy high-WHEAT-sale group against ten
+  lower-WHEAT-sale policies.  The best day-6 binary GBDT achieved only `0.500`
+  balanced accuracy under leave-one-complete-policy-out validation; reject it
+  as an opponent route router despite `0.750` ordinary accuracy.
+- Four factorized event gates transferred materially better.  Policy-held
+  precision/recall were land `0.927/0.729`, animal `0.938/0.798`, fertilizer
+  sale `0.977/0.977` and premium sale `0.994/0.979`.  Each beat a day-only
+  schedule, but fertilizer/premium gains in average precision were only
+  `+0.010/+0.003`, showing that most of those labels are calendar-driven.
+- On the conditional `COW/SHEEP/MIX` head, one-vs-rest GBDTs beat a joint
+  multiclass model: accuracy `0.876 vs 0.755`, balanced accuracy `0.721 vs
+  0.577`, log-loss `0.350 vs 0.374`.  Three unsupported GOOSE rows from one
+  policy were excluded rather than leaking that policy across folds.
+- Decision: retain the compact dataset builder and 865 KB offline model bundle
+  as proposal infrastructure.  Do not execute learned actions or submit.  The
+  next gate needs full-feedback counterfactual outcome labels with KEEP_BASE as
+  an explicit continuation; see `ML_REPLAY_2026-08-25.md`.
