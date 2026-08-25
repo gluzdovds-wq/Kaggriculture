@@ -38,4 +38,3 @@ def test_future_gate_labels_are_factorized():
     assert labels["y_animal_type"] == "COW"
     assert labels["y_sell_fertilizer"] == 1
     assert labels["y_sell_premium"] == 1
-
