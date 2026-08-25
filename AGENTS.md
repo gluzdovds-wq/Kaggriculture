@@ -1,5 +1,18 @@
 # Kaggriculture: Getting Started
 
+## Live submission cadence (project rule)
+
+- Upload exactly two candidates as one evaluation batch, then stop and allow
+  both to accumulate public games for several hours before replacing either.
+- Do not burn three or four submissions consecutively: only the latest two
+  valid submissions remain active/final, so a burst prevents earlier agents
+  from receiving a useful ladder sample.
+- Both candidates must be independently strong standalone policies.  Outcome
+  complementarity is useful only after each member has passed the robustness
+  gate in `META_PLAYBOOK.md`.
+- Preserve the last two available submissions for a deliberate two-policy
+  batch; never spend a lone third slot merely because the daily quota shows it.
+
 This guide walks you through building an agent, testing it locally, and submitting it to the Kaggriculture competition on Kaggle.
 
 For full game rules, the crop / animal / shop tables, the price function, and turn-processing order, see [README.md](README.md).

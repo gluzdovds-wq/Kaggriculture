@@ -93,12 +93,16 @@ loading and full games. N39 is held for the first post-reset autonomous slot;
 exact V36 is the second current-meta policy, and N31 is retained as the daily
 validation/repair reserve.
 
-## Active batch and prepared queue (2026-08-23)
+## Active batch and prepared queue (2026-08-25)
 
-The active pair is now S14 exact N39/S09 (`55703242`) plus S15 N89
-(`55703248`).  S14 is the mature-policy calibration; S15 is the strongest
-current-meta compatible residual.  Do not upload a third candidate until this
-pair has accumulated several hours of ratings and downloadable replays.
+The active pair is now S22 Adaptive Shop Guard (`55769293`) plus S23 Shop Guard
+Fertilizer Exposure (`55769295`).  Each independently won `23/24` newest
+S20/S21 replay trajectories and `8/10` exact current top-five cases.  S23 adds
+a narrowly gated, late fertilizer sale preemption without changing the strong
+farm backbone; it had no negative margin delta on the fresh panel.  Both were
+accepted as `PENDING` at 2026-08-25 18:37 local time.  One daily submission
+remains according to the CLI, but do not use it: wait several hours for both
+active agents to accumulate individual ratings and downloadable replays.
 
 Prepared but currently held artifacts, in descending deployment priority:
 
@@ -130,11 +134,11 @@ to the current local opponent league.
 - There is no hidden private split. After submissions lock on September 30,
   games continue for roughly two weeks and the final leaderboard is produced
   with a Bradley-Terry tournament over the accumulated episodes.
-- Therefore use copies only for infrastructure checks, not as a final
-  portfolio. The current final pair is deterministic N39 plus exact V36,
-  whose replay wins are complementary (`55/56` outcome oracle). Keep N31
-  locally for emergency repair; submitting any third policy would evict the
-  older member of the active pair.
+- Therefore use copies only when needed to retain an evidence-backed policy in
+  the latest-two window.  The current pair is S22 plus S23; each has a `23/24`
+  standalone outcome on the fresh 24-game replay cohort.  Their identical
+  outcome sets make the thin fertilizer intervention and live path variance
+  the decisive tests.  Submitting any third policy would evict S22.
 
 The fifth chronological live holdout reinforced the order: exact V36 won
 `9/10`, N39 `5/10`, N31 `4/10`, and submitted S08 `3/10`, with exact baseline
@@ -142,6 +146,13 @@ reproduction. V36 supplied five unique wins while N39 supplied the sole win on
 V36's loss, so N39 followed by V36 remains preferable to duplicate copies.
 
 ## Current top-replay evidence
+
+The active 2026-08-25 evaluation batch is S22 Adaptive Shop Guard (ref
+`55769293`) and S23 Shop Guard Fertilizer Exposure (ref `55769295`).  Both won
+`23/24` exact fresh replay counterfactuals and `8/10` current top-five cases;
+S23 is a late, public-state fertilizer-price guard on the same robust backbone.
+Do not replace them until both have accumulated several hours of live games.
+See `META_PLAYBOOK.md` and E149 in `EXPERIMENTS.md`.
 
 The 2026-08-22 audit sampled two public games from every top-20 submission.
 Seventy percent of those policies never bought the fourth quadrant in the

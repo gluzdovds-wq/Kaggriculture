@@ -2768,3 +2768,127 @@ arena timing instrumentation preserves both one- and two-argument agents.
   quota window.  Stop here.  Because only the latest two valid submissions
   remain active, wait several hours for both candidates to accumulate public
   games and replay evidence before considering another two-policy batch.
+
+## E146 — mature duplicate divergence and complementary repeat batch
+
+- After roughly fourteen hours, S15/N89 displayed `2182.2` and its exact-base
+  companion S14/N39 displayed `1736.4`.  The byte-identical earlier S09/N39
+  remained at `2570.8`, a same-policy spread of `834.4` rating points.  This is
+  ladder-path evidence, not a policy-code difference; final selection must use
+  matched replay outcomes and complementary coverage rather than one displayed
+  provisional rating.
+- The official competition page confirms that only the latest two submissions
+  are used for final evaluation, games continue after the deadline until
+  convergence (approximately two weeks), and a final Bradley-Terry tournament
+  is fit to the resulting episodes.  The final phase reduces uncertainty but
+  is not a hidden-dataset reset.
+- Reverified N89 SHA-256 `24b63a391ae9013db6cb4519f6b5cbb026b848f89e990df06546c5e25a23d1a6`
+  and exact V36 SHA-256 `47ebf29039463dc0eb803ccf38d5a6f0c130d2b49f3698b20c53f495c1062dc8`.
+  Both compiled, returned the official action shape, loaded through
+  `get_last_callable`, and completed 720-turn path-loaded games from both seats.
+- Submitted N89 as S16, ref `55719105`, then exact V36 as S17, ref `55719112`,
+  at 2026-08-23 22:54 local time.  Kaggle accepted both uploads and initially
+  reported them as `PENDING`; one daily submission remains.
+- Stop after this two-policy batch.  N89 is the strongest locally validated
+  N39-family exploit, while exact V36 is the best tested independent route and
+  supplies complementary outcomes.  Wait several hours for both ratings and
+  replay cohorts before considering the remaining reserve slot.
+
+## E147 — fresh-loss counterfactual and S18/S19 meta-shift batch
+
+- After S16/S17 matured to displayed ratings `2168.9` and `1799.3`, downloaded
+  their latest twelve public episodes each.  S16 recorded `6W/6L`; S17 recorded
+  `4W/8L`.  The joint fresh tail therefore contains fourteen observed losses,
+  confirming that the weak ratings are not explained only by display noise.
+- Replayed all fourteen losses against exact opponent action tapes with N89,
+  V36, N39, C95, V16, v25, SoilCurrent and MoonCurrent.  N89/N39 flipped `6/14`,
+  V36 `4/14`, C95 and V16 `7/14`, v25 `1/14`, MoonCurrent `6/14`, and
+  SoilCurrent `9/14`.  N89 plus SoilCurrent covered `13/14` losses, with only
+  two overlapping wins and four/seven unique wins respectively.
+- On the ten already won fresh trajectories, N89 preserved `10/10` while
+  SoilCurrent preserved `8/10`.  Across all 24 episodes N89 won `16/24`, Soil
+  won `17/24`, and their outcome union was `23/24`.  This makes Soil a genuine
+  route-level meta shift rather than another marginal N39 debt overlay, while
+  N89 remains the required complementary exploit anchor.
+- Reverified SHA-256 `f4b8c16395382060d23f70fa65dd376fd567ab55c430d7aee41bbe0bc117a88c`
+  for the 174,432-byte SoilCurrent artifact and
+  `24b63a391ae9013db6cb4519f6b5cbb026b848f89e990df06546c5e25a23d1a6`
+  for the 320,000-byte N89 artifact.  Both compiled, loaded as two-argument
+  `agent` functions through official `get_last_callable`, and completed full
+  720-turn games against each other from both seats with status `DONE`.
+- Submitted SoilCurrent as S18, ref `55732485`, then exact N89 as S19, ref
+  `55732489`, at 2026-08-24 11:11 local time.  Kaggle accepted both as
+  `PENDING`; the CLI reported three further daily submissions remaining.
+  Stop after this exact two-policy batch and allow both several hours to build
+  ratings and downloadable replay cohorts before any further upload.
+
+## E148 — new adaptive-route search and S20/S21 batch
+
+- After maturation S18/Soil displayed `1697.9` and S19/N89 displayed `2208.6`.
+  This rejected complementary coverage as a sufficient promotion criterion:
+  both final candidates must be strong standalone policies.
+- Downloaded the latest twelve public episodes from each submission and tested
+  seven complete architectures against exact opponent action tapes.  Across
+  the combined 24-game cohort, v48 and v43 each won `18/24` (`75%`), v21 won
+  `14/24`, N89 `12/24`, Score3094 `9/24`, Score3000 `8/24`, and Pure2600
+  `3/24`.  Average margins were `+9909.0` for v48 and `+9258.2` for v43 versus
+  `+343.4` for N89.  v48/v43 had identical outcome sets on this cohort; v48
+  had the stronger margin and lower worst loss.
+- The promoted pair is architecturally outside the previous N39 market-debt
+  ladder.  v43 keeps a common planner prefix and switches only on validated
+  public shop events.  v48 expands that sparse closed loop to six compatible
+  continuations selected from four observable public events.  Neither uses
+  player identity, rating, episode ID, hidden inventory or future actions.
+- Reconstructed the exact notebook artifacts and verified v48 at 107,008 bytes,
+  SHA-256 `dadee25a9840313218384208c53b2c4752f82c3209cc654632e0b96c65e2664a`,
+  and v43 at 63,309 bytes, SHA-256
+  `69f06a802b62aa08f28705dab5728eb924bb6a7c23ffe0164f65b104cc3dadf3`.
+  Both compiled, loaded through official `get_last_callable`, and completed
+  full 720-turn games against each other from both seats with status `DONE`.
+- Submitted v48 as S20, ref `55761332`, then v43 as S21, ref `55761333`, at
+  2026-08-25 11:50 local time.  Kaggle accepted both as `PENDING` and reported
+  three further daily submissions.  Stop after this two-bot batch and wait for
+  mature individual ratings and replay win rates before any further upload.
+
+## E149 — current top-ten replay meta and S22/S23 guarded batch
+
+- After maturation S20/v48 displayed `2301.8` and S21/v43 displayed `2273.7`.
+  Both are exact open-code notebook artifacts.  Their ratings improved slightly
+  during this analysis, but neither approached the earlier `2570.8` outlier.
+- Captured the current top-ten leaderboard and downloaded two newest target
+  games per submission plus S20/S21: 19 unique replay files and 24 target-game
+  observations.  Every sampled top-ten policy used exactly three quadrants,
+  zero geese, both cows and sheep, and a broad production loop.  Mean expansion
+  was at steps `151.3/249.7`; top-five mean `143.4/242.1`; S20/S21 were later at
+  approximately `159/258.5`.
+- In 13 decisive top-ten-vs-top-ten games, winners had `+1.38` peak cows,
+  `-0.54` peak sheep, `+14.8` fertilizer collections, `+14.4` feeds, `+8.3`
+  fertilizations, `+33.7` milk sales and first land `7.3` steps earlier.  These
+  are small-sample hypotheses stored with provenance in `META_PLAYBOOK.md` and
+  `artifacts/top10-replay-meta-2026-08-25.json`.
+- Tested new complete open-code agents on exact current top-five and fresh
+  S20/S21 opponent tapes.  Adaptive Shop Guard won `23/24` fresh games with
+  average margin `+6818.4`, worst margin `-110`, and zero donor-outcome
+  regressions; v48 control won `22/24`.  X594, Premium Queue, Champion V2,
+  Counterbook and Sell Guard were rejected at `10/24`, `15/24`, `16/24`, and
+  only `5/10`/`6/10` on the top-five gate.  Premium First and Shops Memory
+  reproduced only `19/24` outcomes with one improvement and one regression.
+- Built a single-change fertilizer-exposure variant on the Shop Guard backbone.
+  It preserves the opening and activates after step 216 only against a public
+  eight-animal opponent while fertilizer price is at least 80% of base.  It
+  preserved Shop Guard's exact `23/24` outcome set and `8/10` top-five result,
+  changed three fresh games, added 10 own-bank / 20 margin coins in total, and
+  never reduced margin on the 24-game panel.  Treat this as a safe thin online
+  hypothesis, not a proven gain.
+- Reverified S22 SHA-256
+  `e2985f0919961a88fdfef768852c0654efda7a68b2c54aaf6d0087ad0388a7c9`
+  (94,669 bytes) and S23 SHA-256
+  `4bf5f8a9e0cf13c400e3a8b2d65bf6dbc9d0a7423fb865033f630fa0670197e8`
+  (94,686 bytes).  Both compiled, loaded through official
+  `get_last_callable`, and completed 720-turn games from both seats with
+  `DONE` status.
+- Submitted Adaptive Shop Guard as S22, ref `55769293`, then Fertilizer
+  Exposure as S23, ref `55769295`, at 2026-08-25 18:37 local time.  Kaggle
+  accepted both as `PENDING` and reported one further daily submission.  Stop
+  after this two-policy batch; do not spend the remaining slot.  Wait several
+  hours for ratings, match counts and downloadable replay cohorts.

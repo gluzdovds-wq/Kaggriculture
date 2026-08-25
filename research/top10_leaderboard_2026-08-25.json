@@ -1,0 +1,22 @@
+{
+  "competition": "kaggriculture",
+  "captured_at": "2026-08-25T12:10:00+07:00",
+  "source": "public leaderboard live_tv links",
+  "threshold_context": "Top-10 sample from the broader 2300+ cohort",
+  "entries": [
+    {"rank": 1, "name": "Crop Dusta", "score": 3070.6, "submission_id": 55714246},
+    {"rank": 2, "name": "Ryo Hasegawa", "score": 3059.7, "submission_id": 55614463},
+    {"rank": 3, "name": "Subramanya N", "score": 2953.5, "submission_id": 55616096},
+    {"rank": 4, "name": "Kronki", "score": 2901.0, "submission_id": 55740281},
+    {"rank": 5, "name": "Arman Tuganbaev", "score": 2897.3, "submission_id": 55617399},
+    {"rank": 6, "name": "taiseiu", "score": 2879.3, "submission_id": 55739697},
+    {"rank": 7, "name": "tyz123456", "score": 2878.0, "submission_id": 55758423},
+    {"rank": 8, "name": "Aurora", "score": 2843.0, "submission_id": 55729656},
+    {"rank": 9, "name": "Yizuki", "score": 2840.2, "submission_id": 55731561},
+    {"rank": 10, "name": "Akhil Chinta", "score": 2837.2, "submission_id": 55749148}
+  ],
+  "comparators": [
+    {"rank": 224, "name": "Auto Fermers", "replay_name": "Auto Fermers", "score": 2297.5, "submission_id": 55761332, "policy": "S20 v48"},
+    {"rank": null, "name": "Auto Fermers", "replay_name": "Auto Fermers", "score": 2269.1, "submission_id": 55761333, "policy": "S21 v43"}
+  ]
+}
