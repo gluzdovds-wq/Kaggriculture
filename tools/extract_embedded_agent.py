@@ -3,7 +3,7 @@
 The notebook is treated as data: no notebook cell is executed.  String-part
 lists are decoded with the standard Base64/Base85 codecs and zlib, then the
 result is accepted only when it is valid Python and matches a SHA-256 literal
-present in the same cell.
+present in the payload cell or elsewhere in the notebook's code cells.
 """
 
 from __future__ import annotations
@@ -42,6 +42,8 @@ def literal_string_parts(node: ast.AST) -> list[str] | None:
         value = ast.literal_eval(node)
     except (ValueError, TypeError, SyntaxError):
         return None
+    if isinstance(value, str) and value:
+        return [value]
     if isinstance(value, (list, tuple)) and value and all(isinstance(x, str) for x in value):
         return list(value)
     return None
@@ -68,12 +70,20 @@ def main() -> None:
     args = parser.parse_args()
 
     payload = json.loads(args.notebook.read_text(encoding="utf-8"))
+    global_expected_hashes = {
+        item.lower()
+        for cell in payload.get("cells", [])
+        if cell.get("cell_type") == "code"
+        for item in SHA256_RE.findall("".join(cell.get("source", [])))
+    }
     matches: list[tuple[int, str, bytes, str]] = []
     for index, cell in enumerate(payload.get("cells", [])):
         if cell.get("cell_type") != "code":
             continue
         source = "".join(cell.get("source", []))
-        expected_hashes = {item.lower() for item in SHA256_RE.findall(source)}
+        expected_hashes = {
+            item.lower() for item in SHA256_RE.findall(source)
+        } or global_expected_hashes
         if not expected_hashes:
             continue
         try:

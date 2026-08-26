@@ -1,6 +1,6 @@
 # Kaggriculture live meta playbook
 
-Last updated: 2026-08-25 23:25 Asia/Novosibirsk.
+Last updated: 2026-08-26 09:12 Asia/Novosibirsk.
 
 This is the persistent evidence log for deciding which standalone policies are
 robust enough for the live ladder.  It is intentionally separated from raw
@@ -191,3 +191,50 @@ top-level actions.  OVR is retained only inside the conditional
 `COW/SHEEP/MIX` head, where it won the policy-held comparison.  All current
 heads are imitation signals, not outcome policies.  Promotion requires a new
 counterfactual dataset with KEEP_BASE and bounded residual continuations.
+
+## 2026-08-26 S24 audit and first-shop route batch
+
+S24 accumulated 68 public games: `54W/14L`, while its displayed rating moved
+around `1760..1768`.  Exact replay execution reproduced all 28 sampled games
+and exact S09 differed by only one own-bank coin and three total margin coins.
+The weak displayed rating is therefore not evidence of an ML runtime failure;
+it is evidence that the S09 backbone is weak against this scheduled cohort and
+that Bradley-Terry ladder rating is highly opponent-strength dependent.
+
+The strongest current standalone control is exact V48, SHA-256
+`dadee25a9840313218384208c53b2c4752f82c3209cc654632e0b96c65e2664a`.
+It won `27/28` on the S24 frozen cohort at average margin `+22,059.8`, compared
+with `14/28` and `+7,230.5` for S24.  Independent live provenance is unusually
+strong: boatlee ref `55762810` was the same exact V48 policy in six of six
+recent replays (all 719 visible actions) and displayed about `2534` after 92
+games (`62W/22L/8T`) during the audit.
+
+Blind top-player action tapes are rejected despite attractive narrow results.
+The best Crop Dusta tape scored `8/10` on one top-five panel but collapsed to
+`16/28`, with twelve V48-win regressions and average margin `+9,178` versus
+V48's `+22,060`.  New Soil, Moon, Conditional Memory v21.1, V20R1, V21R1 and
+early-land V48 variants also failed the standalone outcome gate.
+
+V43, Premium, ShopMemory and ShopGuard each matched V48's `27/28` frozen
+outcomes.  V43 improved frozen average margin by `119.2` but lost `470.2` on
+the first five-game fresh panel.  Per-first-shop analysis produced one bounded
+route: keep V48 except when the first unlocked shop is `FARMERS_MARKET` or
+`ICE_CREAM_SHOP`, where V43 added `+5,945` total discovery margin with no harm.
+Both policies are shadow-run from step zero; any pre-shop mismatch, exception,
+or invalid V43 action permanently latches V48.
+
+The frozen router, SHA-256
+`df7c5d5ab336ecd67149d8ab81e88061c3ffc1d5b45a9cbb1100974e138ba558`,
+scored `27/28`, average margin `+22,272.1` on frozen-28 and `8/10`, `+6,819.0`
+on the prior top-five panel.  It matched exact V48 at `3/5`, `+182.8` on the
+first fresh panel and again at `3/5`, `+3,110.8` on the final unseen panel.
+The latter contained four newly created post-hash cases plus one older unseen
+Crop case because Crop had no newer public game.  Across 48 replay games there
+were zero prefix mismatches, branch exceptions, invalid actions, or outcome
+regressions versus V48.  Single-process p95 action latency was about `12.4 ms`
+with a `16.6 ms` maximum.
+
+The 2026-08-26 batch is S25 exact V48 (`55783234`) and S26 first-shop router
+(`55783237`), accepted as `PENDING` at 09:11 local time.  Three daily uploads
+remained after the batch; do not use them.  Allow both agents several hours of
+ladder games before comparing their ratings.

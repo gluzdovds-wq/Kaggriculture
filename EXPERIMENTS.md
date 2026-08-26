@@ -2967,3 +2967,57 @@ arena timing instrumentation preserves both one- and two-argument agents.
   one-slot exception.  Validation episode `99375407` completed successfully;
   S24 reached `COMPLETE` with the initial validation-only display `600.0`
   before any ladder episodes were scheduled.
+
+## E152 — S24 live audit, V48 provenance, and first-shop router batch
+
+- S24 ref `55774630` accumulated 68 public matches (`54W/14L`) while its
+  displayed rating moved around `1760..1768`.  A stratified frozen cohort used
+  all fourteen losses plus fourteen wins.  Exact S24 reproduced all 28
+  recorded banks and outcomes.  Exact S09 produced the same outcomes and
+  differed by only one own-bank coin / three total margin coins, so the live
+  result was not caused by a broken ML residual.
+- On the same exact opponent tapes V48 won `27/28`, average margin `+22,059.8`,
+  flipping all fourteen S24 losses while regressing one S24 win.  S24 was
+  `14/28`, `+7,230.5`.  The sole V48 loss was episode `99464166`, margin
+  `-2,726`.
+- Independently identified boatlee ref `55762810` as exact public V48, SHA-256
+  `dadee25a9840313218384208c53b2c4752f82c3209cc654632e0b96c65e2664a`:
+  all 719 visible actions matched in six of six recent replays, and one full
+  donor replay reproduced terminal banks exactly.  The live copy displayed
+  about `2534` after 92 games (`62W/22L/8T`), proving that V48 is genuinely
+  capable of a `2500+` ladder trajectory despite our earlier S20 copy's
+  `2301.8` display.
+- Rejected direct replay imitation.  The strongest Crop Dusta route scored
+  `8/10`, average margin `+13,951` on a narrow top-five screen, but only
+  `16/28`, `+9,178` on frozen-28 versus V48's `27/28`, `+22,060`: one outcome
+  improvement and twelve regressions.  Other Crop/Ryo tapes scored only
+  `3/10..6/10`.
+- Rejected new Soil (`19/28`), Moon, Conditional Memory v21.1 (`2/10` current
+  top-five), V20R1 (`13/28`), V21R1 (`17/28`) and two early-land V48 variants.
+  V21R1 rescued V48's sole loss but was too weak standalone.  Lead-4 created
+  two outcome regressions and lost `2,979` average margin; Lead-8 never
+  activated.
+- A frozen eight-family comparison gave V48, V43, Premium, ShopMemory and
+  ShopGuard the same `27/28` outcomes.  V43/Premium/ShopMemory averaged
+  `+22,179.0`, ShopGuard `+22,156.6`, and V48 `+22,059.8`.  S09/S11 stayed at
+  `14/28`.  Premium was additionally rejected on semantic audit because its
+  weed wrapper emits unsupported `CLEAR_WEED` actions.
+- Frozen first-shop grouping showed V43 safely improving V48 for initial
+  `FARMERS_MARKET` and `ICE_CREAM_SHOP`: `+5,945` total margin, no harmed
+  case.  Built a hash-bound single-file router that shadow-runs exact V48 and
+  V43 every step, selects V43 only for those two first shops, and permanently
+  latches V48 on any prefix mismatch, exception or invalid V43 action.
+- Final router artifact: 169,215-byte `main.py`, SHA-256
+  `df7c5d5ab336ecd67149d8ab81e88061c3ffc1d5b45a9cbb1100974e138ba558`.
+  It scored `27/28`, average margin `+22,272.1` on frozen-28; `8/10`,
+  `+6,819.0` on the prior top-five; `3/5`, `+182.8` on the first fresh top-five;
+  and `3/5`, `+3,110.8`, exactly matching V48 on the final unseen cohort.
+  Across 48 replay cases telemetry recorded zero prefix mismatches/errors and
+  both branches received all 719 calls per game.  A both-seat single-process
+  arena against V48 was exactly tied; p95/max action latency was
+  `12.4/16.6 ms`.  Full suite: `207 passed`.
+- Froze exact artifacts in `submissions/S25/main.py` and
+  `submissions/S26/main.py`.  Uploaded them as one batch at 09:11 local time:
+  S25 exact V48 ref `55783234`, then S26 router ref `55783237`.  Both were
+  accepted as `PENDING`; three daily submissions remained.  Stop here and
+  allow both agents several hours of ladder games.
